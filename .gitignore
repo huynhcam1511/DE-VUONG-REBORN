@@ -14,3 +14,12 @@
 *.zip
 *.rar
 *.7z
+
+# Historical application snapshots are recovery-only and must not re-enter the
+# root repository or normal agent searches.
+archives/
+
+MinGit/
+MinGit.zip
+PortableGit.7z.exe
+git-installer.exe
