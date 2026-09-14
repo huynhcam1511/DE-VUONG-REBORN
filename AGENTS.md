@@ -36,11 +36,11 @@ Khi xây dựng hoặc chỉnh sửa các module quản trị (Admin Modules) d�
    - Không nhồi nhét nội dung mô tả (description) dài dòng vào trong ô dữ liệu khiến chiều cao dòng bị phình to.
 
 4. **Chuẩn thiết kế CSS / Tailwind cho Bảng (Visuals & Hover)**:
-   - **Thẻ `<tr>`**: Bắt buộc dùng hiệu ứng hover với viền trái màu tím và đổi màu nền mượt mà. Class chuẩn: `group align-middle hover:bg-slate-50 hover:shadow-[inset_4px_0_0_0_#4f46e5] [&>td]:border-b [&>td]:border-slate-100 transition-colors`.
+   - **Thẻ `<tr>`**: Bắt buộc dùng hiệu ứng hover với viền trái màu xanh lá (emerald) và đổi màu nền mượt mà. Class chuẩn: `group align-middle hover:bg-slate-50 hover:shadow-[inset_4px_0_0_0_#10b981] [&>td]:border-b [&>td]:border-slate-100 transition-colors`.
    - **Căn chỉnh**: Các thẻ `<td>` luôn sử dụng `align-middle` (hoặc `align-top` nếu có nhiều dòng chữ), padding chuẩn là `px-4 py-3`.
    - **Typography**: 
      - Dữ liệu phụ (như phân loại, trạng thái, ngày tháng): Dùng `text-[12px] font-bold text-slate-600` (hoặc `font-medium text-slate-500`).
-     - Dữ liệu chính (như Tên giáo trình, Tiêu đề): Dùng `text-[13px] font-medium text-slate-900 group-hover:text-indigo-700` để đổi màu chữ khi hover vào dòng.
+     - Dữ liệu chính (như Tên giáo trình, Tiêu đề): Dùng `text-[13px] font-medium text-slate-900 group-hover:text-emerald-700` để đổi màu chữ khi hover vào dòng.
    - **Nút 3 chấm (MoreVertical)**: Màu nhạt và đậm lên khi hover. Class chuẩn: `p-1.5 text-slate-400 transition-all hover:text-slate-600 hover:bg-slate-100 rounded-full`.
 
 5. **Thanh công cụ (Search & Filter - Top Bar)**:

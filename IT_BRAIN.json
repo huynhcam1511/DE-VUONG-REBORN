@@ -589,7 +589,7 @@
         "Một màn hình chỉ có một primary action nổi trội trong cùng vùng ngữ cảnh.",
         "Status dùng semantic mapping thống nhất: neutral, info, success, warning, danger.",
         "Table header, row density, action column, selection và bulk action phải cùng pattern.",
-        "Bảng dữ liệu: Bỏ viền ngoài để bảng lồng mượt vào card trắng. Tiêu đề (header) dùng nền trắng (bg-white), đặt thuộc tính sticky và viền (border-b) trực tiếp vào từng thẻ <th>. Phải dùng border-separate border-spacing-0 cho thẻ <table> để tránh lỗi nhảy khung hình khi cuộn. Dòng (row) khi hover có nền nhạt và vạch kẻ bên trái (vd: shadow-[inset_4px_0_0_0_#4f46e5]).",
+        "Bảng dữ liệu: Bỏ viền ngoài để bảng lồng mượt vào card trắng. Tiêu đề (header) dùng nền trắng (bg-white), đặt thuộc tính sticky và viền (border-b) trực tiếp vào từng thẻ <th>. Phải dùng border-separate border-spacing-0 cho thẻ <table> để tránh lỗi nhảy khung hình khi cuộn. Dòng (row) khi hover có nền nhạt và vạch kẻ bên trái (vd: shadow-[inset_4px_0_0_0_#10b981]).",
         "Top-bar & Các công cụ bảng: Thanh tìm kiếm (Search) và Bộ lọc (Filter) luôn đặt bên trái top-bar. Các nút hành động chính (như Thêm mới) đặt bên phải. Tiêu đề cột (Header) phải hỗ trợ bấm vào để sắp xếp (Sort).",
         "Form label, required marker, helper text, validation error và disabled state phải cùng pattern.",
         "Modal dành cho thao tác ngắn; drawer cho xem/sửa chi tiết; page riêng cho workflow dài hoặc nhiều bước.",
