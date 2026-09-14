@@ -43,8 +43,9 @@ Khi xây dựng hoặc chỉnh sửa các module quản trị (Admin Modules) d�
      - Dữ liệu chính (như Tên giáo trình, Tiêu đề): Dùng `text-[13px] font-medium text-slate-900 group-hover:text-indigo-700` để đổi màu chữ khi hover vào dòng.
    - **Nút 3 chấm (MoreVertical)**: Màu nhạt và đậm lên khi hover. Class chuẩn: `p-1.5 text-slate-400 transition-all hover:text-slate-600 hover:bg-slate-100 rounded-full`.
 
-5. **Thanh công cụ (Search & Filter)**:
-   - Các module luôn phải có thanh top bar gồm: một ô tìm kiếm (Search bar) bọc trong thẻ relative với icon kính lúp, và một dropdown lọc (Filter) bên cạnh để phân loại dữ liệu (ví dụ: trạng thái, danh mục).
+5. **Thanh công cụ (Search & Filter - Top Bar)**:
+   - Các module luôn phải có thanh top bar gồm: một ô tìm kiếm (Search bar) bọc trong thẻ relative với icon kính lúp, và một dropdown lọc (Filter) bên cạnh để phân loại dữ liệu (ví dụ: trạng thái, danh mục), cùng với nút bấm "+ SOẠN/THÊM MỚI".
+   - **Đặc biệt lưu ý**: Top Bar phải luôn luôn **CỐ ĐỊNH** trong suốt quá trình người dùng sử dụng (ngay cả khi chui vào xem/sửa chi tiết một item). Tuyệt đối không dùng Portal để ghi đè hoặc làm mất thanh Search/Filter khi đang ở màn chi tiết. Header của màn chi tiết (như nút Back, Tên, Trạng thái) phải nằm bên dưới khu vực Body.
 
 6. **Tính năng Sắp xếp (Sorting ở Header)**:
    - Các cột chứa dữ liệu quan trọng bắt buộc phải có tính năng sắp xếp (Sort). 
