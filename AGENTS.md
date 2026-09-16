@@ -31,26 +31,83 @@ Khi xây dựng hoặc chỉnh sửa các module quản trị (Admin Modules) d�
    - Thẻ `<th>` phải sử dụng các class Tailwind: `sticky top-0 z-20 bg-white`.
    - Vùng chứa module (như thẻ bọc ngoài cùng trong `AdminDashboard`) phải được set `h-full min-h-0 overflow-hidden` để thanh cuộn (scrollbar) nằm gọn bên trong bảng thay vì tràn ra ngoài window.
 
-3. **Giao diện bảng gọn gàng**:
+3. **Giao diện bảng gọn gàng & Không sinh cột "Mã phân loại" dư thừa**:
    - Chỉ ưu tiên hiển thị các trường quan trọng (Ví dụ: Chương trình, Môn học, Chuyên đề, Tên).
+   - **Tuyệt đối KHÔNG tự sinh và tách riêng cột "Mã / Mã phân loại"**: Không tự tiện bịa ra các mã quy ước rườm rà (như `LT-EX-01`, `BT-01`...) rồi tách riêng thành một cột chiếm chỗ trên bảng. Trong thực tế quản lý đào tạo/LMS, ban đào tạo chỉ quản lý học liệu và bài học theo: Tên tài liệu, Kho (Lý thuyết / Bài tập), Chương trình và Môn học.
    - Không nhồi nhét nội dung mô tả (description) dài dòng vào trong ô dữ liệu khiến chiều cao dòng bị phình to.
 
-4. **Chuẩn thiết kế CSS / Tailwind cho Bảng (Visuals & Hover)**:
+4. **Chuẩn thiết kế CSS / Tailwind cho Bảng (Visuals, Hover & Anti-Pill Overload)**:
+   - **Đường viền bảng (Borders)**:
+     - **Tuyệt đối KHÔNG dùng đường kẻ dọc cột**: Tuyệt đối không đặt `border-r` hay `border-l` lên bất kỳ thẻ `<th>` hay `<td>` nào, tránh biến giao diện thành ô lưới Excel thô ráp.
+     - **Chỉ dùng đường phân cách ngang giữa các dòng**: Đường viền ngang siêu mảnh và thanh lịch được quản lý tập trung trên thẻ `<tr>` bằng class `[&>td]:border-b [&>td]:border-slate-100`. Tuyệt đối không tự ý thêm `border-slate-50` hay `border-b` riêng rẽ lên `<td>` làm lấn át hoặc mất đường viền chuẩn.
    - **Thẻ `<tr>`**: Bắt buộc dùng hiệu ứng hover với viền trái màu xanh lá (emerald) và đổi màu nền mượt mà. Class chuẩn: `group align-middle hover:bg-slate-50 hover:shadow-[inset_4px_0_0_0_#10b981] [&>td]:border-b [&>td]:border-slate-100 transition-colors`.
-   - **Căn chỉnh**: Các thẻ `<td>` luôn sử dụng `align-middle` (hoặc `align-top` nếu có nhiều dòng chữ), padding chuẩn là `px-4 py-3`.
-   - **Typography**: 
-     - Dữ liệu phụ (như phân loại, trạng thái, ngày tháng): Dùng `text-[12px] font-bold text-slate-600` (hoặc `font-medium text-slate-500`).
-     - Dữ liệu chính (như Tên giáo trình, Tiêu đề): Dùng `text-[13px] font-medium text-slate-900 group-hover:text-emerald-700` để đổi màu chữ khi hover vào dòng.
+   - **Căn chỉnh**: Các thẻ `<td>` luôn sử dụng `align-middle` (hoặc `align-top` nếu có nhiều dòng chữ), padding chuẩn là `px-4 py-3.5`.
+   - **Typography & Chống lạm dụng Pill / Màu mè (Anti-Pill Overload)**: 
+     - **Tuyệt đối KHÔNG bọc mọi trường vào badge/pill có nền màu (`bg-*`) hay viền (`border-*`) sặc sỡ**: Tránh biến bảng thành "hộp kẹo" lòe loẹt làm mất tính thanh lịch của SaaS cao cấp.
+     - **Ưu tiên chữ thường tinh gọn (Plain Text)**: Phân loại, nhóm hồ sơ, kho học liệu... hiển thị dạng chữ thường `text-[12px] font-medium text-slate-700` (hoặc `text-slate-600`).
+     - **Tên tài liệu / Tiêu đề chính**: Dùng `text-[13px] font-medium text-slate-900 group-hover:text-emerald-700` để đổi màu chữ khi hover vào dòng.
+     - **Tệp đính kèm**: Dùng icon SVG thanh mảnh màu trung tính (`text-slate-400` hoặc màu nhẹ theo định dạng), đi kèm tên file hoặc kích thước chữ mờ `text-[11px] text-slate-400`. Tuyệt đối không đóng khung pill có viền màu cho từng loại file.
+     - **Phiên bản**: Dùng font-mono chữ thường thanh lịch (`font-mono text-xs font-semibold text-slate-700`), không bọc trong bubble xám `rounded-full bg-slate-100`.
+     - **Phạm vi dùng Pill màu**: Chỉ dùng pill nhỏ gọn khi hiển thị **Trạng thái vận hành cốt lõi** có tính cảnh báo (như Đang học, Hoàn thành, Quá hạn, Đã ký, Chờ duyệt).
    - **Nút 3 chấm (MoreVertical)**: Màu nhạt và đậm lên khi hover. Class chuẩn: `p-1.5 text-slate-400 transition-all hover:text-slate-600 hover:bg-slate-100 rounded-full`.
 
-5. **Thanh công cụ (Search & Filter - Top Bar)**:
-   - Các module luôn phải có thanh top bar gồm: một ô tìm kiếm (Search bar) bọc trong thẻ relative với icon kính lúp, và một dropdown lọc (Filter) bên cạnh để phân loại dữ liệu (ví dụ: trạng thái, danh mục), cùng với nút bấm "+ SOẠN/THÊM MỚI".
-   - **Đặc biệt lưu ý**: Top Bar phải luôn luôn **CỐ ĐỊNH** trong suốt quá trình người dùng sử dụng (ngay cả khi chui vào xem/sửa chi tiết một item). Tuyệt đối không dùng Portal để ghi đè hoặc làm mất thanh Search/Filter khi đang ở màn chi tiết. Header của màn chi tiết (như nút Back, Tên, Trạng thái) phải nằm bên dưới khu vực Body.
+5. **Thanh công cụ của Module (Module Header / Toolbar)**:
+   - **Bố cục 1 hàng tinh gọn (Single-Row Layout)**: Toàn bộ công cụ của module (Ô tìm kiếm, Dropdown bộ lọc, Toggle chuyển chế độ xem, Nút hành động chính như "+ THÊM MỚI", "Biểu mẫu chuẩn") phải nằm gọn gàng trên **cùng một hàng duy nhất** bên trong thẻ `<header className="sticky top-0 z-30 flex-shrink-0 border-b border-slate-200 bg-white px-5 py-3">` của module.
+   - **Tuyệt đối KHÔNG chèn tiêu đề `<h1>` hoặc đoạn văn bản mô tả (`<p>`)**: Tuyệt đối không đưa các thẻ `<h1>` tên module to đùng hoặc đoạn `<p>` chú thích dài dòng vào header module hay topbar toàn cục (`.admin-topbar`), tránh làm phình chiều cao và gây rối mắt. Ưu tiên tối đa diện tích cho thanh công cụ và bảng dữ liệu.
+   - **Phân định rõ ràng với Topbar toàn cục**: Không dùng Portal để đẩy các bộ lọc, nút bấm chuyên biệt của module lên thanh Topbar chung của hệ thống (`.admin-topbar`). Thanh Topbar chung chỉ phục vụ tác vụ toàn cục (Ghim sidebar, Tìm kiếm nhanh toàn hệ thống). Header module tự quản lý thanh công cụ cố định (sticky) của riêng nó.
+   - **Cố định suốt quá trình sử dụng**: Header thanh công cụ phải luôn luôn **CỐ ĐỊNH** khi cuộn bảng. Khi vào màn chi tiết (detail), header chi tiết (nút Back, Lưu, Tên item) phải nằm bên dưới khu vực Body.
 
-6. **Tính năng Sắp xếp (Sorting ở Header)**:
-   - Các cột chứa dữ liệu quan trọng bắt buộc phải có tính năng sắp xếp (Sort). 
-   - Thẻ `<th>` của các cột này phải là thẻ click được (`cursor-pointer hover:bg-slate-50`), có kèm icon `ArrowUpDown` để thể hiện trạng thái sắp xếp (Tăng dần/Giảm dần).
+6. **Chuẩn thiết kế Bộ lọc & Sắp xếp (Filters & Sorting Standard)**:
+   - **Tối đa 2-3 bộ lọc chính trên Toolbar**: Để giữ bố cục 1 hàng tinh gọn, toolbar chỉ đặt tối đa 2-3 dropdown bộ lọc quan trọng nhất. Thứ tự chuẩn: `[Ô tìm kiếm]` -> `[Các dropdown bộ lọc (2-3)]` -> `[Nút xóa lọc (nếu có lọc đang bật)]` -> `[Sub-tabs / Chuyển chế độ xem]` -> `[Nút hành động dữ liệu (Tải báo cáo, Thêm mới)]`.
+   - **Hiệu ứng trực quan khi Bộ lọc đang kích hoạt (Filter Active State)**:
+     - Khi dropdown ở giá trị mặc định (`'all'`): Dùng viền nhẹ `border-slate-200 bg-white text-slate-700 font-medium`.
+     - Khi người dùng chọn một giá trị lọc cụ thể (`!== 'all'`): Bắt buộc đổi sang nền và viền nhấn để người dùng nhận diện ngay dữ liệu đang bị lọc: `border-emerald-300 bg-emerald-50/50 text-emerald-800 font-semibold`.
+   - **Nút "Xóa bộ lọc" nhanh (Quick Reset Button)**:
+     - Khi có bất kỳ ô tìm kiếm nào có chữ hoặc bất kỳ dropdown nào khác `'all'`, hiển thị nút nhỏ gọn "Xóa lọc" (`RotateCcw` size 12) cạnh bộ lọc: `inline-flex items-center gap-1 text-[11px] font-semibold text-slate-500 hover:text-rose-600 transition-colors`. Khi click, reset toàn bộ search và dropdown về mặc định.
+   - **Tính năng Sắp xếp (Sorting in Table vs Toolbar)**:
+     - **Ở dạng Bảng (Table View)**: Tuyệt đối KHÔNG đặt dropdown sắp xếp trên thanh Toolbar làm chật chội và trùng lặp. Bắt buộc tích hợp sắp xếp trực tiếp trên tiêu đề cột `<th>` (`cursor-pointer hover:bg-slate-50`, icon `ArrowUpDown` / `ArrowUp` / `ArrowDown`). Hỗ trợ sắp xếp xoay vòng 3 trạng thái: Mặc định -> Tăng dần (Asc) -> Giảm dần (Desc) -> Mặc định.
+     - **Ở dạng Lưới / Thẻ / Thư mục (Grid/Card/Folder View)**: Do không có dòng tiêu đề cột bảng, mới được phép đặt 1 dropdown sắp xếp gọn gàng trên thanh Toolbar.
 
 7. **Phân loại 2 kiểu Bảng dữ liệu (UX Patterns)**:
    - **Bảng Master-Detail (Ví dụ: Kho lộ trình học)**: Dữ liệu trên bảng chỉ để xem (Read-only). **Bắt buộc** dùng Menu 3 chấm (Toolkit) ở cuối dòng để chứa các nút "Chỉnh sửa" (mở ra màn hình/modal chi tiết), "Đổi tên", "Nhân bản", "Xóa".
    - **Bảng Vận hành / Nhập liệu trực tiếp (Ví dụ: Sơ đồ đào tạo)**: Các ô trong bảng chứa trực tiếp ô nhập liệu (`input`, `select`) để thao tác nhanh như Excel. Ở dạng bảng này, **KHÔNG dùng Menu 3 chấm**, mà đưa trực tiếp các nút thao tác nhanh (như dấu `+` để thêm dòng con, hoặc icon `Trash` để xóa) phơi bày ra ngay cột ngoài cùng bên phải để tiện click luôn.
+
+8. **Thanh điều khiển màn hình Chi tiết (Detail View Layout)**:
+   - Khi người dùng xem hoặc chỉnh sửa chi tiết một mục (mô hình Master-Detail), thanh điều khiển chi tiết (Nút Quay lại `< ChevronLeft/ArrowLeft`, Ô nhập tên, Nút Lưu, Trạng thái lưu) phải nằm ở ngay đầu khu vực nội dung (Body) bên dưới, có đường viền phân cách `border-b border-slate-200 pb-4`.
+   - Tuyệt đối không đẩy các nút của màn hình chi tiết lên thanh Topbar chung của hệ thống.
+
+9. **Danh sách Module mẫu chuẩn (Benchmarks & Standardized Modules)**:
+   - **Module mẫu chuẩn (Design Benchmark)**: `DocumentManagementModule.tsx` (`tab=documents` - Chứng từ & Hợp đồng).
+   - **Các Module đã chuẩn hóa đồng bộ**:
+     - `DocumentManagementModule.tsx` (`tab=documents`)
+     - `CourseTemplatesModule.tsx` (`tab=courses`)
+     - `EducationMapModule.tsx` (`tab=education-map`)
+     - `QuizManagementModule.tsx` (`tab=quizzes`)
+     - `AdminDashboard.tsx` (`tab=classes` - Quản lý Lớp học)
+     - `AdminDashboard.tsx` (`tab=learners` - Quản lý Học viên)
+   - **Quy tắc bắt buộc cho các module tiếp theo**: Bất kỳ module quản trị nào khác (như `tab=blogs`, `tab=schedule`, v.v.) khi chỉnh sửa hoặc mở rộng đều bắt buộc phải tuân thủ 100% chuẩn giao diện này, tuyệt đối không tự ý thêm `<h1>`, `<p>` mô tả dài dòng, hay portal lên `#top-bar-actions`.
+
+10. **Ẩn hoàn toàn thanh cuộn ở Sidebar (Hidden Scrollbar)**:
+    - Danh sách menu ở Sidebar (`<nav>`) bắt buộc phải ẩn hoàn toàn thanh cuộn dọc (dùng utility `.no-scrollbar` cùng các class: `[scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden`).
+    - Tuyệt đối không để lộ thanh cuộn xám của trình duyệt chèn vào khoảng trống giữa sidebar và khung nội dung chính, giúp menu trông gọn gàng, liền mạch mà vẫn cuộn mượt mà khi màn hình thấp.
+
+11. **Chuẩn thiết kế Dropdown / Select (Khoảng cách mũi tên & Tránh cấn viền)**:
+    - **Bản chất kỹ thuật của Native Select**: Thẻ `<select>` mặc định của trình duyệt (Chrome/Edge trên Windows) luôn ghim cứng icon mũi tên mặc định ở sát mép phải (~4-6px). Thuộc tính `pr-8` hay `padding-right` chỉ ngăn chữ không đè lên mũi tên, chứ **hoàn toàn không thể dịch chuyển vị trí mũi tên mặc định của trình duyệt vào trong**.
+    - **Giải pháp chuẩn hóa bắt buộc (Custom Chevron Pattern)**:
+      - Bọc thẻ `<select>` bên trong một container `relative inline-flex items-center`.
+      - Thẻ `<select>` bắt buộc dùng class `appearance-none pl-3 pr-8 ...` để **triệt tiêu hoàn toàn mũi tên mặc định thô kệch và dính viền của trình duyệt**.
+      - Đặt icon SVG Lucide `<ChevronDown size={14} className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400" />` ở sau `<select>`.
+      - **Hiệu quả**: Mũi tên luôn có khoảng thở an toàn chuẩn mực cách lề phải 10px (`right-2.5`), đồng bộ 100% hình thức sắc nét và thanh lịch trên mọi trình duyệt/hệ điều hành.
+      - **Phạm vi áp dụng**: Chỉ áp dụng cho các ô nhập liệu dạng Form (Modal, Bảng nhập liệu trực tiếp). Đối với các bộ lọc trên Toolbar, bắt buộc áp dụng Quy tắc 12 bên dưới.
+
+12. **Chuẩn thiết kế Custom Filter Dropdown trên Toolbar (Notion/Linear Popover Style)**:
+    - **Tuyệt đối KHÔNG dùng Native `<select>` cho bộ lọc trên Toolbar**: Native `<select>` của trình duyệt mở ra popup vuông thô, không bo góc, lộ thanh cuộn xám và làm giật độ rộng (layout shift) khi chọn text dài. Bắt buộc sử dụng component chuẩn `AdminFilterDropdown`.
+    - **Tên nút bộ lọc luôn CỐ ĐỊNH (Fixed Width / Fixed Label)**: Nút filter luôn hiển thị tên tiêu chí (Ví dụ: `Nguồn khách`, `Trạng thái`, `Hình thức`, `Lớp học`, `Doanh nghiệp`). Tuyệt đối không thay thế nhãn nút bằng giá trị được chọn $\to$ giúp các nút filter vừa khít và độ rộng luôn đứng yên 100%.
+    - **Bỏ icon mũi tên (`ChevronDown`) & Tích hợp nút `x` xóa nhanh**:
+      - Khi chưa kích hoạt: Nút hiển thị nhãn thanh lịch, viền `border-slate-200 bg-white text-slate-700 hover:bg-slate-50`, không có icon mũi tên thừa thãi.
+      - Khi đã kích hoạt (chọn $\ge 1$ mục): Nút tự động chuyển sang nền xanh `border-emerald-300 bg-emerald-50 text-emerald-800 font-semibold shadow-xs` và hiển thị icon `x` (`X` size 12) ở mép phải. Khi click vào `x` (`e.stopPropagation()`), filter được xóa ngay về mặc định mà không mở popover.
+    - **Menu Popover dạng Card bo tròn (Rounded Card Popover)**:
+      - Khung menu nổi: Thẻ `<div>` tuyệt đối bo tròn góc mềm mại `rounded-xl border border-slate-200 bg-white shadow-xl p-1.5 min-w-[200px] z-50`.
+      - Danh sách cuộn ẩn scrollbar: `max-h-60 overflow-y-auto` kết hợp `.no-scrollbar` (`[scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden`).
+      - Hỗ trợ chọn nhiều (Multi-Select) với ô checkbox bo tròn, hover đổi màu nhẹ nhàng.
+      - Tự động đóng khi click ra ngoài (Click Outside).

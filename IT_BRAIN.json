@@ -3,9 +3,9 @@
   "document": {
     "id": "de-vuong-reborn-it-brain",
     "title": "DE VUONG REBORN - IT Brain",
-    "version": "1.5.0",
+    "version": "1.6.0",
     "language": "vi-VN",
-    "generated_at": "2026-09-02T00:00:00+07:00",
+    "generated_at": "2026-09-16T14:30:00+07:00",
     "purpose": "Nguồn chuẩn có cấu trúc về hiện trạng UI, kiến trúc, module, luồng nghiệp vụ, phân quyền, checklist và quy tắc tư vấn trước khi thay đổi code.",
     "authority": {
       "priority_order": [
@@ -209,8 +209,62 @@
       "Trạng thái loading, empty, error, disabled và permission-denied phải hiển thị rõ.",
       "Action ghi/xóa dữ liệu cần feedback bằng toast hoặc trạng thái tại chỗ.",
       "Không áp workspace-dark ra ngoài vòng đời WorkspaceLayout.",
-      "Nội dung tiếng Việt phải giữ dấu và encoding UTF-8."
+      "Nội dung tiếng Việt phải giữ dấu và encoding UTF-8.",
+      "Admin module toolbar bắt buộc 1 hàng tinh gọn (sticky top-0 z-30 px-5 py-3); cấm chèn tiêu đề <h1> hoặc chú thích <p> dài dòng.",
+      "Không dùng createPortal để đẩy công cụ/search của module lên topbar hệ thống (#top-bar-actions); topbar chỉ phục vụ tác vụ toàn cục.",
+      "Thanh cuộn ở Sidebar (<nav>) phải luôn luôn được ẩn hoàn toàn (dùng .no-scrollbar), không để thanh cuộn của trình duyệt hiển thị giữa sidebar và body."
     ],
+    "admin_module_standards": {
+      "status": "normative",
+      "benchmark_module": "DocumentManagementModule (tab=documents)",
+      "standardized_modules": [
+        "DocumentManagementModule (tab=documents)",
+        "CourseTemplatesModule (tab=courses)",
+        "EducationMapModule (tab=education-map)",
+        "QuizManagementModule (tab=quizzes)",
+        "AdminDashboard Classes (tab=classes)",
+        "AdminDashboard Learners (tab=learners)"
+      ],
+      "rules": [
+        {
+          "id": "single_row_sticky_header",
+          "rule": "Header công cụ của module nằm bên trong card, ngay dưới topbar hệ thống, cố định khi cuộn.",
+          "class": "sticky top-0 z-30 flex-shrink-0 border-b border-slate-200 bg-white px-5 py-3",
+          "layout": "1 hàng duy nhất (Single-Row Layout), flex-wrap items-center justify-between gap-3; bên trái là ô tìm kiếm và các dropdown lọc/toggle; bên phải là nút hành động chính (+ THÊM MỚI)."
+        },
+        {
+          "id": "no_h1_or_description_clutter",
+          "rule": "Tuyệt đối KHÔNG chèn tiêu đề <h1> hoặc đoạn chú thích <p> dài dòng vào header module hay topbar toàn cục (.admin-topbar). Giữ không gian tối đa cho thanh công cụ và bảng dữ liệu."
+        },
+        {
+          "id": "no_topbar_portaling",
+          "rule": "Tuyệt đối KHÔNG dùng createPortal để đẩy công cụ, bộ lọc, nút bấm của module lên topbar hệ thống (#top-bar-actions). Topbar chỉ dùng cho tác vụ toàn cục (ghim sidebar, search toàn cục)."
+        },
+        {
+          "id": "freeze_panes",
+          "rule": "Bảng dữ liệu dài phải cố định tiêu đề (Freeze Panes). Thẻ <th> dùng 'sticky top-0 z-20 bg-white'. Vùng chứa module set 'h-full min-h-0 overflow-hidden' để scrollbar nằm gọn trong bảng."
+        },
+        {
+          "id": "table_visuals_and_hover",
+          "row_class": "group align-middle hover:bg-slate-50 hover:shadow-[inset_4px_0_0_0_#10b981] [&>td]:border-b [&>td]:border-slate-100 transition-colors",
+          "cell_padding": "px-4 py-3 align-middle",
+          "title_typography": "text-[13px] font-medium text-slate-900 group-hover:text-emerald-700",
+          "meta_typography": "text-[12px] font-bold text-slate-600 hoặc font-medium text-slate-500"
+        },
+        {
+          "id": "action_menu_toolkit",
+          "rule": "Cột ngoài cùng bên phải dành cho Action Menu (MoreVertical). Tuyệt đối không gắn onClick vào toàn bộ thẻ <tr>. Dropdown menu tối thiểu 4 hành động: Chỉnh sửa (BookOpen), Đổi tên nhanh (Pencil), Nhân bản (Copy), Xóa (Trash2)."
+        },
+        {
+          "id": "header_sorting",
+          "rule": "Các cột dữ liệu quan trọng bắt buộc có sắp xếp (Sort) với icon ArrowUpDown, hover:bg-slate-50, cursor-pointer."
+        },
+        {
+          "id": "detail_view_layout",
+          "rule": "Khi xem/chỉnh sửa chi tiết một item (Master-Detail), thanh điều khiển chi tiết (Back, Lưu, Tên) nằm ở đầu phần Body bên dưới, có border-b border-slate-200 pb-4, không đẩy lên topbar."
+        }
+      ]
+    },
     "accessibility_checklist": [
       "Keyboard focus nhìn thấy được",
       "Button/icon-only có accessible name",
@@ -255,7 +309,7 @@
     { "code": "ADM-FIN", "id": "finance", "status": "active", "portal": "ADM", "responsibilities": ["Sổ tài chính", "Ledger transaction", "financial goals", "thu/chi/điều chỉnh"] },
     { "code": "ADM-PAY", "id": "payments", "status": "active", "portal": "ADM", "responsibilities": ["Thu học phí SePay", "Payment intent", "VietQR", "SePay webhook", "đối soát"] },
     { "code": "ADM-SUPPORT", "id": "support", "status": "active", "portal": "ADM", "responsibilities": ["Trung tâm hỗ trợ", "Ticket", "message", "unread counters"] },
-    { "code": "ADM-DOC", "id": "documents", "status": "disabled", "portal": "ADM", "responsibilities": ["Chứng từ & Hợp đồng", "Analyze/OCR", "draft", "approve", "rescan", "delete"], "reason": "security audit required" },
+    { "code": "ADM-DOC", "id": "documents", "status": "active", "portal": "ADM", "responsibilities": ["Chứng từ & Hợp đồng", "Hồ sơ pháp lý, thương mại, đào tạo, vận hành, thanh quyết toán", "Tủ hồ sơ theo doanh nghiệp", "Template mẫu chuẩn"], "ui_benchmark": true },
     { "code": "ADM-WORK", "id": "workspace", "status": "active", "portal": "ADM", "responsibilities": ["Quản lý công việc", "Organization", "space", "folder", "task/subtask", "attached document", "task/list/board/calendar views"] },
     { "code": "ADM-QUIZ", "id": "quiz", "status": "active", "portal": "ADM", "responsibilities": ["Quiz Bank", "Question bank", "quiz template"] },
     { "code": "ADM-BLOG", "id": "admin_blog", "status": "active", "portal": "ADM", "responsibilities": ["Quản trị Blog"] },
