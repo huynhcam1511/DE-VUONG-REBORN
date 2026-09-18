@@ -70,7 +70,7 @@ Khi xây dựng hoặc chỉnh sửa các module quản trị (Admin Modules) d�
 
 7. **Phân loại 2 kiểu Bảng dữ liệu (UX Patterns)**:
    - **Bảng Master-Detail (Ví dụ: Kho lộ trình học)**: Dữ liệu trên bảng chỉ để xem (Read-only). **Bắt buộc** dùng Menu 3 chấm (Toolkit) ở cuối dòng để chứa các nút "Chỉnh sửa" (mở ra màn hình/modal chi tiết), "Đổi tên", "Nhân bản", "Xóa".
-   - **Bảng Vận hành / Nhập liệu trực tiếp (Ví dụ: Sơ đồ đào tạo)**: Các ô trong bảng chứa trực tiếp ô nhập liệu (`input`, `select`) để thao tác nhanh như Excel. Ở dạng bảng này, **KHÔNG dùng Menu 3 chấm**, mà đưa trực tiếp các nút thao tác nhanh (như dấu `+` để thêm dòng con, hoặc icon `Trash` để xóa) phơi bày ra ngay cột ngoài cùng bên phải để tiện click luôn.
+   - **Bảng Vận hành / Nhập liệu trực tiếp (Ví dụ: Chương trình đào tạo)**: Các ô trong bảng chứa trực tiếp ô nhập liệu (`input`, `select`) để thao tác nhanh như Excel. Ở dạng bảng này, **KHÔNG dùng Menu 3 chấm**, mà đưa trực tiếp các nút thao tác nhanh (như dấu `+` để thêm dòng con, hoặc icon `Trash` để xóa) phơi bày ra ngay cột ngoài cùng bên phải để tiện click luôn.
 
 8. **Thanh điều khiển màn hình Chi tiết (Detail View Layout)**:
    - Khi người dùng xem hoặc chỉnh sửa chi tiết một mục (mô hình Master-Detail), thanh điều khiển chi tiết (Nút Quay lại `< ChevronLeft/ArrowLeft`, Ô nhập tên, Nút Lưu, Trạng thái lưu) phải nằm ở ngay đầu khu vực nội dung (Body) bên dưới, có đường viền phân cách `border-b border-slate-200 pb-4`.
@@ -81,7 +81,7 @@ Khi xây dựng hoặc chỉnh sửa các module quản trị (Admin Modules) d�
    - **Các Module đã chuẩn hóa đồng bộ**:
      - `DocumentManagementModule.tsx` (`tab=documents`)
      - `CourseTemplatesModule.tsx` (`tab=courses`)
-     - `EducationMapModule.tsx` (`tab=education-map`)
+     - `EducationMapModule.tsx` (`tab=education-map` - Chương trình đào tạo)
      - `QuizManagementModule.tsx` (`tab=quizzes`)
      - `AdminDashboard.tsx` (`tab=classes` - Quản lý Lớp học)
      - `AdminDashboard.tsx` (`tab=learners` - Quản lý Học viên)
@@ -111,3 +111,26 @@ Khi xây dựng hoặc chỉnh sửa các module quản trị (Admin Modules) d�
       - Danh sách cuộn ẩn scrollbar: `max-h-60 overflow-y-auto` kết hợp `.no-scrollbar` (`[scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden`).
       - Hỗ trợ chọn nhiều (Multi-Select) với ô checkbox bo tròn, hover đổi màu nhẹ nhàng.
       - Tự động đóng khi click ra ngoài (Click Outside).
+
+ 1 3 .   * * L �u   d �  l i �u   q u a   A P I   ( K h � n g   c h �  s �a   g i a o   d i �n   L o c a l   S t a t e ) * * : 
+         -   K h i   l � m   c � c   t � n h   n n g   t h a y   �i   d �  l i �u   ( T h � m ,   S �a ,   X � a ,   �i   t r �n g   t h � i ,   N h � n   b �n . . . ) ,   * * b �t   b u �c * *   p h �i   g �i   A P I   b a c k e n d   ( v �   d �:   \  p i R e q u e s t \ )   h o �c   F i r e b a s e   ( v �   d �:   \ s e t D o c \ ,   \ u p d a t e D o c \ )   �  l �u   d �  l i �u   v )n h   v i �n   v � o   c �  s �  d �  l i �u   ( F i r e s t o r e ) . 
+         -   * * T u y �t   �i   K H � N G * *   c h �  c �p   n h �t   s t a t e   t r � n   g i a o   d i �n   ( R e a c t   \ u s e S t a t e \ ,   \ s e t D o c u m e n t s \ . . . )   r �i   �  � ,   v �   d �  l i �u   s �  b �  m �t   k h i   n g ��i   d � n g   t �i   l �i   t r a n g   ( F 5 ) . 
+         -   L u � n   k i �m   t r a   x e m   m o d u l e / p a g e   c �   c �n   A P I   c a l l   c h �a   v �   b �  s u n g   n �u   t h i �u . 
+  
+ 
+
+## 14. Phân định kiến trúc cốt lõi phân hệ Đào tạo (Training Architecture Standards)
+
+Bắt buộc tuân thủ ranh giới nghiệp vụ giữa 3 module trong phân hệ Đào tạo, tuyệt đối không được nhầm lẫn:
+
+1. **Sơ đồ đào tạo (`tab=education-map`) - Master Taxonomy**:
+   - **Nơi khai báo danh mục gốc**: Cấu trúc 3 cấp gồm **Lĩnh vực -> Chương trình đào tạo -> Chuyên đề**.
+   - Mỗi chuyên đề khai báo: Tên chuyên đề, Nội dung đào tạo tóm tắt (viết trọn vẹn 1 dòng theo chuyên đề, không chia nhỏ Chương 01, 02), Học liệu liên kết (ví dụ) và Ghi chú phân loại (B2B/B2C).
+   - Mục đích: Nơi khai báo để sau này thêm được các môn/ngành mới, phục vụ tra cứu tổng quan, đóng gói B2B (Doanh nghiệp mua cả Chương trình) và bán lẻ B2C (Học viên học theo Chuyên đề lẻ).
+
+2. **Giáo trình đào tạo (`tab=courses`) - Course Curriculum Repository**:
+   - **Kho học liệu giáo trình thực tế bám theo Sơ đồ đào tạo**: Tại đây, từng Chuyên đề sẽ được **đính thêm cả giáo trình thực tế vào** (gồm các Module/Chủ đề bài học, Nội dung chi tiết, file/link Giáo trình lý thuyết và Bài tập thực tế).
+   - **TUYỆT ĐỐI KHÔNG CÓ**: Soạn từng buổi học (Buổi 1, Buổi 2...), đính kèm slide bài giảng, video ghi hình, bài tập và bài kiểm tra (Quiz) để giảng viên đứng lớp giảng dạy.
+
+3. **Lớp học & Lịch học (`tab=classes`, `tab=schedule`) - Class Delivery & Operations**:
+   - **Nơi vận hành giảng dạy thực tế của giảng viên cho từng lớp**: Quản lý lịch học theo buổi (Buổi 1, Buổi 2...), điểm danh attendance, lưu video ghi hình buổi học, giao bài tập, tổ chức thi Quiz và theo dõi tiến độ điểm số của học viên.
