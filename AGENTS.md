@@ -144,8 +144,12 @@ Bắt buộc tuân thủ ranh giới nghiệp vụ giữa 3 module trong phân h
    - **TUYỆT ĐỐI KHÔNG CÓ**: Soạn từng buổi học (Buổi 1, Buổi 2...), đính kèm slide bài giảng, video ghi hình, bài tập và bài kiểm tra (Quiz) để giảng viên đứng lớp giảng dạy.
 
 3. **Lớp học & Lịch học (`tab=classes`, `tab=schedule`) - Class Delivery & Operations**:
-   - **Nơi vận hành giảng dạy thực tế của giảng viên cho từng lớp**: Quản lý lịch học theo buổi (Buổi 1, Buổi 2...), điểm danh attendance, lưu video ghi hình buổi học, giao bài tập, tổ chức thi Quiz và theo dõi tiến độ điểm số của học viên.
-
+   - **Nơi vận hành giảng dạy thực tế của giảng viên cho từng lớp**. Quản lý lịch học theo buổi (Buổi 1, Buổi 2...), điểm danh attendance, lưu video ghi hình buổi học, giao bài tập, tổ chức thi Quiz.
+   - **Quy tắc UX/Logic 4 Tabs Màn hình Chi tiết Lớp học (Class Detail)**:
+     - **Tab Tổng quan (Overview)**: Nơi khai báo khung nội dung. Admin bấm chọn 1 "Chương trình đào tạo", hệ thống tự động xổ ra danh sách các "Chuyên đề" thuộc chương trình đó (mặc định Tick All). Admin có thể Tick Off một số chuyên đề nếu lớp học rút gọn.
+     - **Tab Học viên (Students)**: Không nhập tay học viên. Phải chọn/gán từ danh sách "Hồ sơ Học viên" đã tồn tại (từ Sales/CRM).
+     - **Tab Thời khóa biểu (Schedule)**: Thuần túy là timeline (Buổi 1, Buổi 2...) với ngày giờ, link Zoom, giảng viên. **Tuyệt đối tách bạch**: Giáo trình chỉ là Nội dung, không dính dáng đến timeline buổi hay tự sinh ra buổi.
+     - **Tab Kết quả (Grades)**: Bảng điểm và đánh giá.
 ## 15. Xử lý ngày tháng an toàn với Firestore (Safe Firestore Date Parsing)
 
 Trong Firestore, các trường thời gian (`createdAt`, `updatedAt`, `lastLogin`, v.v.) thường được lưu dưới dạng đối tượng Firestore `Timestamp` (`{ seconds, nanoseconds }` hoặc có hàm `.toDate()`), chuỗi ISO hoặc JavaScript `Date`.
@@ -174,4 +178,22 @@ Trong Firestore, các trường thời gian (`createdAt`, `updatedAt`, `lastLogi
 - Mọi ô nhập tìm kiếm trên thanh Toolbar cố định của module quản trị bắt buộc phải có nút xóa `x` (`<X size={12} />`) ở góc phải khi ô tìm kiếm có nội dung (`searchQuery !== ''`).
 - Khi click vào nút `x` (`onClick={() => setSearchQuery('')}`), ô tìm kiếm lập tức được xóa trắng về rỗng.
 - Ô input phải có padding phải `pr-7` để văn bản không bị đè lên icon `x`.
+
+## 17. Quy ước Biệt đội IT Team 10 Subagents (@IT team) & Mã Tag Danh định
+
+Khi người dùng nhắc đến **`@IT team`** (hoặc `IT team:`), hệ thống Antigravity bắt buộc huy động và điều phối **Biệt đội 10 Subagents chuyên trách** dưới sự chỉ huy của Main Orchestrator. Người dùng cũng có thể tag trực tiếp từng cá nhân bằng mã danh định:
+
+| Mã Tag Subagent | Vị trí chuyên trách | Chuyên môn & Trách nhiệm bắt buộc |
+| :--- | :--- | :--- |
+| **`@it_architect`** | **Lead Solution Architect** | Gác cổng [SYSTEM_BLUEPRINT_V1.0.md](file:///c:/Users/ADMIN-PC/Documents/ANTIGRAVITY/DE%20VUONG%20REBORN/De_Vuong_Webapp/docs/SYSTEM_BLUEPRINT_V1.0.md) & 16 quy tắc trong `AGENTS.md`. Thẩm định kiến trúc, không cho phép code lệch chuẩn. |
+| **`@it_ba`** | **Senior Business Analyst** | Bóc tách luồng nghiệp vụ kinh doanh & đào tạo (Lead $\to$ Deal $\to$ Báo giá $\to$ Hợp đồng $\to$ Đào tạo), đảm bảo dữ liệu liên thông không bị gãy. |
+| **`@it_frontend_ui`** | **Frontend UI Lead** | Dựng giao diện SaaS cao cấp, Freeze Panes header, Toolbar 1 dòng, triệt tiêu Pill Overload, không tự sinh cột mã thừa. |
+| **`@it_frontend_ux`** | **Frontend UX & Interaction** | Xử lý kéo thả Kanban, modal, popover, phím tắt, dropdown, tránh layout shift và click nhầm. |
+| **`@it_backend_data`** | **Backend Data Architect** | Thiết kế Firestore Schema, Collections, Composite Indexes, đảm bảo toàn vẹn dữ liệu. |
+| **`@it_backend_logic`** | **Backend Logic & Rules** | State Machine, Firestore Transactions, Cloud Functions, an toàn `parseFirestoreDate` (Quy tắc 15), lưu DB vĩnh viễn (Quy tắc 13). |
+| **`@it_integration`** | **Integration Specialist** | Tích hợp SePay Webhook, Firebase Storage, nhúng bộ tính giá Pricing Simulator, xuất PDF/Excel. |
+| **`@it_security`** | **Security & IAM Officer** | Kiểm tra phân quyền RBAC (`authorization.ts`, `firestore.rules`), bảo vệ thông tin cá nhân PII. |
+| **`@it_qa`** | **QA & Test Engineer** | Kiểm thử kiểu TypeScript `npm run lint` (`tsc --noEmit`), bắt lỗi logic, kiểm tra dữ liệu biên. |
+| **`@it_devops`** | **DevOps & Release Engineer** | Chạy `npm run build`, kiểm soát dung lượng bundle, deploy Firebase Hosting (`https://anti-gravity-katc-academy.web.app`). |
+
 
