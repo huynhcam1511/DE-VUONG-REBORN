@@ -424,7 +424,10 @@
         "EducationMapModule (tab=education-map - Sơ đồ đào tạo: Lĩnh vực - Chương trình - Chuyên đề)",
         "QuizManagementModule (tab=quizzes)",
         "AdminDashboard Classes (tab=classes)",
-        "AdminDashboard Learners (tab=learners)"
+        "AdminDashboard Learners (tab=learners)",
+        "CRMAdmissionsModule (tab=leads - Tuyển sinh & Quản lý Nhu cầu học B2C)",
+        "PartnerManagementModule (tab=partners - Hồ sơ Doanh nghiệp B2B)",
+        "UserManagementModule (tab=users - Quản trị Tài khoản & Phân quyền IAM)"
       ],
       "rules": [
         {
@@ -767,6 +770,33 @@
         "Template mẫu chuẩn"
       ],
       "ui_benchmark": true
+    },
+    {
+      "code": "ADM-LEADS",
+      "id": "crm_admissions",
+      "status": "active",
+      "portal": "ADM",
+      "tab": "leads",
+      "name": "Tuyển sinh & Quản lý Nhu cầu học (B2C Leads)",
+      "responsibilities": [
+        "Tiếp nhận và quản lý nhu cầu học viên cá nhân (B2C Leads)",
+        "Chọn Chương trình & Chuyên đề đào tạo từ Sơ đồ đào tạo",
+        "Tư vấn, báo giá và xuất mã VietQR SePay",
+        "Kích hoạt học viên & Xếp lớp 1-click (chuyển đổi sang Hồ sơ Học viên và Lớp học)"
+      ]
+    },
+    {
+      "code": "ADM-PARTNERS",
+      "id": "partners",
+      "status": "active",
+      "portal": "ADM",
+      "tab": "partners",
+      "name": "Hồ sơ Doanh nghiệp (B2B Master Data)",
+      "responsibilities": [
+        "Quản lý thông tin pháp nhân doanh nghiệp (MST, Người đại diện, Địa chỉ)",
+        "Quản lý các Thương vụ CRM (Deals) liên kết doanh nghiệp",
+        "Quản lý Tủ hồ sơ Chứng từ & Hợp đồng B2B"
+      ]
     },
     {
       "code": "ADM-WORK",

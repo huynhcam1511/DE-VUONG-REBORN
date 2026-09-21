@@ -17,6 +17,7 @@ All implementation, debugging, builds, tests, dependency changes, Firebase work,
 - Any recovery must be applied selectively to `De_Vuong_Webapp/` and reviewed as a normal code change.
 
 If duplicate application files are found, always prefer the path under `De_Vuong_Webapp/` unless the user explicitly says otherwise.
+
 ## Admin Module UI Standards
 
 Khi xây dựng hoặc chỉnh sửa các module quản trị (Admin Modules) dạng danh sách/bảng, bắt buộc phải tuân thủ các nguyên tắc thiết kế sau:
@@ -58,12 +59,13 @@ Khi xây dựng hoặc chỉnh sửa các module quản trị (Admin Modules) d�
    - **Cố định suốt quá trình sử dụng**: Header thanh công cụ phải luôn luôn **CỐ ĐỊNH** khi cuộn bảng. Khi vào màn chi tiết (detail), header chi tiết (nút Back, Lưu, Tên item) phải nằm bên dưới khu vực Body.
 
 6. **Chuẩn thiết kế Bộ lọc & Sắp xếp (Filters & Sorting Standard)**:
-   - **Tối đa 2-3 bộ lọc chính trên Toolbar**: Để giữ bố cục 1 hàng tinh gọn, toolbar chỉ đặt tối đa 2-3 dropdown bộ lọc quan trọng nhất. Thứ tự chuẩn: `[Ô tìm kiếm]` -> `[Các dropdown bộ lọc (2-3)]` -> `[Nút xóa lọc (nếu có lọc đang bật)]` -> `[Sub-tabs / Chuyển chế độ xem]` -> `[Nút hành động dữ liệu (Tải báo cáo, Thêm mới)]`.
+   - **Tối đa 2-3 bộ lọc chính trên Toolbar**: Để giữ bố cục 1 hàng tinh gọn, toolbar chỉ đặt tối đa 2-3 dropdown bộ lọc quan trọng nhất. Thứ tự chuẩn: `[Ô tìm kiếm]` -> `[Các dropdown bộ lọc (2-3)]` -> `[Sub-tabs / Chuyển chế độ xem]` -> `[Nút hành động dữ liệu (Tải báo cáo, Thêm mới)]`.
    - **Hiệu ứng trực quan khi Bộ lọc đang kích hoạt (Filter Active State)**:
      - Khi dropdown ở giá trị mặc định (`'all'`): Dùng viền nhẹ `border-slate-200 bg-white text-slate-700 font-medium`.
      - Khi người dùng chọn một giá trị lọc cụ thể (`!== 'all'`): Bắt buộc đổi sang nền và viền nhấn để người dùng nhận diện ngay dữ liệu đang bị lọc: `border-emerald-300 bg-emerald-50/50 text-emerald-800 font-semibold`.
-   - **Nút "Xóa bộ lọc" nhanh (Quick Reset Button)**:
-     - Khi có bất kỳ ô tìm kiếm nào có chữ hoặc bất kỳ dropdown nào khác `'all'`, hiển thị nút nhỏ gọn "Xóa lọc" (`RotateCcw` size 12) cạnh bộ lọc: `inline-flex items-center gap-1 text-[11px] font-semibold text-slate-500 hover:text-rose-600 transition-colors`. Khi click, reset toàn bộ search và dropdown về mặc định.
+   - **Xóa lọc tích hợp trực tiếp (Tuyệt đối KHÔNG tạo nút "Xóa lọc" riêng lẻ)**:
+     - **Tuyệt đối KHÔNG tạo thêm nút "Xóa lọc" (`RotateCcw`) đứng riêng lẻ trên thanh Toolbar**: Tránh làm thừa thãi, chiếm diện tích và rối mắt thanh công cụ.
+     - Việc xóa lọc được tích hợp trực tiếp: (1) Ô tìm kiếm có nút `x` xóa chữ khi có input, (2) Nút `AdminFilterDropdown` khi kích hoạt tự động hiện icon `x` ở mép phải để xóa lọc tức thì chỉ với 1 click (theo đúng Quy tắc 12).
    - **Tính năng Sắp xếp (Sorting in Table vs Toolbar)**:
      - **Ở dạng Bảng (Table View)**: Tuyệt đối KHÔNG đặt dropdown sắp xếp trên thanh Toolbar làm chật chội và trùng lặp. Bắt buộc tích hợp sắp xếp trực tiếp trên tiêu đề cột `<th>` (`cursor-pointer hover:bg-slate-50`, icon `ArrowUpDown` / `ArrowUp` / `ArrowDown`). Hỗ trợ sắp xếp xoay vòng 3 trạng thái: Mặc định -> Tăng dần (Asc) -> Giảm dần (Desc) -> Mặc định.
      - **Ở dạng Lưới / Thẻ / Thư mục (Grid/Card/Folder View)**: Do không có dòng tiêu đề cột bảng, mới được phép đặt 1 dropdown sắp xếp gọn gàng trên thanh Toolbar.
@@ -85,6 +87,9 @@ Khi xây dựng hoặc chỉnh sửa các module quản trị (Admin Modules) d�
      - `QuizManagementModule.tsx` (`tab=quizzes`)
      - `AdminDashboard.tsx` (`tab=classes` - Quản lý Lớp học)
      - `AdminDashboard.tsx` (`tab=learners` - Quản lý Học viên)
+     - `CRMAdmissionsModule.tsx` (`tab=leads` - Tuyển sinh & Quản lý Nhu cầu học B2C)
+     - `PartnerManagementModule.tsx` (`tab=partners` - Hồ sơ Doanh nghiệp B2B)
+     - `UserManagementModule.tsx` (`tab=users` - Quản trị Tài khoản & Phân quyền IAM)
    - **Quy tắc bắt buộc cho các module tiếp theo**: Bất kỳ module quản trị nào khác (như `tab=blogs`, `tab=schedule`, v.v.) khi chỉnh sửa hoặc mở rộng đều bắt buộc phải tuân thủ 100% chuẩn giao diện này, tuyệt đối không tự ý thêm `<h1>`, `<p>` mô tả dài dòng, hay portal lên `#top-bar-actions`.
 
 10. **Ẩn hoàn toàn thanh cuộn ở Sidebar (Hidden Scrollbar)**:
@@ -112,12 +117,10 @@ Khi xây dựng hoặc chỉnh sửa các module quản trị (Admin Modules) d�
       - Hỗ trợ chọn nhiều (Multi-Select) với ô checkbox bo tròn, hover đổi màu nhẹ nhàng.
       - Tự động đóng khi click ra ngoài (Click Outside).
 
- 1 3 .   * * L �u   d �  l i �u   q u a   A P I   ( K h � n g   c h �  s �a   g i a o   d i �n   L o c a l   S t a t e ) * * : 
-         -   K h i   l � m   c � c   t � n h   n n g   t h a y   �i   d �  l i �u   ( T h � m ,   S �a ,   X � a ,   �i   t r �n g   t h � i ,   N h � n   b �n . . . ) ,   * * b �t   b u �c * *   p h �i   g �i   A P I   b a c k e n d   ( v �   d �:   \  p i R e q u e s t \ )   h o �c   F i r e b a s e   ( v �   d �:   \ s e t D o c \ ,   \ u p d a t e D o c \ )   �  l �u   d �  l i �u   v )n h   v i �n   v � o   c �  s �  d �  l i �u   ( F i r e s t o r e ) . 
-         -   * * T u y �t   �i   K H � N G * *   c h �  c �p   n h �t   s t a t e   t r � n   g i a o   d i �n   ( R e a c t   \ u s e S t a t e \ ,   \ s e t D o c u m e n t s \ . . . )   r �i   �  � ,   v �   d �  l i �u   s �  b �  m �t   k h i   n g ��i   d � n g   t �i   l �i   t r a n g   ( F 5 ) . 
-         -   L u � n   k i �m   t r a   x e m   m o d u l e / p a g e   c �   c �n   A P I   c a l l   c h �a   v �   b �  s u n g   n �u   t h i �u . 
-  
- 
+13. **Lưu dữ liệu qua API (Không chỉ sửa giao diện Local State)**:
+    - Khi làm các tính năng thay đổi dữ liệu (Thêm, Sửa, Xóa, Đổi trạng thái, Nhân bản...), **bắt buộc** phải gọi API backend (ví dụ: `apiRequests`) hoặc Firebase (ví dụ: `setDoc`, `updateDoc`) để lưu dữ liệu vĩnh viễn vào cơ sở dữ liệu (Firestore).
+    - **Tuyệt đối KHÔNG** chỉ cập nhật state trên giao diện (React `useState`, `setDocuments`...) rồi để đó, vì dữ liệu sẽ bị mất khi người dùng tải lại trang (F5).
+    - Luôn kiểm tra xem module/page có cần API call chưa và bổ sung nếu thiếu.
 
 ## 14. Phân định kiến trúc cốt lõi phân hệ Đào tạo (Training Architecture Standards)
 
