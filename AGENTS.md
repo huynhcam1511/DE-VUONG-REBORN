@@ -45,23 +45,31 @@ Khi xây dựng hoặc chỉnh sửa các module quản trị (Admin Modules) d�
    - **Căn chỉnh**: Các thẻ `<td>` luôn sử dụng `align-middle` (hoặc `align-top` nếu có nhiều dòng chữ), padding chuẩn là `px-4 py-3.5`.
    - **Typography & Chống lạm dụng Pill / Màu mè (Anti-Pill Overload)**: 
      - **Tuyệt đối KHÔNG bọc mọi trường vào badge/pill có nền màu (`bg-*`) hay viền (`border-*`) sặc sỡ**: Tránh biến bảng thành "hộp kẹo" lòe loẹt làm mất tính thanh lịch của SaaS cao cấp.
-     - **Ưu tiên chữ thường tinh gọn (Plain Text)**: Phân loại, nhóm hồ sơ, kho học liệu... hiển thị dạng chữ thường `text-[12px] font-medium text-slate-700` (hoặc `text-slate-600`).
+     - **Ưu tiên chữ thường tinh gọn (Plain Text)**:
+       - Phân loại, nhóm hồ sơ, kho học liệu, loại hình lớp: hiển thị dạng chữ thường `text-[12px] font-medium text-slate-700` (hoặc `text-slate-600`), đi kèm icon SVG trung tính thanh mảnh (`text-slate-400`).
+       - **Danh sách nhiều mục (Multi-item: Khóa học/Lớp đang học, tags)**: Bắt buộc hiển thị dạng văn bản thường cách nhau bằng dấu phẩy (`text-xs font-medium text-slate-700`, ví dụ: `Lớp A, Lớp B`). Tuyệt đối KHÔNG bọc từng phần tử vào khung badge/pill viền xám (`bg-slate-50 border border-slate-200 px-1.5 py-0.5 rounded text-slate-500`).
+       - **Số lượng (như số câu hỏi đề thi, số học viên)**: Dùng chữ thường tinh gọn (`{count} câu`, `text-xs font-black text-slate-600`) thay vì đóng khung pill.
+       - **Tuyệt đối KHÔNG hiển thị nhãn thừa lặp lại**: Không chèn nhãn như `• ĐÃ XÁC THỰC` lặp đi lặp lại ở mọi dòng họ tên khi bảng đã có tab phân loại đối tượng chính thức.
      - **Tên tài liệu / Tiêu đề chính**: Dùng `text-[13px] font-medium text-slate-900 group-hover:text-emerald-700` để đổi màu chữ khi hover vào dòng.
      - **Tệp đính kèm**: Dùng icon SVG thanh mảnh màu trung tính (`text-slate-400` hoặc màu nhẹ theo định dạng), đi kèm tên file hoặc kích thước chữ mờ `text-[11px] text-slate-400`. Tuyệt đối không đóng khung pill có viền màu cho từng loại file.
      - **Phiên bản**: Dùng font-mono chữ thường thanh lịch (`font-mono text-xs font-semibold text-slate-700`), không bọc trong bubble xám `rounded-full bg-slate-100`.
-     - **Phạm vi dùng Pill màu**: Chỉ dùng pill nhỏ gọn khi hiển thị **Trạng thái vận hành cốt lõi** có tính cảnh báo (như Đang học, Hoàn thành, Quá hạn, Đã ký, Chờ duyệt).
+     - **Phạm vi dùng Trạng thái vận hành**: Chỉ hiển thị dạng chấm tròn tinh tế (`•`) kèm chữ thanh lịch (`inline-flex items-center gap-1.5 text-xs font-medium text-emerald-700`, chấm tròn `w-1.5 h-1.5 rounded-full bg-emerald-500`) thay vì pill to đùng đóng khung viền.
    - **Nút 3 chấm (MoreVertical)**: Màu nhạt và đậm lên khi hover. Class chuẩn: `p-1.5 text-slate-400 transition-all hover:text-slate-600 hover:bg-slate-100 rounded-full`.
 
 5. **Thanh công cụ của Module (Module Header / Toolbar)**:
-   - **Bố cục 1 hàng tinh gọn (Single-Row Layout)**: Toàn bộ công cụ của module (Ô tìm kiếm, Dropdown bộ lọc, Toggle chuyển chế độ xem, Nút hành động chính như "+ THÊM MỚI", "Biểu mẫu chuẩn") phải nằm gọn gàng trên **cùng một hàng duy nhất** bên trong thẻ `<header className="sticky top-0 z-30 flex-shrink-0 border-b border-slate-200 bg-white px-5 py-3">` của module.
+   - **Bố cục 1 hàng tinh gọn (Single-Row Layout)**: Toàn bộ công cụ của module (Ô tìm kiếm có nút `x` xóa nhanh, Dropdown bộ lọc `AdminFilterDropdown`, Toggle chuyển chế độ xem, Nút hành động chính như "+ THÊM MỚI", "Biểu mẫu chuẩn") phải nằm gọn gàng trên **cùng một hàng duy nhất** bên trong thẻ `<header className="sticky top-0 z-30 flex-shrink-0 border-b border-slate-200 bg-white px-5 py-3">` của module.
    - **Tuyệt đối KHÔNG chèn tiêu đề `<h1>` hoặc đoạn văn bản mô tả (`<p>`)**: Tuyệt đối không đưa các thẻ `<h1>` tên module to đùng hoặc đoạn `<p>` chú thích dài dòng vào header module hay topbar toàn cục (`.admin-topbar`), tránh làm phình chiều cao và gây rối mắt. Ưu tiên tối đa diện tích cho thanh công cụ và bảng dữ liệu.
    - **Phân định rõ ràng với Topbar toàn cục**: Không dùng Portal để đẩy các bộ lọc, nút bấm chuyên biệt của module lên thanh Topbar chung của hệ thống (`.admin-topbar`). Thanh Topbar chung chỉ phục vụ tác vụ toàn cục (Ghim sidebar, Tìm kiếm nhanh toàn hệ thống). Header module tự quản lý thanh công cụ cố định (sticky) của riêng nó.
    - **Cố định suốt quá trình sử dụng**: Header thanh công cụ phải luôn luôn **CỐ ĐỊNH** khi cuộn bảng. Khi vào màn chi tiết (detail), header chi tiết (nút Back, Lưu, Tên item) phải nằm bên dưới khu vực Body.
 
 6. **Chuẩn thiết kế Bộ lọc & Sắp xếp (Filters & Sorting Standard)**:
-   - **Tối đa 2-3 bộ lọc chính trên Toolbar**: Để giữ bố cục 1 hàng tinh gọn, toolbar chỉ đặt tối đa 2-3 dropdown bộ lọc quan trọng nhất. Thứ tự chuẩn: `[Ô tìm kiếm]` -> `[Các dropdown bộ lọc (2-3)]` -> `[Sub-tabs / Chuyển chế độ xem]` -> `[Nút hành động dữ liệu (Tải báo cáo, Thêm mới)]`.
+   - **Tuyệt đối KHÔNG đặt icon phễu lọc Excel (`<Filter>`) hay Popup Portal trên tiêu đề cột `<th>`**:
+     - Tiêu đề cột `<th>` **CHỈ** dành riêng cho tên cột và sắp xếp trực tiếp (Sort: `handleSort`, `ArrowUpDown`, `ArrowUp`, `ArrowDown`).
+     - Tuyệt đối không nhét nút bấm mở popup lọc, dropdown tìm kiếm hay render Portal trôi nổi vào trong `<th>`.
+     - **Tất cả các bộ lọc** (Trạng thái, Loại hình, Lớp học, Lộ trình mẫu, Doanh nghiệp...) **BẮT BUỘC** phải nằm trên thanh công cụ Toolbar bằng component chuẩn `AdminFilterDropdown`.
+   - **Tối đa 2-3 bộ lọc chính trên Toolbar**: Để giữ bố cục 1 hàng tinh gọn, toolbar chỉ đặt tối đa 2-3 dropdown bộ lọc quan trọng nhất. Thứ tự chuẩn: `[Ô tìm kiếm có 'x']` -> `[Các dropdown bộ lọc AdminFilterDropdown (2-3)]` -> `[Sub-tabs / Chuyển chế độ xem]` -> `[Nút hành động dữ liệu (Tải báo cáo, Thêm mới)]`.
    - **Hiệu ứng trực quan khi Bộ lọc đang kích hoạt (Filter Active State)**:
-     - Khi dropdown ở giá trị mặc định (`'all'`): Dùng viền nhẹ `border-slate-200 bg-white text-slate-700 font-medium`.
+     - Khi dropdown ở giá trị mặc định (`'all'` hoặc rỗng): Dùng viền nhẹ `border-slate-200 bg-white text-slate-700 font-medium`.
      - Khi người dùng chọn một giá trị lọc cụ thể (`!== 'all'`): Bắt buộc đổi sang nền và viền nhấn để người dùng nhận diện ngay dữ liệu đang bị lọc: `border-emerald-300 bg-emerald-50/50 text-emerald-800 font-semibold`.
    - **Xóa lọc tích hợp trực tiếp (Tuyệt đối KHÔNG tạo nút "Xóa lọc" riêng lẻ)**:
      - **Tuyệt đối KHÔNG tạo thêm nút "Xóa lọc" (`RotateCcw`) đứng riêng lẻ trên thanh Toolbar**: Tránh làm thừa thãi, chiếm diện tích và rối mắt thanh công cụ.
@@ -137,3 +145,33 @@ Bắt buộc tuân thủ ranh giới nghiệp vụ giữa 3 module trong phân h
 
 3. **Lớp học & Lịch học (`tab=classes`, `tab=schedule`) - Class Delivery & Operations**:
    - **Nơi vận hành giảng dạy thực tế của giảng viên cho từng lớp**: Quản lý lịch học theo buổi (Buổi 1, Buổi 2...), điểm danh attendance, lưu video ghi hình buổi học, giao bài tập, tổ chức thi Quiz và theo dõi tiến độ điểm số của học viên.
+
+## 15. Xử lý ngày tháng an toàn với Firestore (Safe Firestore Date Parsing)
+
+Trong Firestore, các trường thời gian (`createdAt`, `updatedAt`, `lastLogin`, v.v.) thường được lưu dưới dạng đối tượng Firestore `Timestamp` (`{ seconds, nanoseconds }` hoặc có hàm `.toDate()`), chuỗi ISO hoặc JavaScript `Date`.
+
+- **Tuyệt đối KHÔNG** gọi trực tiếp `new Date(item.updatedAt).toLocaleDateString()` hay `format(new Date(item.updatedAt))`. Nếu đối tượng là Firestore Timestamp object, `new Date(obj)` sẽ sinh ra `Invalid Date` dẫn tới hiển thị lỗi `NaN/NaN/NaN` hoặc gây crash giao diện.
+- **Quy chuẩn bắt buộc**: Luôn sử dụng hàm parser an toàn (như `parseFirestoreDate(val)`):
+  ```typescript
+  export const parseFirestoreDate = (dateVal: any): Date | null => {
+    if (!dateVal) return null;
+    if (dateVal instanceof Date) return isNaN(dateVal.getTime()) ? null : dateVal;
+    if (typeof dateVal?.toDate === 'function') {
+      const d = dateVal.toDate();
+      return isNaN(d.getTime()) ? null : d;
+    }
+    if (typeof dateVal?.seconds === 'number') {
+      const d = new Date(dateVal.seconds * 1000);
+      return isNaN(d.getTime()) ? null : d;
+    }
+    const parsed = new Date(dateVal);
+    return isNaN(parsed.getTime()) ? null : parsed;
+  };
+  ```
+
+## 16. Nút xóa nhanh trên Ô tìm kiếm Toolbar (Search Clear 'x' Button)
+
+- Mọi ô nhập tìm kiếm trên thanh Toolbar cố định của module quản trị bắt buộc phải có nút xóa `x` (`<X size={12} />`) ở góc phải khi ô tìm kiếm có nội dung (`searchQuery !== ''`).
+- Khi click vào nút `x` (`onClick={() => setSearchQuery('')}`), ô tìm kiếm lập tức được xóa trắng về rỗng.
+- Ô input phải có padding phải `pr-7` để văn bản không bị đè lên icon `x`.
+
