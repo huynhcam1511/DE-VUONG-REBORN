@@ -43,7 +43,13 @@ Khi xây dựng hoặc chỉnh sửa các module quản trị (Admin Modules) d�
      - **Chỉ dùng đường phân cách ngang giữa các dòng**: Đường viền ngang siêu mảnh và thanh lịch được quản lý tập trung trên thẻ `<tr>` bằng class `[&>td]:border-b [&>td]:border-slate-100`. Tuyệt đối không tự ý thêm `border-slate-50` hay `border-b` riêng rẽ lên `<td>` làm lấn át hoặc mất đường viền chuẩn.
    - **Thẻ `<tr>`**: Bắt buộc dùng hiệu ứng hover với viền trái màu xanh lá (emerald) và đổi màu nền mượt mà. Class chuẩn: `group align-middle hover:bg-slate-50 hover:shadow-[inset_4px_0_0_0_#10b981] [&>td]:border-b [&>td]:border-slate-100 transition-colors`.
    - **Căn chỉnh**: Các thẻ `<td>` luôn sử dụng `align-middle` (hoặc `align-top` nếu có nhiều dòng chữ), padding chuẩn là `px-4 py-3.5`.
-   - **Typography & Chống lạm dụng Pill / Màu mè (Anti-Pill Overload)**: 
+   - **Quy chuẩn Phông chữ & Phân cấp Thị giác (Typography & Font Hierarchy Scale - Bad vs Good)**:
+       - **Headline / Title chính**: `text-2xl` (`24px` / `font-bold`) - dành cho tiêu đề chính, Hero title, Modal Header. Tuyệt đối KHÔNG dùng `26px` đứng sát Subheadline `11px` bé xíu gây gắt gỏng thị giác.
+       - **Subheadline / Section Title**: `text-base` (`16px` / `font-semibold`) - dành cho tiêu đề phân đoạn, subtitle.
+       - **Body Text**: `text-sm` (`14px` / `font-normal` / `font-medium`) - dành cho văn bản đọc chính, description, input values. Tuyệt đối KHÔNG dùng text `11-12px` làm body text gây đau mắt.
+       - **Button Text**: `text-sm` - `text-base` (`14px - 16px` / `font-semibold`) - chữ nút bấm cân bằng hoàn hảo với Body (`14px`), không làm nút phình to `18px` thô kỉnh hoặc tụt xuống `11px`.
+       - **Table Data / Meta Info**: `text-xs` (`12px` / `font-medium`) - ô bảng dữ liệu tinh gọn, timestamp, badge chỉ số nhẹ.
+     - **Typography & Chống lạm dụng Pill / Màu mè (Anti-Pill Overload)**: 
      - **Tuyệt đối KHÔNG bọc mọi trường vào badge/pill có nền màu (`bg-*`) hay viền (`border-*`) sặc sỡ**: Tránh biến bảng thành "hộp kẹo" lòe loẹt làm mất tính thanh lịch của SaaS cao cấp.
      - **Ưu tiên chữ thường tinh gọn (Plain Text)**:
        - Phân loại, nhóm hồ sơ, kho học liệu, loại hình lớp: hiển thị dạng chữ thường `text-[12px] font-medium text-slate-700` (hoặc `text-slate-600`), đi kèm icon SVG trung tính thanh mảnh (`text-slate-400`).
@@ -195,5 +201,19 @@ Khi người dùng nhắc đến **`@IT team`** (hoặc `IT team:`), hệ thốn
 | **`@it_security`** | **Security & IAM Officer** | Kiểm tra phân quyền RBAC (`authorization.ts`, `firestore.rules`), bảo vệ thông tin cá nhân PII. |
 | **`@it_qa`** | **QA & Test Engineer** | Kiểm thử kiểu TypeScript `npm run lint` (`tsc --noEmit`), bắt lỗi logic, kiểm tra dữ liệu biên. |
 | **`@it_devops`** | **DevOps & Release Engineer** | Chạy `npm run build`, kiểm soát dung lượng bundle, deploy Firebase Hosting (`https://anti-gravity-katc-academy.web.app`). |
+
+## 18. Chuẩn Topbar hệ thống & Avatar Profile Dropdown (System Topbar & User Menu Standard)
+
+- **Tên & Email đầy đủ**: Hiển thị tên người dùng và email đầy đủ (`whitespace-nowrap`), không dùng `max-w` hay `truncate` làm cắt cụt email trên Topbar.
+- **Tuyệt đối KHÔNG bọc viền Pill xám hay viền hộp nổi quanh nút Profile/Cổng**: Nút Profile và Cổng làm việc trên Topbar sử dụng dạng tương tác tinh gọn (`bg-transparent hover:bg-slate-100 rounded-xl`), tuyệt đối không bọc khung viền xám hay ô Pill trắng nổi gây rối mắt.
+- **Chuyển đổi Cổng làm việc**: Cung cấp nút chọn nhanh 3 cổng: **Cổng Quản trị (Admin)** (`/admin/dashboard`), **Cổng Giảng viên** (`/teacher-pending`), **Cổng Học viên (Student)** (`/portal`).
+- **Popover Profile gọn gàng (Chống lặp Header)**: Khi nhấp vào Avatar, Popover Menu xổ xuống tuyệt đối không lặp lại khối Header (Avatar circle + Tên + Email) khi nút trên Topbar đã phơi bày thông tin này. Popover chỉ chứa lối tắt Chuyển nhanh Cổng và nút **Đăng xuất**.
+- **Không chèn thanh Search toàn cục vô nghĩa lên Topbar chung**: Thanh Topbar chung chỉ dành cho các tác vụ điều hướng hệ thống (Ghim sidebar, Chuyển cổng, Profile), không nhét ô `Tìm kiếm nhanh...` dư thừa.
+
+## 19. Chuẩn hóa Menu 3 chấm (Action Toolkit) & Thuật ngữ đối tượng (Action Popovers & Terminology)
+
+- **Tuyệt đối KHÔNG chèn Emoji màu sắc (🔵, 📄, 💼, 📁) hoặc dấu `+` rườm rà vào nhãn Action**: Tên các thao tác trong Menu 3 chấm phải là văn bản thường thanh lịch (ví dụ: *Chỉnh sửa*, *Đổi tên*, *Nhân bản*, *Tạo Nhu cầu CRM*, *Tạo Báo giá Mới*, *Tạo Thương vụ (Deal)*, *Lập Hợp đồng / Chứng từ*, *Xóa vĩnh viễn*), đi kèm SVG icon đơn sắc trung tính (`text-slate-400`).
+- **Giao diện Popover 3 chấm bo tròn đều góc**: Popover card phải bo tròn góc mềm mại (`rounded-2xl border border-slate-200/90 shadow-xl p-1.5`). Các dòng bấm bên trong được bo tròn đều `rounded-xl px-2.5 py-2 hover:bg-slate-100/80`, triệt tiêu góc vuông sắc cạnh khi di chuột vào dòng.
+- **Đồng bộ 100% Thuật ngữ trong Module**: Các tiêu chí phân loại phải dùng chung một tên gọi duy nhất (ví dụ: `Phân loại đối tác` phải đồng bộ 100% ở Nút Filter Dropdown trên Toolbar, Tiêu đề Cột Bảng và Nhãn ô Form Chi tiết, tuyệt đối không gọi lúc thì *Nhóm đối tác*, lúc thì *Phân loại*, lúc thì *Phân loại đối tác*).
 
 
