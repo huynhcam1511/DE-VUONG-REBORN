@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bảng Tính Báo Giá Đào Tạo - DE VUONG REBORN</title>
+  <style>
+    /* CSS NỘI TUYẾN ĐỘC LẬP 100% - KHÔNG PHỤ THUỘC CDN/MẠNG */
+    :root {
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --border: #e2e8f0;
+      --border-focus: #10b981;
+      --text-title: #0f172a;
+      --text-body: #334155;
+      --text-muted: #64748b;
+      --text-light: #94a3b8;
+      --primary: #059669;
+      --primary-hover: #047857;
+      --primary-bg: #ecfdf5;
+      --primary-border: #a7f3d0;
+      --danger-text: #e11d48;
+      --radius-lg: 16px;
+      --radius-md: 10px;
+      --radius-sm: 6px;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text-body);
+      line-height: 1.5;
+      padding: 24px 16px;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* Topbar & Presets */
+    .topbar {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px 24px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--primary-bg);
+      color: var(--primary);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 9999px;
+      margin-bottom: 6px;
+    }
+
+    .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--primary);
+    }
+
+    .title {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--text-title);
+      letter-spacing: -0.02em;
+    }
+
+    .subtitle {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .preset-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .preset-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-light);
+    }
+
+    .preset-btn {
+      background: #f1f5f9;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-body);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .preset-btn:hover {
+      background: var(--primary-bg);
+      border-color: var(--primary-border);
+      color: var(--primary);
+    }
+
+    /* 2-Column Grid Layout */
+    .grid-layout {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 20px;
+      align-items: start;
+    }
+
+    @media (max-width: 900px) {
+      .grid-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Cards */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .section-title {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-light);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .badge-num {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #f1f5f9;
+      color: var(--text-body);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    /* Stepper 3-column input */
+    .stepper-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 600px) {
+      .stepper-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .stepper-box {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 12px;
+    }
+
+    .stepper-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .stepper-control {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 2px 4px;
+    }
+
+    .stepper-btn {
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: none;
+      border: none;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-muted);
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    .stepper-btn:hover {
+      background: #f1f5f9;
+      color: var(--text-title);
+    }
+
+    .stepper-input {
+      width: 45px;
+      border: none;
+      background: transparent;
+      text-align: center;
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--text-title);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      outline: none;
+    }
+
+    /* Form Fields & Dropdowns */
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .field-item {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .field-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .field-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-title);
+    }
+
+    .multiplier-tag {
+      font-size: 11px;
+      font-weight: 700;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      color: var(--primary);
+      background: var(--primary-bg);
+      border: 1px solid var(--primary-border);
+      padding: 1px 6px;
+      border-radius: 4px;
+    }
+
+    .select-input {
+      width: 100%;
+      height: 40px;
+      background-color: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 0 12px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-title);
+      cursor: pointer;
+      outline: none;
+      box-shadow: var(--shadow-sm);
+      transition: border-color 0.15s ease;
+    }
+
+    .select-input:focus {
+      border-color: var(--border-focus);
+    }
+
+    /* Sub Costs */
+    .cost-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 12px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+
+    .cost-input {
+      width: 100%;
+      height: 36px;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 0 12px;
+      font-size: 13px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-weight: 600;
+      color: var(--text-title);
+      outline: none;
+    }
+
+    .cost-input:focus {
+      background: #ffffff;
+      border-color: var(--border-focus);
+    }
+
+    /* RIGHT COLUMN: QUOTATION SUMMARY */
+    .sticky-card {
+      position: sticky;
+      top: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .quote-box {
+      background: #ffffff;
+      border: 2px solid var(--primary-border);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      box-shadow: var(--shadow-md);
+    }
+
+    .quote-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .quote-title {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--primary);
+    }
+
+    .quote-pill {
+      font-size: 10px;
+      font-weight: 700;
+      background: var(--primary-bg);
+      color: var(--primary);
+      border: 1px solid var(--primary-border);
+      padding: 2px 8px;
+      border-radius: 9999px;
+    }
+
+    .quote-total {
+      font-size: 34px;
+      font-weight: 900;
+      color: var(--text-title);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      letter-spacing: -0.03em;
+      margin: 4px 0 6px 0;
+    }
+
+    .quote-note {
+      font-size: 11px;
+      color: var(--text-light);
+    }
+
+    /* Mini Stats */
+    .mini-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin: 16px 0;
+      padding: 14px 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .stat-cell {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 10px 12px;
+    }
+
+    .stat-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--text-light);
+      display: block;
+    }
+
+    .stat-val {
+      font-size: 14px;
+      font-weight: 800;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      color: var(--text-title);
+      margin-top: 2px;
+      display: block;
+    }
+
+    /* Breakdown rows */
+    .breakdown-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 12px;
+    }
+
+    .breakdown-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--text-body);
+    }
+
+    .breakdown-val {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-weight: 600;
+      color: var(--text-title);
+    }
+
+    .breakdown-val.highlight {
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    /* Action Button */
+    .btn-action {
+      width: 100%;
+      background: var(--primary);
+      color: #ffffff;
+      border: none;
+      border-radius: var(--radius-md);
+      padding: 12px 16px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 18px;
+      transition: background 0.15s ease;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn-action:hover {
+      background: var(--primary-hover);
+    }
+
+    .btn-action svg {
+      width: 16px;
+      height: 16px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      flex-shrink: 0;
+    }
+
+    /* Advice Callout */
+    .advice-box {
+      background: var(--primary-bg);
+      border: 1px solid var(--primary-border);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      font-size: 12px;
+      color: #064e3b;
+      line-height: 1.6;
+    }
+
+    .advice-title {
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 6px;
+      color: var(--primary);
+    }
+
+    .advice-title svg {
+      width: 15px;
+      height: 15px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+    }
+
+    /* TABLE SECTION */
+    .table-container {
+      overflow-x: auto;
+      margin-top: 12px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+      text-align: left;
+    }
+
+    th {
+      background: #f8fafc;
+      padding: 12px 14px;
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: var(--text-light);
+      border-bottom: 1px solid var(--border);
+    }
+
+    td {
+      padding: 14px;
+      border-bottom: 1px solid #f1f5f9;
+      vertical-align: middle;
+    }
+
+    tr:hover td {
+      background: #f8fafc;
+    }
+
+    .td-client {
+      font-weight: 700;
+      color: var(--text-title);
+    }
+
+    .td-mono {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-weight: 600;
+    }
+
+    .td-highlight {
+      background: var(--primary-bg);
+      color: var(--primary);
+      font-weight: 800;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+
+    .discount-tag {
+      font-size: 10px;
+      color: var(--danger-text);
+      display: block;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <!-- Topbar & Presets -->
+    <div class="topbar">
+      <div>
+        <div class="badge">
+          <span class="dot"></span>
+          Thuật Toán Định Giá Thặng Dư & May Đo
+        </div>
+        <div class="title">Bảng Tính Báo Giá Đào Tạo</div>
+        <div class="subtitle">Tự động tính thặng dư học phí chuẩn xác theo đặc thù từng doanh nghiệp và học viên.</div>
+      </div>
+
+      <div class="preset-group">
+        <span class="preset-label">Tải mẫu nhanh:</span>
+        <button onclick="loadPreset('khe2')" class="preset-btn">Khè Khóa 2 (10 HV)</button>
+        <button onclick="loadPreset('jenny')" class="preset-btn">Mrs. Jenny (1-1)</button>
+        <button onclick="loadPreset('alphatech')" class="preset-btn">Alphatech (25 HV)</button>
+      </div>
+    </div>
+
+    <!-- 2-Column Grid -->
+    <div class="grid-layout">
+
+      <!-- CỘT TRÁI: BỘ TIÊU CHÍ (7 CỘT) -->
+      <div style="display: flex; flex-direction: column; gap: 20px;">
+
+        <!-- 1. QUY MÔ ĐÀO TẠO -->
+        <div class="card">
+          <div class="section-title">
+            <span class="badge-num">1</span>
+            Quy mô khóa học
+            <span style="margin-left: auto; text-transform: none; font-weight: 500; color: var(--text-muted);" id="scaleSummary">12 giờ đào tạo</span>
+          </div>
+
+          <div class="stepper-row">
+            <!-- Học viên -->
+            <div class="stepper-box">
+              <span class="stepper-label">Số học viên</span>
+              <div class="stepper-control">
+                <button type="button" class="stepper-btn" onclick="stepValue('numStudents', -1)">−</button>
+                <input type="number" id="numStudents" value="10" min="1" max="100" class="stepper-input" oninput="calculate()">
+                <button type="button" class="stepper-btn" onclick="stepValue('numStudents', 1)">+</button>
+              </div>
+            </div>
+
+            <!-- Buổi học -->
+            <div class="stepper-box">
+              <span class="stepper-label">Số buổi học</span>
+              <div class="stepper-control">
+                <button type="button" class="stepper-btn" onclick="stepValue('numSessions', -1)">−</button>
+                <input type="number" id="numSessions" value="4" min="1" max="50" class="stepper-input" oninput="calculate()">
+                <button type="button" class="stepper-btn" onclick="stepValue('numSessions', 1)">+</button>
+              </div>
+            </div>
+
+            <!-- Giờ / buổi -->
+            <div class="stepper-box">
+              <span class="stepper-label">Giờ / buổi</span>
+              <div class="stepper-control">
+                <button type="button" class="stepper-btn" onclick="stepValue('hoursPerSession', -0.5)">−</button>
+                <input type="number" id="hoursPerSession" value="3" min="0.5" max="8" step="0.5" class="stepper-input" oninput="calculate()">
+                <button type="button" class="stepper-btn" onclick="stepValue('hoursPerSession', 0.5)">+</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. CÁC TIÊU CHÍ MAY ĐO -->
+        <div class="card">
+          <div class="section-title">
+            <span class="badge-num">2</span>
+            Đặc tính may đo & Phân loại đối tượng
+          </div>
+
+          <div class="field-group">
+            <!-- Tiêu chí 1: Môn học -->
+            <div class="field-item">
+              <div class="field-header">
+                <label class="field-label">1. Chủ đề đào tạo & Độ khó kiến thức</label>
+                <span class="multiplier-tag" id="lblComplexity">x1.20</span>
+              </div>
+              <select id="complexity" class="select-input" onchange="calculate()">
+                <option value="1.00">Thao tác cơ bản (Word, Excel căn bản, Canva thiết kế)</option>
+                <option value="1.20" selected>Phân tích dữ liệu & Tự động hóa (Pivot, Dashboard, Báo cáo động)</option>
+                <option value="1.35">Tư duy Quản trị & Tối ưu hiệu suất (KPI, OKR, Vận hành)</option>
+                <option value="1.50">Chiến lược & Hệ thống dữ liệu cấp cao (Business Intelligence / AI)</option>
+              </select>
+            </div>
+
+            <!-- Tiêu chí 2: Độ tuổi & Nền tảng -->
+            <div class="field-item">
+              <div class="field-header">
+                <label class="field-label">2. Độ tuổi & Nền tảng tiếp thu của học viên</label>
+                <span class="multiplier-tag" id="lblAge">x1.00</span>
+              </div>
+              <select id="ageFactor" class="select-input" onchange="calculate()">
+                <option value="0.95">Gen Z / Nhân sự trẻ (&lt; 26 tuổi, nhạy công nghệ, tiếp thu rất nhanh)</option>
+                <option value="1.00" selected>Người đi làm tiêu chuẩn (26 - 38 tuổi, có nền tảng văn phòng sẵn)</option>
+                <option value="1.15">Quản lý trung niên (39 - 50 tuổi, cần giảng chậm, giải thích cặn kẽ)</option>
+                <option value="1.30">Lớn tuổi / Kháng cự công nghệ (&gt; 50 tuổi, cần cầm tay chỉ việc từng bước)</option>
+              </select>
+            </div>
+
+            <!-- Tiêu chí 3: May đo dữ liệu -->
+            <div class="field-item">
+              <div class="field-header">
+                <label class="field-label">3. Mức độ May đo bài toán thực tế của doanh nghiệp</label>
+                <span class="multiplier-tag" id="lblCustom">x1.35</span>
+              </div>
+              <select id="customization" class="select-input" onchange="calculate()">
+                <option value="1.00">Giáo trình tiêu chuẩn (Học theo case-study mẫu có sẵn)</option>
+                <option value="1.15">Bán may đo (Giáo trình mẫu + lồng ghép 20% dữ liệu thực tế)</option>
+                <option value="1.35" selected>May đo chuyên sâu (100% giải quyết trực tiếp trên file số liệu thật của DN)</option>
+                <option value="1.60">Tư vấn giải pháp (Vừa giảng dạy vừa tái cấu trúc toàn bộ file quy trình)</option>
+              </select>
+            </div>
+
+            <!-- Tiêu chí 4: Ngành nghề -->
+            <div class="field-item">
+              <div class="field-header">
+                <label class="field-label">4. Lĩnh vực kinh doanh & Dòng tiền ngành nghề</label>
+                <span class="multiplier-tag" id="lblIndustry">x1.20</span>
+              </div>
+              <select id="industryFactor" class="select-input" onchange="calculate()">
+                <option value="0.85">Giáo dục, Bán lẻ truyền thống, Sinh viên khởi nghiệp</option>
+                <option value="1.00">SME đa ngành, Dịch vụ văn phòng phổ thông</option>
+                <option value="1.20" selected>Night-life, F&B, Bất động sản, Thẩm mỹ / Spa, Chuỗi bán lẻ</option>
+                <option value="1.45">Chứng khoán, Fintech, AI / Data hardcore, Club cao cấp / Luxury</option>
+              </select>
+            </div>
+
+            <!-- Tiêu chí 5: Địa điểm -->
+            <div class="field-item">
+              <div class="field-header">
+                <label class="field-label">5. Hình thức & Địa điểm tổ chức</label>
+                <span class="multiplier-tag" id="lblLocation">x1.00</span>
+              </div>
+              <select id="locationFactor" class="select-input" onchange="calculate()">
+                <option value="1.00" selected>Online qua Google Meet / Onsite nội thành (&lt; 5km)</option>
+                <option value="1.10">Onsite ngoại thành / Xa trung tâm (5 - 15km)</option>
+                <option value="1.25">Đi tỉnh / Đào tạo tập trung ngoại thành xa</option>
+              </select>
+            </div>
+
+            <!-- Chi phí phụ trợ -->
+            <div class="cost-grid">
+              <div>
+                <label class="field-label" style="display: block; margin-bottom: 4px;">Cà phê / Phòng họp (VNĐ)</label>
+                <input type="number" id="cafeCost" value="0" step="50000" placeholder="0" class="cost-input" oninput="calculate()">
+              </div>
+              <div>
+                <label class="field-label" style="display: block; margin-bottom: 4px;">Di chuyển / Xăng xe (VNĐ)</label>
+                <input type="number" id="travelCost" value="0" step="50000" placeholder="0" class="cost-input" oninput="calculate()">
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+      <!-- CỘT PHẢI: KẾT QUẢ BÁO GIÁ (STICKY) -->
+      <div class="sticky-card">
+        
+        <div class="quote-box">
+          <div class="quote-header">
+            <span class="quote-title">Học Phí Đề Xuất (Net)</span>
+            <span class="quote-pill">Chuẩn Thặng Dư</span>
+          </div>
+
+          <div class="quote-total" id="outTotal">14.400.000 đ</div>
+          <div class="quote-note">Mức giá phản ánh trọn vẹn giá trị may đo, không cần tự hạ giá 30-40%.</div>
+
+          <!-- Mini stats -->
+          <div class="mini-stats">
+            <div class="stat-cell">
+              <span class="stat-label">Học phí / 1 người</span>
+              <span class="stat-val" id="outPerStudent">1.440.000 đ</span>
+            </div>
+            <div class="stat-cell">
+              <span class="stat-label">Thù lao / 1 buổi</span>
+              <span class="stat-val" id="outPerSession">3.600.000 đ</span>
+            </div>
+          </div>
+
+          <!-- Breakdown -->
+          <div class="breakdown-list">
+            <div class="breakdown-row">
+              <span>Đơn giá Base cơ sở:</span>
+              <span class="breakdown-val" id="bdBase">165.000 đ/h</span>
+            </div>
+            <div class="breakdown-row">
+              <span>Tổng số giờ:</span>
+              <span class="breakdown-val" id="bdHours">12 giờ (4 buổi)</span>
+            </div>
+            <div class="breakdown-row">
+              <span>Hệ số quy mô:</span>
+              <span class="breakdown-val highlight" id="bdScale">x4.50 (10 HV)</span>
+            </div>
+            <div class="breakdown-row">
+              <span>Tích hợp 5 hệ số:</span>
+              <span class="breakdown-val highlight" id="bdMultiplier">x1.94</span>
+            </div>
+            <div class="breakdown-row">
+              <span>Chi phí phụ trợ:</span>
+              <span class="breakdown-val" id="bdCost">0 đ</span>
+            </div>
+          </div>
+
+          <!-- Button Copy -->
+          <button type="button" onclick="copyQuotation()" id="btnCopy" class="btn-action">
+            <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+            <span>Sao Chép Báo Giá Gửi Zalo</span>
+          </button>
+          <div style="text-align: center; font-size: 11px; color: var(--text-light); margin-top: 6px;" id="copyNotice">Định dạng sẵn văn bản chuyên nghiệp để gửi khách hàng</div>
+        </div>
+
+        <!-- Advice -->
+        <div class="advice-box">
+          <div class="advice-title">
+            <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            Chiến lược bảo vệ giá:
+          </div>
+          Khi gửi báo giá cho Doanh nghiệp, hãy gửi kèm <strong>Bảng Đánh Giá Nhu Cầu</strong> (Nêu rõ: giải quyết trực tiếp trên file số liệu thật, đào tạo theo tốc độ tiếp thu của đội ngũ). Khi khách thấy sự "may đo", họ sẽ vui vẻ chi trả mà không mặc cả.
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- BẢNG ĐỐI SOÁT 4 CASE THỰC TẾ TRONG FILE EXCEL -->
+    <div class="card">
+      <div class="section-title">
+        <span class="badge-num">3</span>
+        Đối soát 4 deal thực tế trong file Excel của bạn
+      </div>
+      <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">So sánh mức giá thực thu cũ với mức giá do thuật toán đề xuất:</p>
+
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Khách hàng</th>
+              <th>Quy mô</th>
+              <th>Nội dung</th>
+              <th>Giá cũ trong Excel</th>
+              <th style="background: var(--primary-bg); color: var(--primary);">Mô hình Đề Xuất</th>
+              <th>Bản chất thặng dư & Tâm lý</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="td-client">Mrs. Jenny</td>
+              <td>1 học viên (1-1)</td>
+              <td style="color: var(--text-muted);">Excel (16h) - Trưởng nhóm Night-life</td>
+              <td>
+                <span class="td-mono">3.700.000 đ</span>
+                <span class="discount-tag" style="color: var(--text-light);">(231k/giờ kèm riêng)</span>
+              </td>
+              <td class="td-highlight">5.800.000 đ</td>
+              <td style="color: var(--text-muted); font-size: 11px;">Giá cũ quá rẻ cho suất kèm 1-1 của Trưởng nhóm. Giá mới phản ánh đúng thặng dư cầm tay chỉ việc trên file nhạy cảm.</td>
+            </tr>
+            <tr>
+              <td class="td-client">Khè Group (Khóa 2)</td>
+              <td>10 học viên</td>
+              <td style="color: var(--text-muted);">Excel (12h) - Trưởng nhóm Night-life</td>
+              <td>
+                <span class="td-mono">7.800.000 đ</span>
+                <span class="discount-tag">(Đã giảm 40% từ 12.9tr)</span>
+              </td>
+              <td class="td-highlight">8.900.000 đ</td>
+              <td style="color: var(--text-muted); font-size: 11px;">Tương đương mức thực thu 7.8tr nhưng <strong>không phải tự hạ giá 40%</strong>, nâng cao vị thế chuyên gia.</td>
+            </tr>
+            <tr>
+              <td class="td-client">Khè Group (Khóa 3)</td>
+              <td>17 học viên</td>
+              <td style="color: var(--text-muted);">Excel/Pivot (12h) - Night-life</td>
+              <td>
+                <span class="td-mono">12.200.000 đ</span>
+                <span class="discount-tag">(Đã giảm 40% từ 20.1tr)</span>
+              </td>
+              <td class="td-highlight">13.200.000 đ</td>
+              <td style="color: var(--text-muted); font-size: 11px;">Thuật toán giảm biên quy mô tự động kéo giá về đúng tầm chi trả của doanh nghiệp (13.2tr) rất tự nhiên.</td>
+            </tr>
+            <tr>
+              <td class="td-client">Alphatech</td>
+              <td>25 học viên</td>
+              <td style="color: var(--text-muted);">Word/Excel (16h) - Nhân viên Y tế</td>
+              <td>
+                <span class="td-mono">26.400.000 đ</span>
+                <span class="discount-tag">(Đã giảm 20% từ 33tr)</span>
+              </td>
+              <td class="td-highlight">27.500.000 đ</td>
+              <td style="color: var(--text-muted); font-size: 11px;">Khớp chuẩn với mức chi trả 26.4tr của Alphatech, định giá vững vàng và có cơ sở bảo vệ trước ban giám đốc.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // Diminishing Marginal Return Scale Factor
+    function getScaleFactor(n) {
+      if (n === 1) return 1.0;
+      if (n === 2) return 1.6;
+      if (n === 3) return 2.2;
+      if (n <= 5) return 2.8;
+      if (n <= 8) return 3.8;
+      if (n <= 12) return 4.5;
+      if (n <= 16) return 5.5;
+      if (n <= 20) return 6.3;
+      if (n <= 25) return 7.5;
+      return 7.5 + (n - 25) * 0.25;
+    }
+
+    function formatVND(val) {
+      return new Intl.NumberFormat('vi-VN').format(Math.round(val)) + ' đ';
+    }
+
+    function stepValue(id, delta) {
+      const el = document.getElementById(id);
+      let val = parseFloat(el.value) || 0;
+      val = Math.max(parseFloat(el.min) || 1, val + delta);
+      if (el.step === '0.5') {
+        el.value = val.toFixed(1).replace('.0', '');
+      } else {
+        el.value = Math.round(val);
+      }
+      calculate();
+    }
+
+    let currentQuoteData = {};
+
+    function calculate() {
+      const nStudents = Math.max(1, parseInt(document.getElementById('numStudents').value) || 1);
+      const nSessions = Math.max(1, parseInt(document.getElementById('numSessions').value) || 1);
+      const hoursPerSession = Math.max(0.5, parseFloat(document.getElementById('hoursPerSession').value) || 1);
+      const totalHours = nSessions * hoursPerSession;
+
+      const selComplexity = document.getElementById('complexity');
+      const kComplexity = parseFloat(selComplexity.value);
+
+      const selAge = document.getElementById('ageFactor');
+      const kAge = parseFloat(selAge.value);
+
+      const selCustom = document.getElementById('customization');
+      const kCustom = parseFloat(selCustom.value);
+
+      const selIndustry = document.getElementById('industryFactor');
+      const kIndustry = parseFloat(selIndustry.value);
+
+      const selLocation = document.getElementById('locationFactor');
+      const kLocation = parseFloat(selLocation.value);
+
+      const cafeCost = parseFloat(document.getElementById('cafeCost').value) || 0;
+      const travelCost = parseFloat(document.getElementById('travelCost').value) || 0;
+
+      // Update multiplier badges
+      document.getElementById('lblComplexity').innerText = 'x' + kComplexity.toFixed(2);
+      document.getElementById('lblAge').innerText = 'x' + kAge.toFixed(2);
+      document.getElementById('lblCustom').innerText = 'x' + kCustom.toFixed(2);
+      document.getElementById('lblIndustry').innerText = 'x' + kIndustry.toFixed(2);
+      document.getElementById('lblLocation').innerText = 'x' + kLocation.toFixed(2);
+
+      document.getElementById('scaleSummary').innerText = `${totalHours} giờ (${nSessions} buổi x ${hoursPerSession}h)`;
+
+      // Base rate: 1-1 coaching is 280k/h, Group training is 165k/h
+      const baseRate = nStudents === 1 ? 280000 : 165000;
+      const scaleFactor = getScaleFactor(nStudents);
+      const combinedMultiplier = kComplexity * kAge * kCustom * kIndustry * kLocation;
+
+      // Calculate tuition
+      let tuition = baseRate * totalHours * scaleFactor * (combinedMultiplier / (nStudents === 1 ? 1 : 1.2));
+      let totalPrice = tuition + cafeCost + travelCost;
+
+      // Round to nearest 100k
+      totalPrice = Math.round(totalPrice / 100000) * 100000;
+
+      const perStudent = Math.round(totalPrice / nStudents);
+      const perSession = Math.round(totalPrice / nSessions);
+
+      // Render outputs
+      document.getElementById('outTotal').innerText = formatVND(totalPrice);
+      document.getElementById('outPerStudent').innerText = formatVND(perStudent);
+      document.getElementById('outPerSession').innerText = formatVND(perSession);
+
+      document.getElementById('bdBase').innerText = formatVND(baseRate) + '/giờ';
+      document.getElementById('bdHours').innerText = `${totalHours} giờ (${nSessions} buổi)`;
+      document.getElementById('bdScale').innerText = `x${scaleFactor.toFixed(2)} (${nStudents} HV)`;
+      document.getElementById('bdMultiplier').innerText = `x${combinedMultiplier.toFixed(2)}`;
+      document.getElementById('bdCost').innerText = formatVND(cafeCost + travelCost);
+
+      currentQuoteData = {
+        totalPrice: formatVND(totalPrice),
+        perStudent: formatVND(perStudent),
+        perSession: formatVND(perSession),
+        students: nStudents,
+        sessions: nSessions,
+        hours: totalHours,
+        subject: selComplexity.options[selComplexity.selectedIndex].text.split('(')[0].trim(),
+        custom: selCustom.options[selCustom.selectedIndex].text.split('(')[0].trim(),
+      };
+    }
+
+    function copyQuotation() {
+      const text = `KÍNH GỬI BÁO GIÁ ĐÀO TẠO
+- Nội dung: ${currentQuoteData.subject}
+- Hình thức: ${currentQuoteData.custom}
+- Quy mô: ${currentQuoteData.students} học viên | ${currentQuoteData.sessions} buổi (${currentQuoteData.hours} giờ)
+----------------------------------------
+Tổng học phí trọn gói: ${currentQuoteData.totalPrice}
+(Tương đương: ${currentQuoteData.perStudent}/học viên - ${currentQuoteData.perSession}/buổi)
+----------------------------------------
+* Báo giá đã bao gồm toàn bộ giáo trình may đo thực tế và hỗ trợ giải đáp sau khóa học.`;
+
+      navigator.clipboard.writeText(text).then(() => {
+        const btn = document.getElementById('btnCopy');
+        const originalHtml = btn.innerHTML;
+        btn.innerHTML = `<span>✓ Đã Sao Chép Vào Bộ Nhớ!</span>`;
+        btn.style.background = '#0f172a';
+        setTimeout(() => {
+          btn.innerHTML = originalHtml;
+          btn.style.background = 'var(--primary)';
+        }, 2000);
+      }).catch(err => {
+        alert('Không thể sao chép tự động, bạn có thể bôi đen copy.');
+      });
+    }
+
+    function loadPreset(preset) {
+      if (preset === 'khe2') {
+        document.getElementById('numStudents').value = 10;
+        document.getElementById('numSessions').value = 4;
+        document.getElementById('hoursPerSession').value = 3;
+        document.getElementById('complexity').value = '1.20';
+        document.getElementById('ageFactor').value = '1.00';
+        document.getElementById('customization').value = '1.35';
+        document.getElementById('industryFactor').value = '1.20';
+        document.getElementById('locationFactor').value = '1.00';
+        document.getElementById('cafeCost').value = 0;
+        document.getElementById('travelCost').value = 0;
+      } else if (preset === 'jenny') {
+        document.getElementById('numStudents').value = 1;
+        document.getElementById('numSessions').value = 8;
+        document.getElementById('hoursPerSession').value = 2;
+        document.getElementById('complexity').value = '1.00';
+        document.getElementById('ageFactor').value = '1.00';
+        document.getElementById('customization').value = '1.35';
+        document.getElementById('industryFactor').value = '1.20';
+        document.getElementById('locationFactor').value = '1.00';
+        document.getElementById('cafeCost').value = 400000;
+        document.getElementById('travelCost').value = 180000;
+      } else if (preset === 'alphatech') {
+        document.getElementById('numStudents').value = 25;
+        document.getElementById('numSessions').value = 8;
+        document.getElementById('hoursPerSession').value = 2;
+        document.getElementById('complexity').value = '1.00';
+        document.getElementById('ageFactor').value = '1.00';
+        document.getElementById('customization').value = '1.15';
+        document.getElementById('industryFactor').value = '1.00';
+        document.getElementById('locationFactor').value = '1.00';
+        document.getElementById('cafeCost').value = 0;
+        document.getElementById('travelCost').value = 0;
+      }
+      calculate();
+    }
+
+    // Init
+    calculate();
+  </script>
+</body>
+</html>

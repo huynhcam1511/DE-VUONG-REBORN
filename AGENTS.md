@@ -35,6 +35,7 @@ Khi xây dựng hoặc chỉnh sửa các module quản trị (Admin Modules) d�
 3. **Chuẩn cột Mã định danh ID (Business Record IDs), Ngày tháng & Tránh mã phân loại rườm rà**:
    - **Phân biệt Mã định danh ID nghiệp vụ vs Mã quy ước rườm rà**:
      - Các bảng dữ liệu thương mại & quản trị (CRM Nhu cầu tuyển sinh, Báo giá, Hợp đồng, Giao dịch tài chính, Hồ sơ Doanh nghiệp, Hồ sơ Học viên) **bắt buộc** có cột **Mã ID** (Ví dụ: `Mã hồ sơ`, `Mã BG`, `Mã HĐ`, `Mã DN`, `Mã HV`) hiển thị đầu tiên với phông mono tinh gọn (`font-mono text-xs font-semibold text-slate-700`) dạng chữ thường liền mạch, **tuyệt đối KHÔNG bọc vào pill/badge viền xám** (`bg-*` hay `border-*`) gây rườm rà.
+     - **Mã ID trên Header màn hình Chi tiết (Detail View Header)**: Khi mở xem/chỉnh sửa chi tiết bản ghi, Mã ID nghiệp vụ **bắt buộc** hiển thị ngay trên thanh Header cố định của Detail View (cạnh nút "Quay lại danh sách") với định dạng phông mono tinh gọn (`font-mono text-xs font-semibold text-slate-700`), **tuyệt đối KHÔNG bọc trong pill/badge viền xám hay nền màu**.
      - Ngược lại, đối với học liệu LMS (Bài tập, Lý thuyết), **không tự tiện bịa mã quy ước rườm rà** (như `LT-EX-01`, `BT-01`) chiếm chỗ trên bảng.
    - Không nhồi nhét nội dung mô tả (description) dài dòng vào trong ô dữ liệu khiến chiều cao dòng bị phình to.
 
@@ -90,7 +91,8 @@ Khi xây dựng hoặc chỉnh sửa các module quản trị (Admin Modules) d�
    - **Bảng Vận hành / Nhập liệu trực tiếp (Ví dụ: Chương trình đào tạo)**: Các ô trong bảng chứa trực tiếp ô nhập liệu (`input`, `select`) để thao tác nhanh như Excel. Ở dạng bảng này, **KHÔNG dùng Menu 3 chấm**, mà đưa trực tiếp các nút thao tác nhanh (như dấu `+` để thêm dòng con, hoặc icon `Trash` để xóa) phơi bày ra ngay cột ngoài cùng bên phải để tiện click luôn.
 
 8. **Thanh điều khiển màn hình Chi tiết (Detail View Layout)**:
-   - Khi người dùng xem hoặc chỉnh sửa chi tiết một mục (mô hình Master-Detail), thanh điều khiển chi tiết (Nút Quay lại `< ChevronLeft/ArrowLeft`, Ô nhập tên, Nút Lưu, Trạng thái lưu) phải nằm ở ngay đầu khu vực nội dung (Body) bên dưới, có đường viền phân cách `border-b border-slate-200 pb-4`.
+   - Khi người dùng xem hoặc chỉnh sửa chi tiết một mục (mô hình Master-Detail), thanh điều khiển chi tiết (Nút Quay lại `< ChevronLeft/ArrowLeft`, **Mã định danh ID phông mono không bọc pill**, Tên item, Nút Lưu, Trạng thái lưu) phải nằm ở ngay đầu khu vực nội dung (Body) bên dưới, có đường viền phân cách `border-b border-slate-200 pb-4`.
+   - **Mã định danh ID trên Header**: Mã ID bắt buộc hiển thị cạnh nút Quay lại danh sách dưới dạng phông mono tinh gọn (`font-mono text-xs font-semibold text-slate-700`), **tuyệt đối KHÔNG bọc trong pill / badge**.
    - Tuyệt đối không đẩy các nút của màn hình chi tiết lên thanh Topbar chung của hệ thống.
 
 9. **Danh sách Module mẫu chuẩn (Benchmarks & Standardized Modules)**:
@@ -231,3 +233,14 @@ Khi người dùng nhắc đến **`@IT team`** (hoặc `IT team:`), hệ thốn
 - **Ngăn chặn Layout Shift (Chống nhảy khung)**: Mỗi khi chuyển giữa các module tab hoặc nạp bất đồng bộ dữ liệu từ Cloud Firestore/Backend API, tất cả các Bảng quản trị (`table`) bắt buộc phải hiển thị **Trạng thái Skeleton Loading** trong khoảng thời gian chờ (`isLoading === true`).
 - **Cấu trúc Dòng Skeleton chuẩn**: Hiển thị từ 5 dòng `<tr>` có hiệu ứng `animate-pulse`, trong đó các ô `<td>` chứa thẻ `<div>` mờ (`h-4 rounded bg-slate-100/80`) mô phỏng độ dài tương ứng của từng cột.
 - **Khởi tạo State an toàn**: Khi nạp trang ban đầu (F5), state khởi tạo của Bảng phải sử dụng helper khởi tạo đồng bộ (đã lọc các ID bị xóa trong `localStorage`) để triệt tiêu hoàn toàn hiện tượng chớp nạp lại dữ liệu mẫu (`DEFAULT_SEED`).
+
+## 22. Ưu tiên Full Page View cho các luồng công việc & Nhập liệu (Full Page View Standard - Zero Popup Policy)
+
+- **Tuyệt đối KHÔNG sử dụng Modal Popup nổi** cho các luồng nghiệp vụ chính, các biểu mẫu nhập liệu dài, hoặc các tính năng xử lý dữ liệu lớn (như Import file Excel B2B, Soạn thảo Báo giá, Quản lý Chi tiết Học viên/Doanh nghiệp).
+- **Thiết kế chuẩn mực Full Page View (Giữ nguyên Sidebar & Topbar toàn cục)**:
+  - Màn hình Full Page View hiển thị tràn khung làm việc chính của module (`h-full min-h-0 w-full flex flex-col bg-slate-50 overflow-hidden`).
+  - **Tuyệt đối KHÔNG dùng `fixed inset-0` hay `absolute inset-0 z-50` đè lên làm che mất Sidebar menu và Topbar chung của hệ thống**. Sidebar và Topbar chung phải luôn hiển thị cố định và sẵn sàng tương tác.
+  - Thanh điều khiển cố định của Module (Sticky Header): Nút Quay lại danh sách (`<` ChevronLeft / ArrowLeft), Tiêu đề module / Mã ID nghiệp vụ phông mono (`LRN-XXXXXXXX` / `ENT-XXXXXXXX` / `B2B-IMPORT`), và các Nút Hành Động chính (Lưu, Xác nhận Import, Tải mẫu).
+  - Trải nghiệm liền mạch, chuyên nghiệp như ứng dụng Desktop/SaaS cao cấp, loại bỏ hoàn toàn các khung Popup/Modal chèn ngang màn hình.
+- **Ngoại lệ duy nhất**: Chỉ các Menu Toolkit 3 chấm (Action Dropdown Popover) và Hộp thoại xác nhận thao tác nguy hiểm ngắn (`AdminConfirmModal` - Xóa vĩnh viễn) mới được phép hiển thị dạng Popover/Modal nhỏ.
+
