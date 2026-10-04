@@ -22,10 +22,12 @@ If duplicate application files are found, always prefer the path under `De_Vuong
 
 Khi xây dựng hoặc chỉnh sửa các module quản trị (Admin Modules) dạng danh sách/bảng, bắt buộc phải tuân thủ các nguyên tắc thiết kế sau:
 
-1. **Menu Hành động (Toolkit 3 chấm)**:
-   - **Tuyệt đối KHÔNG** gắn sự kiện mở chi tiết (onClick) lên toàn bộ dòng (`<tr>`) của bảng, tránh tình trạng click nhầm.
+1. **Menu Hành động (Toolkit 3 chấm) & Triệt tiêu Click nhầm trên Bảng Master & Detail**:
+   - **Tuyệt đối KHÔNG gắn sự kiện mở chi tiết (onClick, thẻ button, thẻ a/underline) lên toàn bộ dòng (`<tr>`) hay bất kỳ ô dữ liệu (`<td>`) nào của bảng (kể cả ô Tên/Tiêu đề bản ghi)**: Tránh tuyệt đối tình trạng click nhầm khi chọn văn bản hoặc xem dữ liệu. Toàn bộ các ô dữ liệu trên bảng Master là **READ-ONLY plain text**.
+   - **Cơ chế thao tác DUY NHẤT**: Mọi hành động xem chi tiết, chỉnh sửa, đổi tên, nhân bản, xóa **BẮT BUỘC chỉ được thực hiện thông qua Action Menu 3 chấm (`MoreVertical`)** ở cột ngoài cùng bên phải (áp dụng cho cả bảng Master lẫn bảng danh sách chi tiết Detail View). Tuyệt đối không phơi bày các nút icon trần trụi (`Pencil`, `Trash2`) ở cuối dòng.
+   - **Thẻ `<th>` của cột Action Menu BẮT BUỘC để trống, TUYỆT ĐỐI KHÔNG có chữ 'Thao tác' hay 'Hành động'**: Thẻ `<th>` ngoài cùng bên phải của Action Menu luôn để rỗng (`<th className="w-16 px-4 py-3.5 text-right font-medium border-b border-slate-200"></th>`), tránh làm thô ráp và chật chội hàng tiêu đề bảng.
    - Luôn luôn tạo một cột ngoài cùng bên phải dành cho Action Menu, sử dụng icon 3 chấm dọc (`MoreVertical`).
-   - Dropdown menu tối thiểu phải bao gồm 4 hành động: **Chỉnh sửa** (BookOpen/Edit2), **Đổi tên** (Pencil - cho phép đổi tên nhanh qua prompt/inline mà không cần mở chi tiết), **Nhân bản** (Copy), và **Xóa** (Trash2).
+   - Dropdown menu tối thiểu phải bao gồm các hành động phù hợp: **Chỉnh sửa / Chi tiết** (BookOpen/Edit2/Pencil), **Nhân bản** (Copy), và **Xóa** (Trash2).
 
 2. **Cố định tiêu đề bảng (Freeze Panes)**:
    - Các bảng dữ liệu dài bắt buộc phải có tính năng Freeze Pane (chỉ cuộn phần thân bảng, giữ nguyên thanh tiêu đề).
@@ -87,7 +89,10 @@ Khi xây dựng hoặc chỉnh sửa các module quản trị (Admin Modules) d�
      - **Ở dạng Lưới / Thẻ / Thư mục (Grid/Card/Folder View)**: Do không có dòng tiêu đề cột bảng, mới được phép đặt 1 dropdown sắp xếp gọn gàng trên thanh Toolbar.
 
 7. **Phân loại 2 kiểu Bảng dữ liệu (UX Patterns)**:
-   - **Bảng Master-Detail (Ví dụ: Kho lộ trình học)**: Dữ liệu trên bảng chỉ để xem (Read-only). **Bắt buộc** dùng Menu 3 chấm (Toolkit) ở cuối dòng để chứa các nút "Chỉnh sửa" (mở ra màn hình/modal chi tiết), "Đổi tên", "Nhân bản", "Xóa".
+   - **Bảng Master-Detail (Ví dụ: Kho lộ trình học, Ngân hàng câu hỏi, Báo giá, Hợp đồng)**:
+     - Dữ liệu trên bảng thuần túy để tra cứu và xem (Read-only).
+     - **Tuyệt đối KHÔNG biến tên mục / tiêu đề thành link bấm được (`button`, `a`, `hover:underline`)**. Tiêu đề hiển thị dạng văn bản chuẩn `text-[13px] font-medium text-slate-900 group-hover:text-emerald-700`.
+     - **Bắt buộc** dùng Menu 3 chấm (Toolkit) ở cuối dòng để chứa các nút "Chi tiết / Chỉnh sửa" (mở ra màn hình/modal chi tiết), "Đổi tên", "Nhân bản", "Xóa".
    - **Bảng Vận hành / Nhập liệu trực tiếp (Ví dụ: Chương trình đào tạo)**: Các ô trong bảng chứa trực tiếp ô nhập liệu (`input`, `select`) để thao tác nhanh như Excel. Ở dạng bảng này, **KHÔNG dùng Menu 3 chấm**, mà đưa trực tiếp các nút thao tác nhanh (như dấu `+` để thêm dòng con, hoặc icon `Trash` để xóa) phơi bày ra ngay cột ngoài cùng bên phải để tiện click luôn.
 
 8. **Thanh điều khiển màn hình Chi tiết (Detail View Layout)**:
