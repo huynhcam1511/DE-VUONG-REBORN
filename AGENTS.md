@@ -146,24 +146,43 @@ Khi xây dựng hoặc chỉnh sửa các module quản trị (Admin Modules) d�
 
 ## 14. Phân định kiến trúc cốt lõi phân hệ Đào tạo (Training Architecture Standards)
 
-Bắt buộc tuân thủ ranh giới nghiệp vụ giữa 3 module trong phân hệ Đào tạo, tuyệt đối không được nhầm lẫn:
+Bắt buộc tuân thủ ranh giới nghiệp vụ chuẩn mực của 5 modules trên Sidebar Menu Đào tạo, tuyệt đối không được nhầm lẫn:
 
-1. **Sơ đồ đào tạo (`tab=education-map`) - Master Taxonomy**:
+1. **Chương trình đào tạo (`tab=education-map`) - Master Taxonomy**:
    - **Nơi khai báo danh mục gốc**: Cấu trúc 3 cấp gồm **Lĩnh vực -> Chương trình đào tạo -> Chuyên đề**.
-   - Mỗi chuyên đề khai báo: Tên chuyên đề, Nội dung đào tạo tóm tắt (viết trọn vẹn 1 dòng theo chuyên đề, không chia nhỏ Chương 01, 02), Học liệu liên kết (ví dụ) và Ghi chú phân loại (B2B/B2C).
+   - Mỗi chuyên đề khai báo: Tên chuyên đề, Nội dung tóm tắt, Học liệu liên kết và Ghi chú phân loại (B2B/B2C).
    - Mục đích: Nơi khai báo để sau này thêm được các môn/ngành mới, phục vụ tra cứu tổng quan, đóng gói B2B (Doanh nghiệp mua cả Chương trình) và bán lẻ B2C (Học viên học theo Chuyên đề lẻ).
 
-2. **Giáo trình đào tạo (`tab=courses`) - Course Curriculum Repository**:
-   - **Kho học liệu giáo trình thực tế bám theo Sơ đồ đào tạo**: Tại đây, từng Chuyên đề sẽ được **đính thêm cả giáo trình thực tế vào** (gồm các Module/Chủ đề bài học, Nội dung chi tiết, file/link Giáo trình lý thuyết và Bài tập thực tế).
-   - **TUYỆT ĐỐI KHÔNG CÓ**: Soạn từng buổi học (Buổi 1, Buổi 2...), đính kèm slide bài giảng, video ghi hình, bài tập và bài kiểm tra (Quiz) để giảng viên đứng lớp giảng dạy.
+2. **Thư viện học liệu (`tab=library`) - Material Repository**:
+   - Quản lý học liệu dạng file hoặc link: `theory` (Lý thuyết, Slide) và `exercise` (Bài tập, Case study).
+   - Quản lý mã ID `MAT-XXXXXXXX` và phiên bản tự động (`V1.0`, `V1.1`).
 
-3. **Lớp học & Lịch học (`tab=classes`, `tab=schedule`) - Class Delivery & Operations**:
+3. **Ngân hàng Câu hỏi (`tab=exam-bank`) - Question Pool (`isBank: true`)**:
+   - Kho câu hỏi trắc nghiệm & tình huống đơn lẻ theo từng Chuyên đề đào tạo (`QST-XXXXXXXX`).
+   - Phân loại độ khó (Dễ / Trung bình / Khó), ngữ cảnh (Lý thuyết / Tình huống), dạng câu hỏi (Single, Multi, Đúng/Sai), AI Question Import.
+
+4. **Bài thi / Bài kiểm tra (`tab=quizzes`) - Exam Assembly (`isBank: false`)**:
+   - Lắp ráp các Bộ Đề thi trắc nghiệm hoàn chỉnh (`EXM-XXXXXXXX`) từ Ngân hàng câu hỏi.
+   - Cài đặt thời gian làm bài (phút), ngày/giờ thi, điểm đạt (pass score), gán cho các lớp học.
+
+5. **Chuyên đề đào tạo (`tab=courses`) - Course Curriculum Repository**:
+   - **Kho học liệu giáo trình thực tế bám theo Chương trình đào tạo**: Tại đây, từng Chuyên đề sẽ được soạn thảo Giáo trình chi tiết (các buổi học mẫu `sessions`, nội dung, đính kèm file Lý thuyết và Bài tập từ Thư viện học liệu theo ID `MAT-XXXXXXXX`).
+   - **Tự động Resolve Versioning**: Lấy file phiên bản active mới nhất theo ID.
+
+6. **Lớp học & Lịch học (`tab=classes`, `tab=schedule`) - Class Delivery & Operations**:
    - **Nơi vận hành giảng dạy thực tế của giảng viên cho từng lớp**. Quản lý lịch học theo buổi (Buổi 1, Buổi 2...), điểm danh attendance, lưu video ghi hình buổi học, giao bài tập, tổ chức thi Quiz.
-   - **Quy tắc UX/Logic 4 Tabs Màn hình Chi tiết Lớp học (Class Detail)**:
-     - **Tab Tổng quan (Overview)**: Nơi khai báo khung nội dung. Admin bấm chọn 1 "Chương trình đào tạo", hệ thống tự động xổ ra danh sách các "Chuyên đề" thuộc chương trình đó (mặc định Tick All). Admin có thể Tick Off một số chuyên đề nếu lớp học rút gọn.
-     - **Tab Học viên (Students)**: Không nhập tay học viên. Phải chọn/gán từ danh sách "Hồ sơ Học viên" đã tồn tại (từ Sales/CRM).
-     - **Tab Thời khóa biểu (Schedule)**: Thuần túy là timeline (Buổi 1, Buổi 2...) với ngày giờ, link Zoom, giảng viên. **Tuyệt đối tách bạch**: Giáo trình chỉ là Nội dung, không dính dáng đến timeline buổi hay tự sinh ra buổi.
-     - **Tab Kết quả (Grades)**: Bảng điểm và đánh giá.
+   - **LỚP HỌC CHỈ KẾ THỪA NỘI DUNG, TUYỆT ĐỐI KHÔNG PHẢI NƠI SOẠN ĐỀ HOẶC TẠO HỌC LIỆU MỚI!**
+   - **Cơ chế Kế thừa Tự động & Tách bạch Hoàn toàn (Decoupled Operations)**:
+     - **Tab Chuyên đề đào tạo LÀM CẢ HAI (Lý thuyết & Bài tập)**: Ở Tầng 2 Chuyên đề đã có sẵn cả cột Lý thuyết và cột Bài tập đi liền với nhau. Khi Lớp học tick chọn Chuyên đề, cả Lý thuyết và Bài tập tự động hiển thị song hành theo từng chuyên đề! Tuyệt đối không cần tách thêm tab "Bài tập" riêng lẻ gây trùng lặp.
+     - **Thời khóa biểu**: Thuần túy là lịch học, ngày giờ, Zoom, điểm danh. Tuyệt đối không nhồi nhét bài tập hay đề thi vào đây.
+     - **Bài kiểm tra & Đề thi**: Ở Tầng 2 đã tạo sẵn các bộ đề (`EXM-XXXXXXXX`), tại Lớp học chỉ cần **chọn/gõ Mã Đề thi `EXM-XXXXXXXX`** để kích hoạt đợt thi cho lớp.
+     - **Bảng điểm**: Thuần túy là nơi tổng hợp điểm số toàn khóa (Chuyên cần, Bài tập, Đề thi, GPA).
+   - **Cấu trúc Chuẩn mực 5 Tabs của Màn hình Chi tiết Lớp học (Class Detail)**:
+     1. **Chuyên đề đào tạo**: Khung nội dung theo Chương trình & Chuyên đề (Hiển thị song hành file Lý thuyết & Bài tập của từng chuyên đề).
+     2. **Thời khóa biểu**: Timeline các buổi học thực tế (ngày giờ, Zoom, GV, điểm danh).
+     3. **Học viên**: Danh sách học viên lớp (`LRN-XXXXXXXX`).
+     4. **Bài kiểm tra & Đề thi**: Quản lý các đề thi gắn vào lớp theo mã `EXM-XXXXXXXX` & kết quả làm bài.
+     5. **Bảng điểm**: Bảng điểm tổng hợp các đầu điểm của học viên (CC, BT, Thi, GPA).
 ## 15. Xử lý ngày tháng an toàn với Firestore (Safe Firestore Date Parsing)
 
 Trong Firestore, các trường thời gian (`createdAt`, `updatedAt`, `lastLogin`, v.v.) thường được lưu dưới dạng đối tượng Firestore `Timestamp` (`{ seconds, nanoseconds }` hoặc có hàm `.toDate()`), chuỗi ISO hoặc JavaScript `Date`.
