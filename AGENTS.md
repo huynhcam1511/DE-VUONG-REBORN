@@ -152,9 +152,14 @@ Khi xây dựng hoặc chỉnh sửa các module quản trị (Admin Modules) d�
       - Thanh Toolbar Header cố định ghim ở trên: `<header className="sticky top-0 z-30 flex-shrink-0 border-b border-slate-200 bg-white px-5 py-3">`.
       - **Bố cục 1 Hàng Tối Ưu cho Subtabs (Single-Row Subtab Action Bar)**: Khi module có hệ thống Subtabs, các nút bấm hành động (Search, Filter, View toggle, Nút `+ Thêm mới`) **BẮT BUỘC** nằm ở phía bên phải (align right) trên **CÙNG MỘT HÀNG** với các nút chuyển Subtab (`sticky top-0 z-30 flex items-center justify-between border-b border-slate-200 bg-white px-4 min-h-[48px]`).
       - Vùng chứa Bảng cuộn dữ liệu nằm ngay bên dưới Header **không có margin/padding**: `<div className="flex-1 min-h-0 overflow-auto">`.
-      - **Chuẩn Typography cho Tiêu đề Bảng (`<th>`)**: Đồng bộ 100% tất cả các bảng dùng class `<tr className="border-b border-slate-200 bg-slate-50/80 text-[11px] font-semibold text-slate-500">` và `<th className="sticky top-0 z-20 bg-white px-4 py-3 border-b border-slate-200">`, dán liền ngay dưới đường phân cách của Header, tạo trải nghiệm giao diện SaaS liền mạch, sắc nét và chuyên nghiệp (tương tự `LibraryModule.tsx` & `ClassDetail.tsx`).
+15. **Chuẩn thiết kế Thanh Topbar & Căn chỉnh Chuẩn mực Trục dọc (Topbar Single-Row & Baseline Alignment Standard)**:
+    - **Nút Menu Sidebar Topbar phải thẳng cột 100% với các icon Menu dưới Sidebar**:
+      - Nút toggle ghim sidebar (`Menu`) trên thanh Topbar bắt buộc phải có lề trái `ml-2` (hoặc `pl-5`) sao cho tâm icon nằm ở đúng vị trí `40px` tính từ mép trái màn hình, khớp hoàn hảo 100% theo chiều dọc với các icon menu của Sidebar bên dưới (`sm:w-20`).
+    - **Căn chỉnh Tiêu đề & Mã ID trên cùng 1 hàng (Single-Row Text Baseline Alignment)**:
+      - Khi hiển thị Tiêu đề chính cùng Mã ID nghiệp vụ (`EXM-...`, `CLS-...`, `MAT-...`) trên cùng 1 hàng ngang của Topbar, **tuyệt đối KHÔNG dùng thẻ `<h1>` block mặc định lồng ghép tự do với thẻ `<span>` inline** (tránh làm lệch đường cơ sở baseline dọc giữa chữ to và chữ nhỏ).
+      - **Cấu trúc chuẩn mực**: Bọc tất cả trong một container `<div className="flex items-center gap-2 min-w-0 text-xs sm:text-sm">`. Tiêu đề sử dụng thẻ `<span className="font-bold text-slate-900 truncate leading-normal">` hoặc bọc trong `<span className="font-bold text-slate-900 truncate">`, đi kèm các mã ID `font-mono text-xs font-semibold text-slate-700` để bảo đảm 100% toàn bộ ký tự nằm khớp chính xác trên cùng một đường cơ sở ngang (horizontal baseline).
 
-## 15. Phân định kiến trúc cốt lõi phân hệ Đào tạo (Training Architecture Standards)
+## 16. Phân định kiến trúc cốt lõi phân hệ Đào tạo (Training Architecture Standards)
 
 Bắt buộc tuân thủ ranh giới nghiệp vụ chuẩn mực của 5 modules trên Sidebar Menu Đào tạo, tuyệt đối không được nhầm lẫn:
 
