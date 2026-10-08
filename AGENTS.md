@@ -34,10 +34,11 @@ Khi xây dựng hoặc chỉnh sửa các module quản trị (Admin Modules) d�
    - Thẻ `<th>` phải sử dụng các class Tailwind: `sticky top-0 z-20 bg-white`.
    - Vùng chứa module (như thẻ bọc ngoài cùng trong `AdminDashboard`) phải được set `h-full min-h-0 overflow-hidden` để thanh cuộn (scrollbar) nằm gọn bên trong bảng thay vì tràn ra ngoài window.
 
-3. **Chuẩn cột Mã định danh ID (Business Record IDs), Ngày tháng & Tránh mã phân loại rườm rà**:
+3. **Chuẩn cột Mã định danh ID (Business Record IDs), Ngày tháng & Quy tắc Bám mã (Code-Anchoring)**:
    - **Phân biệt Mã định danh ID nghiệp vụ vs Mã quy ước rườm rà**:
-     - Các bảng dữ liệu thương mại & quản trị (CRM Nhu cầu tuyển sinh, Báo giá, Hợp đồng, Giao dịch tài chính, Hồ sơ Doanh nghiệp, Hồ sơ Học viên) **bắt buộc** có cột **Mã ID** (Ví dụ: `Mã hồ sơ`, `Mã BG`, `Mã HĐ`, `Mã DN`, `Mã HV`) hiển thị đầu tiên với phông mono tinh gọn (`font-mono text-xs font-semibold text-slate-700`) dạng chữ thường liền mạch, **tuyệt đối KHÔNG bọc vào pill/badge viền xám** (`bg-*` hay `border-*`) gây rườm rà.
+     - Các bảng dữ liệu thương mại & quản trị (CRM Nhu cầu tuyển sinh, Báo giá, Hợp đồng, Giao dịch tài chính, Hồ sơ Doanh nghiệp, Hồ sơ Học viên, Chuyên đề `TPC-XXXXXXXX`, Học liệu `MAT-XXXXXXXX`) **bắt buộc** có cột **Mã ID** (Ví dụ: `Mã hồ sơ`, `Mã BG`, `Mã HĐ`, `Mã DN`, `Mã HV`, `Mã CĐ`, `Mã HL`) hiển thị đầu tiên với phông mono tinh gọn (`font-mono text-xs font-semibold text-slate-700`) dạng chữ thường liền mạch, **tuyệt đối KHÔNG bọc vào pill/badge viền xám** (`bg-*` hay `border-*`) gây rườm rà.
      - **Mã ID trên Header màn hình Chi tiết (Detail View Header)**: Khi mở xem/chỉnh sửa chi tiết bản ghi, Mã ID nghiệp vụ **bắt buộc** hiển thị ngay trên thanh Header cố định của Detail View (cạnh nút "Quay lại danh sách") với định dạng phông mono tinh gọn (`font-mono text-xs font-semibold text-slate-700`), **tuyệt đối KHÔNG bọc trong pill/badge viền xám hay nền màu**.
+     - **Quy tắc Bám mã định danh duy nhất (Strict ID / Code-Anchoring)**: Mọi thao tác liên kết dữ liệu giữa các module (ví dụ: Chuyên đề đào tạo $\leftrightarrow$ Thư viện học liệu, Lớp học $\leftrightarrow$ Chuyên đề) **BẮT BUỘC dựa theo Mã ID duy nhất (`materialId`, `materialCode`, `topic.id`)**. Tuyệt đối KHÔNG dùng khớp chuỗi mờ/tìm kiếm từ khóa nới lỏng (`includes()`), tránh tình trạng các từ khóa dùng chung (như "PivotTable", "Word", "Excel") làm lây lan hoặc nhảy nhầm file giữa các chuyên đề khác nhau.
      - Ngược lại, đối với học liệu LMS (Bài tập, Lý thuyết), **không tự tiện bịa mã quy ước rườm rà** (như `LT-EX-01`, `BT-01`) chiếm chỗ trên bảng.
    - Không nhồi nhét nội dung mô tả (description) dài dòng vào trong ô dữ liệu khiến chiều cao dòng bị phình to.
 
@@ -144,7 +145,16 @@ Khi xây dựng hoặc chỉnh sửa các module quản trị (Admin Modules) d�
     - **Tuyệt đối KHÔNG** chỉ cập nhật state trên giao diện (React `useState`, `setDocuments`...) rồi để đó, vì dữ liệu sẽ bị mất khi người dùng tải lại trang (F5).
     - Luôn kiểm tra xem module/page có cần API call chưa và bổ sung nếu thiếu.
 
-## 14. Phân định kiến trúc cốt lõi phân hệ Đào tạo (Training Architecture Standards)
+14. **Chuẩn thiết kế Layout Bảng dữ liệu Tệp liền vào Header (Full-Bleed Table Layout Standard)**:
+    - **Tuyệt đối KHÔNG bọc Bảng dữ liệu (`<table>`) vào khung thẻ nổi bo góc có khoảng đệm padding (`p-5`, `rounded-xl border shadow-sm`) trên nền xám (`bg-slate-50`)**: Tránh làm rời rạc giao diện, làm thu hẹp diện tích hiển thị cột và biến bảng thành "hộp card trôi nổi".
+    - **Layout Tệp liền Chuẩn mực (Edge-to-Edge Full Bleed Layout)**:
+      - Khung ngoài cùng của Module sử dụng class: `flex h-full min-h-0 w-full flex-col bg-white overflow-hidden`.
+      - Thanh Toolbar Header cố định ghim ở trên: `<header className="sticky top-0 z-30 flex-shrink-0 border-b border-slate-200 bg-white px-5 py-3">`.
+      - **Bố cục 1 Hàng Tối Ưu cho Subtabs (Single-Row Subtab Action Bar)**: Khi module có hệ thống Subtabs, các nút bấm hành động (Search, Filter, View toggle, Nút `+ Thêm mới`) **BẮT BUỘC** nằm ở phía bên phải (align right) trên **CÙNG MỘT HÀNG** với các nút chuyển Subtab (`sticky top-0 z-30 flex items-center justify-between border-b border-slate-200 bg-white px-4 min-h-[48px]`).
+      - Vùng chứa Bảng cuộn dữ liệu nằm ngay bên dưới Header **không có margin/padding**: `<div className="flex-1 min-h-0 overflow-auto">`.
+      - **Chuẩn Typography cho Tiêu đề Bảng (`<th>`)**: Đồng bộ 100% tất cả các bảng dùng class `<tr className="border-b border-slate-200 bg-slate-50/80 text-[11px] font-semibold text-slate-500">` và `<th className="sticky top-0 z-20 bg-white px-4 py-3 border-b border-slate-200">`, dán liền ngay dưới đường phân cách của Header, tạo trải nghiệm giao diện SaaS liền mạch, sắc nét và chuyên nghiệp (tương tự `LibraryModule.tsx` & `ClassDetail.tsx`).
+
+## 15. Phân định kiến trúc cốt lõi phân hệ Đào tạo (Training Architecture Standards)
 
 Bắt buộc tuân thủ ranh giới nghiệp vụ chuẩn mực của 5 modules trên Sidebar Menu Đào tạo, tuyệt đối không được nhầm lẫn:
 
