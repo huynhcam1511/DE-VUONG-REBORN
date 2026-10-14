@@ -283,3 +283,16 @@ Khi người dùng nhắc đến **`@IT team`** (hoặc `IT team:`), hệ thốn
   - Trải nghiệm liền mạch, chuyên nghiệp như ứng dụng Desktop/SaaS cao cấp, loại bỏ hoàn toàn các khung Popup/Modal chèn ngang màn hình.
 - **Ngoại lệ duy nhất**: Chỉ các Menu Toolkit 3 chấm (Action Dropdown Popover) và Hộp thoại xác nhận thao tác nguy hiểm ngắn (`AdminConfirmModal` - Xóa vĩnh viễn) mới được phép hiển thị dạng Popover/Modal nhỏ.
 
+## 23. Tiêu chuẩn Dữ liệu Vận hành Thực tế & An toàn Mã định danh (Zero Hardcoded Seed Data & Code Immutability)
+
+- **Triệt tiêu hoàn toàn Hardcoded Seed Data đối với dữ liệu thực tế (Zero Mock Fallback)**:
+  - **Tuyệt đối KHÔNG** tạo các mảng dữ liệu mẫu chứa tên người, tên công ty, chức danh, sếp hoặc số điện thoại giả định (như `INITIAL_SEED_PARTNERS`, `DEFAULT_CRM_RECORDS`...) nằm lẫn trong file nghiệp vụ (`services/`).
+  - Khi collection trên Cloud Firestore hoặc Local trống/đang nạp: Hệ thống **CHỈ** được phép hiển thị **Trạng thái Trống (Empty State)** (`"Chưa có dữ liệu, vui lòng bấm + THÊM MỚI"`), tuyệt đối không tự ý "tạo hộ" dữ liệu mẫu thế chỗ.
+- **Cấm tuyệt đối tính năng "Tự động ghi đè lên Database" (`auto-seed on empty`)**:
+  - Code frontend chỉ đọc (Read) và ghi (Write) khi người dùng chủ động bấm Lưu hoặc Thêm mới trên giao diện.
+  - Tuyệt đối không viết vòng lặp `for (...) await setDoc(...)` chạy tự động ngầm khi thấy database rỗng, tránh nguy cơ ghi đè âm thầm làm ô nhiễm hoặc mất dữ liệu chuẩn của người dùng.
+- **Tính Bất Biến của Mã Định Danh Nghiệp Vụ (Code / ID Immutability)**:
+  - Mã định danh nghiệp vụ (`ENT-XXXXXXXX`, `LRN-XXXXXXXX`, `EMP-XXXXXXXX`, `BG-XXXXXXXX`, `HD-XXXXXXXX`) là **khóa ngoại liên thông toàn hệ thống** (Doanh nghiệp $\rightarrow$ CRM Leads $\rightarrow$ Báo giá $\rightarrow$ Hợp đồng $\rightarrow$ Thu chi).
+  - Một khi bản ghi đã được tạo và cấp mã, **mã đó là bất biến vĩnh viễn**, tuyệt đối không tự ý thay đổi, tái tạo ngẫu nhiên khi F5/reload trang, hoặc sử dụng mã mẫu giả định (như `p-1`, `p-districtk`).
+  - Mọi thao tác lưu/cập nhật bắt buộc phải bám chặt theo Mã ID duy nhất này để ngăn chặn triệt để tình trạng ghi đè chéo hoặc làm gãy liên kết dữ liệu giữa các phân hệ.
+
