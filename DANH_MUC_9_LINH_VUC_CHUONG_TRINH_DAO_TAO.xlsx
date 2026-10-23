@@ -1,0 +1,50 @@
+Lĩnh vực,Chương trình,Mã CĐ,Chuyên đề,Nội dung chuyên đề,Hình thức áp dụng
+Tin học văn phòng,Microsoft Word,TPC-10010001,01,Làm quen với Microsoft Word & Kỹ thuật soạn thảo chuẩn,B2B & E-learning
+Tin học văn phòng,Microsoft Word,TPC-10010002,02,Định dạng Style - Mục lục tự động & Đánh số trang đa phân vùng,B2B & E-learning
+Tin học văn phòng,Microsoft Word,TPC-10010003,03,Trộn thư (Mail Merge) & Tự động hóa văn bản hành chính,B2B & E-learning
+Tin học văn phòng,Microsoft Excel,TPC-10020001,01,Cấu trúc dữ liệu bảng tính & Phím tắt gia tốc Excel,B2B & E-learning
+Tin học văn phòng,Microsoft Excel,TPC-10020002,02,Nhóm hàm tính toán & Xử lý logic (IF - AND - OR - IFS),B2B & E-learning
+Tin học văn phòng,Microsoft Excel,TPC-10020003,03,Nhóm hàm dò tìm & Tham chiếu động (XLOOKUP - INDEX-MATCH),B2B & E-learning
+Tin học văn phòng,Microsoft PowerPoint,TPC-10030001,01,Tư duy bố cục Slide - Slide Master & Phối màu chuẩn thương hiệu,B2B & E-learning
+Tin học văn phòng,Microsoft PowerPoint,TPC-10030002,02,Thiết kế biểu đồ - Infographic & Hiệu ứng chuyển cảnh Morph,B2B & E-learning
+Tin học văn phòng,Microsoft Outlook & Teams,TPC-10040001,01,Quản trị Email - Lịch làm việc Calendar & Họp trực tuyến Teams,B2B & E-learning
+Phân tích dữ liệu,PivotTable & PivotChart,TPC-20010001,01,Làm quen với PivotTable và nguyên tắc tổ chức dữ liệu chuẩn,B2B & E-learning
+Phân tích dữ liệu,PivotTable & PivotChart,TPC-20010002,02,Nhóm - sắp xếp - lọc và tính toán nâng cao trong PivotTable,B2B & E-learning
+Phân tích dữ liệu,PivotTable & PivotChart,TPC-20010003,03,Trực quan hóa dữ liệu đa chiều với PivotChart & Slicer,B2B & E-learning
+Phân tích dữ liệu,Excel Dashboard,TPC-20020001,01,Thiết kế khung Báo cáo Quản trị động trên Excel,B2B & E-learning
+Phân tích dữ liệu,Excel Dashboard,TPC-20020002,02,Xây dựng Dashboard Doanh thu & Chi phí thực chiến,B2B & E-learning
+Phân tích dữ liệu,Power Query,TPC-20030001,01,Kết nối nguồn - làm sạch dữ liệu và tự động hóa ETL,B2B & E-learning
+Phân tích dữ liệu,Power Query,TPC-20030002,02,Gộp bảng (Merge & Append) và xử lý dữ liệu phức tạp,B2B & E-learning
+Phân tích dữ liệu,Power BI,TPC-20040001,01,Xây dựng Data Model (Mô hình hình sao) trong Power BI,B2B & E-learning
+Phân tích dữ liệu,Power BI,TPC-20040002,02,Viết biểu thức hàm DAX cơ bản và tính toán Time Intelligence,B2B & E-learning
+Phân tích dữ liệu,Data Analysis Foundations,TPC-20050001,01,Tư duy phân tích số liệu - chỉ số KPI và các bẫy thống kê,B2B & E-learning
+Thiết kế & Truyền thông,Canva,TPC-30010001,01,Thiết kế ấn phẩm truyền thông Marketing & Social Media,B2B & E-learning
+Thiết kế & Truyền thông,Canva,TPC-30010002,02,Làm chủ bộ nhận diện thương hiệu Brand Kit trên Canva,B2B & E-learning
+Thiết kế & Truyền thông,Thuyết trình,TPC-30020001,01,Rèn luyện giọng nói và ngôn ngữ cơ thể khi thuyết trình,B2B & 1-1
+Thiết kế & Truyền thông,Thuyết trình,TPC-30020002,02,Cấu trúc bài thuyết trình thuyết phục nhà đầu tư / Sếp,B2B & 1-1
+Video & Media,Video Production Foundations,TPC-40010001,01,Tư duy góc quay - ánh sáng - kịch bản quay video cơ bản,B2B & E-learning
+Video & Media,CapCut Video Editing,TPC-40020001,01,Cắt ghép - chỉnh màu - lồng tiếng và hiệu ứng trên CapCut PC,B2B & E-learning
+Video & Media,CapCut Video Editing,TPC-40020002,02,Tạo phụ đề tự động - nhịp điệu âm thanh và hiệu ứng chuyển cảnh,B2B & E-learning
+Video & Media,Short-form Video Marketing,TPC-40030001,01,Sản xuất video ngắn triệu view TikTok - Reels - Shorts,B2B & E-learning
+AI & Prompting,AI Foundations,TPC-50010001,01,Bản chất mô hình ngôn ngữ lớn (LLM) và hệ sinh thái AI 2026,B2B & E-learning
+AI & Prompting,Prompt Engineering,TPC-50020001,01,Kỹ thuật cấu trúc Prompt chuyên sâu (Role - Task - Context - Output),B2B & E-learning
+AI & Prompting,Prompt Engineering,TPC-50020002,02,Kỹ thuật Few-shot - Chain-of-Thought và hạn chế ảo giác AI,B2B & E-learning
+AI & Prompting,ChatGPT Applications,TPC-50030001,01,Ứng dụng ChatGPT trong viết báo cáo - phân tích tài liệu và email,B2B & E-learning
+AI & Prompting,Google Gemini Applications,TPC-50040001,01,Khai thác Gemini tích hợp sâu trong Google Docs - Sheets - Drive,B2B & E-learning
+AI & Prompting,Claude Applications,TPC-50050001,01,Tối ưu hóa xử lý văn bản dài - viết lách sáng tạo và phân tích code,B2B & E-learning
+AI & Prompting,NotebookLM Research,TPC-50060001,01,Nghiên cứu tài liệu học thuật và tổng hợp tri thức với NotebookLM,B2B & E-learning
+AI & Prompting,AI for Office Productivity,TPC-50070001,01,Bộ công cụ AI giải phóng 70% thời gian làm việc văn phòng,B2B & E-learning
+Automation & No-code,Google Sheets & Apps Script,TPC-60010001,01,Tự động hóa gửi mail - xuất PDF báo cáo từ Google Sheets,B2B & E-learning
+Automation & No-code,Google Sheets & Apps Script,TPC-60010002,02,Kết nối trigger theo thời gian và xây dựng form nhập liệu,B2B & E-learning
+Automation & No-code,No-code & API Foundations,TPC-60020001,01,Bản chất Webhook - REST API và kết nối hệ thống tự động,B2B & E-learning
+Vibe Coding & Web App,Web Development Foundations,TPC-70010001,01,Kiến trúc Web - Frontend - Backend - Database và Cloud hosting,B2B & E-learning
+Vibe Coding & Web App,Vibe Coding with AI,TPC-70020001,01,Kỹ năng lập trình bằng giọng điệu và giao tiếp tự nhiên với AI,B2B & E-learning
+Vibe Coding & Web App,Google Apps Script Web App,TPC-70030001,01,Xây dựng ứng dụng Web nội bộ bằng Apps Script & Sheets,B2B & E-learning
+Vibe Coding & Web App,Codex & Antigravity Workflow,TPC-70040001,01,Quy trình phối hợp Agent AI xây dựng ứng dụng toàn năng,B2B & E-learning
+Vibe Coding & Web App,SaaS Product Foundations,TPC-70050001,01,Thiết kế luồng người dùng (UX Flow) và kiến trúc SaaS chuẩn,B2B & E-learning
+Kỹ năng công việc,Quản lý công việc & Thời gian,TPC-80010001,01,Phương pháp Eisenhower - Pomodoro và lập kế hoạch OKR/KPI,B2B & 1-1
+Kỹ năng công việc,Tư duy giải quyết vấn đề,TPC-80020001,01,Cây vấn đề (Issue Tree) và nguyên lý MECE trong công việc,B2B & 1-1
+Kỹ năng công việc,Tác phong công sở chuyên nghiệp,TPC-80030001,01,Giao tiếp qua email - báo cáo tiến độ và văn hóa phản hồi,B2B & 1-1
+Ngoại ngữ,Tiếng Anh công sở (Business English),TPC-90010001,01,Viết Email thương mại chuẩn quốc tế và đàm phán hợp đồng,B2B & E-learning
+Ngoại ngữ,Tiếng Anh công sở (Business English),TPC-90010002,02,Kỹ năng phỏng vấn - báo cáo và thuyết trình song ngữ,B2B & E-learning
+Ngoại ngữ,Tiếng Anh chuyên ngành IT & AI,TPC-90020001,01,Thuật ngữ công nghệ - đọc hiểu tài liệu kỹ thuật và Prompt chuẩn,B2B & E-learning
