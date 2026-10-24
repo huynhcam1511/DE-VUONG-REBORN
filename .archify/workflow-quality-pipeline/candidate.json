@@ -1,0 +1,78 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "Ma Trận 2 Trục & Pipeline 5 Bước",
+    "animation": "trace",
+    "visual_preset": "signal-flow",
+    "quality_profile": "standard",
+    "output": ".archify/workflow-quality-pipeline/pipeline-2axis-quality.html"
+  },
+  "lanes": [
+    { "id": "admin_flow", "label": "Admin Setup" },
+    { "id": "matrix_audit", "label": "Audit 2 Trục", "variant": "normal" },
+    { "id": "ide_pipeline", "label": "IDE Pipeline", "variant": "exception" },
+    { "id": "student_flow", "label": "Student UX" }
+  ],
+  "phases": [
+    { "id": "phase_config", "label": "Khởi Tạo", "fromCol": 0, "toCol": 1 },
+    { "id": "phase_audit", "label": "Đối Soát 2 Trục", "fromCol": 2, "toCol": 3, "variant": "emphasis" },
+    { "id": "phase_verify", "label": "Build & Triển Khai", "fromCol": 4, "toCol": 5, "variant": "dashed" }
+  ],
+  "groups": [
+    { "id": "grp_admin", "label": "Admin nghiệp vụ", "lane": "admin_flow", "fromCol": 0, "toCol": 1 },
+    { "id": "grp_audit", "label": "Rà soát ma trận", "lane": "matrix_audit", "fromCol": 2, "toCol": 3, "variant": "emphasis" },
+    { "id": "grp_ide", "label": "Khép vòng kỹ thuật", "lane": "ide_pipeline", "fromCol": 3, "toCol": 5, "variant": "security" },
+    { "id": "grp_student", "label": "Học viên UX", "lane": "student_flow", "fromCol": 1, "toCol": 5, "variant": "dashed" }
+  ],
+  "mainPath": ["adm_setup", "adm_save", "audit_h", "audit_v", "ide_code", "ide_build", "ide_deploy"],
+  "nodes": [
+    { "id": "adm_setup", "lane": "admin_flow", "col": 0, "type": "backend", "label": "Cấu Hình Ca Thi", "sublabel": "Mật khẩu, giờ mở", "width": 128 },
+    { "id": "adm_save", "lane": "admin_flow", "col": 1, "type": "database", "label": "Lưu Firestore", "sublabel": "assessments", "tag": "DB", "width": 128 },
+    
+    { "id": "audit_h", "lane": "matrix_audit", "col": 2, "type": "security", "label": "Trục Ngang", "sublabel": "Từ khóa + Phân hệ", "tag": "3 Tầng", "width": 128 },
+    { "id": "audit_v", "lane": "matrix_audit", "col": 3, "type": "security", "label": "Trục Dọc", "sublabel": "Tuyến tính click", "tag": "E2E UX", "width": 128 },
+    
+    { "id": "std_access", "lane": "student_flow", "col": 1, "type": "frontend", "label": "Vào Link Thi", "sublabel": "Portal link", "width": 128 },
+    { "id": "std_pass", "lane": "student_flow", "col": 2, "type": "frontend", "label": "Nhập Passcode", "sublabel": "Tĩnh / AUTO", "width": 128 },
+    { "id": "std_take", "lane": "student_flow", "col": 3, "type": "frontend", "label": "Làm Bài Thi", "sublabel": "Safe Hooks", "width": 128 },
+    { "id": "std_submit", "lane": "student_flow", "col": 5, "type": "frontend", "label": "Nộp Bài", "sublabel": "Ghi điểm", "width": 128 },
+
+    { "id": "ide_code", "lane": "ide_pipeline", "col": 3, "type": "backend", "label": "B1: Code & Guard", "sublabel": "An toàn null", "width": 128 },
+    { "id": "ide_build", "lane": "ide_pipeline", "col": 4, "type": "messagebus", "label": "B2: Build & Test", "sublabel": "Clean build + iOS", "tag": "Pass", "width": 128 },
+    { "id": "ide_deploy", "lane": "ide_pipeline", "col": 5, "type": "cloud", "label": "B3: Deploy", "sublabel": "Hosting + Git", "tag": "Done", "width": 128 }
+  ],
+  "edges": [
+    { "id": "e_adm_save", "from": "adm_setup", "to": "adm_save", "label": "Lưu ca", "variant": "default" },
+    { "id": "e_save_to_audit", "from": "adm_save", "to": "audit_h", "label": "Nạp data", "variant": "emphasis" },
+    { "id": "e_audit_hv", "from": "audit_h", "to": "audit_v", "label": "Đối soát", "variant": "emphasis" },
+    { "id": "e_audit_to_code", "from": "audit_v", "to": "ide_code", "label": "Phát hiện", "variant": "security" },
+    
+    { "id": "e_code_build", "from": "ide_code", "to": "ide_build", "label": "Biên dịch", "variant": "emphasis" },
+    { "id": "e_build_deploy", "from": "ide_build", "to": "ide_deploy", "label": "Đạt chuẩn", "variant": "emphasis" },
+
+    { "id": "e_std_flow1", "from": "std_access", "to": "std_pass", "label": "Nạp an toàn", "variant": "default" },
+    { "id": "e_std_flow2", "from": "std_pass", "to": "std_take", "label": "Khớp mã", "variant": "default" },
+    { "id": "e_std_flow3", "from": "std_take", "to": "std_submit", "label": "Hoàn tất", "variant": "default" },
+
+    { "id": "e_deploy_to_student", "from": "ide_deploy", "to": "std_submit", "label": "Bảo chứng UX", "variant": "dashed", "fromSide": "bottom", "toSide": "top" }
+  ],
+  "cards": [
+    {
+      "dot": "emerald",
+      "title": "Ma Trận 2 Trục (Quy tắc 25)",
+      "items": [
+        "Trục Ngang: Quét từ khóa trực tiếp, liên đới ngữ nghĩa và tất cả phân hệ DB liên quan",
+        "Trục Dọc: Tuyến tính luồng người dùng từ Admin cấu hình đến Học viên click làm bài và nộp bài"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Pipeline IDE (Quy tắc 24)",
+      "items": [
+        "Không bao giờ báo xong khi chỉ vừa sửa 1 dòng code",
+        "Bắt buộc: Code an toàn Null -> Build sạch -> Test Mobile/iOS -> Deploy Hosting -> Mới bàn giao"
+      ]
+    }
+  ]
+}

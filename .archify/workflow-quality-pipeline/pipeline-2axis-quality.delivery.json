@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "c5d05755-e6ab-4cb5-9d41-548d11647771",
+  "status": "current",
+  "command": "deliver",
+  "type": "workflow",
+  "input": "C:\\Users\\zit\\Documents\\Antigravity\\DE VUONG REBORN\\.archify\\workflow-quality-pipeline\\candidate.json",
+  "output": "C:\\Users\\zit\\Documents\\Antigravity\\DE VUONG REBORN\\.archify\\workflow-quality-pipeline\\pipeline-2axis-quality.html",
+  "specification": {
+    "sha256": "bf76766b1478b12ebfcb7054c4dad1dfb6c31a905aa4fc645eff4da9313ce3cf",
+    "bytes": 5211
+  },
+  "artifact": {
+    "sha256": "c0dbcb957786af9833ca29eeb1494d6558c4d51a027ca1455bd8c39964c36f33",
+    "bytes": 832215
+  }
+}
