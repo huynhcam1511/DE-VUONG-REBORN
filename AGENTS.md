@@ -320,4 +320,23 @@ Cấm tuyệt đối thói quen "vừa sửa xong 1 dòng hoặc chạy lệnh b
    - Triển khai lên Production / Hosting và commit git đồng bộ cả repository submodule lẫn root.
    - **Chỉ khi và chỉ khi** đã qua đủ 4 bước kiểm thử ở trên và kiểm tra hosting finalize thành công mới được phép thông báo cho người dùng kiểm tra kết quả. Báo cáo phải nêu rõ: Đã fix nguyên nhân gì, đã audit những ca biên nào và kết quả xác thực ra sao.
 
+## 25. Phương Pháp Ma Trận Tìm & Rà Soát Lỗi Toàn Diện: Trục Ngang Đa Dạng x Trục Dọc Tuyến Tính (2-Axis Bug Audit Standard)
+
+Khi nhận báo cáo lỗi hoặc chuẩn bị bàn giao bất kỳ tính năng nào, tuyệt đối không được điều tra hời hợt chỉ ở điểm người dùng bấm. Bắt buộc phải triển khai phương pháp rà soát ma trận 2 trục:
+
+### 1. Trục Ngang (Horizontal Axis) - Đa dạng Từ khóa & Phân hệ Liên đới:
+- **Tầng 1 - Từ khóa trực tiếp (Direct keywords)**: Tìm chính xác cụm từ trong thông báo lỗi, tên nút, mã định danh (`EXM-XXXXXXXX`, `Mật khẩu bài kiểm tra`, `evaluating 'title'`, `Minified React error`).
+- **Tầng 2 - Từ khóa liên đới ngữ nghĩa (Associated & Semantic keywords)**: Tìm các hàm, biến, helper liên quan mật thiết sinh ra hoặc xử lý dữ liệu đó (`examPassword`, `passcode`, `verifyExamPassword`, `generateHourlyPasscode`, `examSeed`, `assessments`).
+- **Tầng 3 - Các module nghiệp vụ liên quan (Cross-module dependencies)**: Dữ liệu được sinh ra ở đâu và tiêu thụ ở đâu? (Ví dụ: Ca thi được cấu hình ở `ClassDetail.tsx` / `ExamBankModule.tsx` $\to$ lưu vào Firestore `classes.assessments` $\to$ đọc ra và kiểm tra tại `ExamTakingPage.tsx` $\to$ ghi nhận điểm vào `quiz_attempts` & sổ điểm lớp `StudentDetail.tsx`). Tất cả các đầu mút này đều phải khớp 100% về cấu trúc dữ liệu và logic.
+
+### 2. Trục Dọc (Vertical Axis) - Tuyến tính Luồng Trải nghiệm Người Dùng (Linear End-to-End UX Journey):
+Rà soát từng bước theo đúng hành trình thực tế của người dùng từ đầu đến cuối, không bỏ qua bất kỳ bước trung gian nào:
+- **Phía Admin / Giảng viên (Creator Journey)**:
+  1. Tạo đề / chọn ngân hàng câu hỏi $\to$ 2. Cài đặt ca thi (thời lượng, số lần làm, ngày giờ mở/đóng, mật khẩu cố định hoặc `AUTO`) $\to$ 3. Bấm Lưu $\to$ 4. Xem lại mã hiển thị trên bảng lớp (icon ổ khóa, nút copy mã) $\to$ 5. Bàn giao mã cho học viên.
+- **Phía Học viên (Consumer Journey)**:
+  1. Mở link bài thi (URL param: `class`, `exam`) $\to$ 2. Màn hình chờ nạp dữ liệu (kiểm tra null-safety khi mạng trễ) $\to$ 3. Màn hình Chào/Xác thực (kiểm tra quyền vào lớp, điều kiện mở ca) $\to$ 4. Ô nhập mật khẩu (kiểm tra khớp với mã phía Admin đã tạo) $\to$ 5. Bấm "Bắt đầu làm bài" (chuyển step: kiểm tra không crash React hooks, bật toàn màn hình) $\to$ 6. Làm bài (chọn đáp án, đánh dấu câu, đếm ngược đồng hồ, auto-save draft localStorage) $\to$ 7. Nộp bài (ghi điểm vào Firestore, cập nhật trạng thái) $\to$ 8. Xem kết quả / Bảng điểm.
+
+**Nguyên tắc cốt tử**: Khi sửa một mắt xích, BẮT BUỘC phải đi dọc toàn bộ luồng tuyến tính này để đảm bảo mắt xích trước không tạo dữ liệu lệch cho mắt xích sau, và mắt xích sau không bị sập vì dữ liệu chưa kịp tới.
+
+
 
