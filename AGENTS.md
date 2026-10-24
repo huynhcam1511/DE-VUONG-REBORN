@@ -338,5 +338,49 @@ Rà soát từng bước theo đúng hành trình thực tế của người dù
 
 **Nguyên tắc cốt tử**: Khi sửa một mắt xích, BẮT BUỘC phải đi dọc toàn bộ luồng tuyến tính này để đảm bảo mắt xích trước không tạo dữ liệu lệch cho mắt xích sau, và mắt xích sau không bị sập vì dữ liệu chưa kịp tới.
 
+## 26. Chuẩn Mực Kiểm Thử Phần Mềm Chuyên Nghiệp (Professional QA/QC Lifecycle Standard)
+
+Mọi tính năng mới hoặc bản vá lỗi (bug fix) trong toàn bộ dự án bắt buộc phải áp dụng quy trình kiểm thử chất lượng 4 giai đoạn chuẩn quốc tế (chuẩn CO-WELL Tech Academy & ISTQB):
+
+```
+Requirement (Tìm điểm thiếu/mơ hồ/rủi ro) ➔ Test Scenario (WHAT - Kịch bản tổng thể) ➔ Test Case (HOW - Tiền điều kiện/Các bước/Data/Kết quả) ➔ QA Execution & Triage (Phân loại Severity & Priority) ➔ Dev Fix ➔ Regression Testing (Kiểm thử hồi quy)
+```
+
+### 1. Phân Tích Yêu Cầu (Requirement Analysis) - Không Chỉ Đọc Để Biết Làm:
+- Trước khi bắt tay vào code, bắt buộc phải mổ xẻ Requirement để tìm ra 3 yếu tố cốt tử:
+  - **Điểm thiếu (Missing points)**: Tính năng này còn thiếu nhánh xử lý nào? (Ví dụ: Ca thi có mật khẩu nhưng nếu học viên bấm F5 tải lại trang thì trạng thái thế nào? Có nhớ bài làm dở không?).
+  - **Điểm mơ hồ (Unclear points)**: Các trường hợp biên chưa được định nghĩa rõ ràng (Ví dụ: Mật khẩu `AUTO` đổi theo giờ thì người thi lúc 13:59 nộp bài lúc 14:05 có bị trượt mã không?).
+  - **Rủi ro tiềm ẩn (Hidden Risks)**: Tình trạng gián đoạn mạng, Firestore trễ nạp data `null`, khác biệt hành vi giữa trình duyệt Desktop và Safari trên iPhone/iPad.
+
+### 2. Thiết Kế Kịch Bản Kiểm Thử (Test Scenario - WHAT):
+- Liệt kê đầy đủ các trường hợp tổng quan cần kiểm thử, bao gồm cả luồng chuẩn (Happy Path) và luồng dị thường/ngoại lệ (Unhappy / Edge Cases):
+  - ✅ **Luồng chuẩn**: Nhập đúng dữ liệu, quyền hợp lệ, hoàn tất suôn sẻ.
+  - ❌ **Luồng sai dữ liệu**: Sai mật khẩu, trùng mã ID, định dạng không hợp lệ.
+  - ⚠️ **Luồng vi phạm/bảo mật**: Rời màn hình bài thi, đổi tab, truy cập lớp khi chưa ghi danh.
+  - 🛑 **Luồng rỗng/thiếu dữ liệu**: Chưa nạp xong thông tin, collection rỗng, bỏ trống ô bắt buộc.
+
+### 3. Thiết Kế Ca Kiểm Thử Chi Tiết (Test Case - HOW):
+- Mỗi ca kiểm thử phải đảm bảo nguyên tắc: *"Một người khác hoặc AI khác đọc vào là có thể tái hiện chính xác 100%"*:
+  - **Pre-condition (Tiền điều kiện)**: Trạng thái hệ thống trước khi test (Đã đăng nhập bằng tài khoản học viên lớp `CLS-00912697`, ca thi đang mở).
+  - **Test Steps (Các bước bấm)**: Bấm vào link $\to$ Nhập mã $\to$ Bấm Bắt đầu $\to$ Chọn đáp án câu 1 $\to$ Bấm Nộp bài.
+  - **Test Data (Dữ liệu thử)**: Mã đề `EXM-57384793`, passcode `415656`.
+  - **Expected Result (Kết quả kỳ vọng)**: Không bị văng màn hình đỏ, câu trả lời được lưu, kết quả hiển thị chính xác.
+
+### 4. Phân Loại Khiếm Khuyết (Defect Triage: Severity vs Priority):
+- Khi phát hiện bug, phải phân loại rõ ràng theo 2 chiều:
+  - **Severity (Mức độ nghiêm trọng kỹ thuật)**:
+    - *Blocker / Critical*: Sập toàn trang, trắng màn hình, văng lỗi React `#310` hoặc `null is not an object` làm gián đoạn toàn bộ bài thi.
+    - *Major*: Mất dữ liệu câu trả lời, không lưu được điểm vào Firestore.
+    - *Minor / Trivial*: Lệch giao diện CSS, sai chính tả, khoảng cách padding chưa đều.
+  - **Priority (Mức độ ưu tiên kinh doanh)**:
+    - *P1 (Khẩn cấp)*: Lỗi đang xảy ra ngay trong giờ thi của học viên $\to$ Bắt buộc fix và deploy production ngay lập tức.
+    - *P2 (Cao)*: Lỗi ảnh hưởng luồng chính của lớp học tiếp theo.
+    - *P3 (Bình thường)*: Cải tiến trải nghiệm và thẩm mỹ.
+
+### 5. Kiểm Thử Hồi Quy Bắt Buộc (Mandatory Regression Testing):
+- **Cấm tuyệt đối**: Fix lỗi ở module này làm vỡ hoặc phát sinh lỗi mới ở module khác (Side-effect bugs).
+- **Hành động bắt buộc**: Sau khi sửa xong 1 lỗi (ví dụ: sửa mã passcode trong ca thi), bắt buộc phải thực hiện kiểm thử hồi quy (Regression Test) quét lại toàn bộ các module liên quan: Quản lý lớp học (`ClassDetail`), Điểm danh (`Attendance`), Sổ điểm (`Gradebook`), và Trang chủ (`Landing Page`) trước khi đóng task.
+
+
 
 
