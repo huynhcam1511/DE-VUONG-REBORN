@@ -296,3 +296,28 @@ Khi người dùng nhắc đến **`@IT team`** (hoặc `IT team:`), hệ thốn
   - Một khi bản ghi đã được tạo và cấp mã, **mã đó là bất biến vĩnh viễn**, tuyệt đối không tự ý thay đổi, tái tạo ngẫu nhiên khi F5/reload trang, hoặc sử dụng mã mẫu giả định (như `p-1`, `p-districtk`).
   - Mọi thao tác lưu/cập nhật bắt buộc phải bám chặt theo Mã ID duy nhất này để ngăn chặn triệt để tình trạng ghi đè chéo hoặc làm gãy liên kết dữ liệu giữa các phân hệ.
 
+## 24. Quy trình Đảm bảo Chất lượng Code & Khép vòng Task (IDE Pipeline: Build -> Audit/Test -> Self-Review -> Fix -> Close)
+
+Cấm tuyệt đối thói quen "vừa sửa xong 1 dòng hoặc chạy lệnh build xong là vội vàng báo thành công/xong task" cho người dùng khi chưa tự kiểm thử và tự rà soát toàn bộ vòng đời thực thi. Mọi task chỉnh sửa code BẮT BUỘC phải trải qua đủ 5 bước khép kín trước khi được phép báo cáo hoàn tất:
+
+1. **Bước 1: Implement (Sửa code đúng bản chất)**:
+   - Sửa dứt điểm nguyên nhân gốc rễ, không chắp vá tạm bợ hay chỉ chữa cháy cục bộ đúng 1 điểm phát sinh lỗi.
+   - Luôn tuân thủ nguyên tắc React Rules of Hooks: Tuyệt đối không đặt `useState`, `useEffect`, `useMemo`, `useCallback`, `useRef` sau bất kỳ lệnh `return` hay điều kiện rẽ nhánh nào.
+
+2. **Bước 2: Static Analysis & Full Null-Safety Audit (Rà soát tĩnh an toàn dữ liệu)**:
+   - Rà soát toàn bộ file liên quan đến các đối tượng bất đồng bộ (`nullable state` như `data`, `profile`, `examBank`, `sub`... khi chưa fetch xong từ DB/mạng).
+   - Bắt buộc kiểm tra chuỗi truy cập an toàn (`?.`), mảng (`Array.isArray()`), và giá trị fallback mặc định (`|| ''`, `|| []`) ở MỌI vị trí trong file, không để sót bất kỳ nhánh nào gây lỗi `null is not an object` hoặc `cannot read property of undefined`.
+
+3. **Bước 3: IDE Build Verification (Kiểm thử Build thực tế)**:
+   - Chạy lệnh build chuẩn (`npm run build`) và bắt buộc kiểm tra `exit code === 0` cùng output build sạch lỗi TypeScript / cú pháp.
+   - Nếu build cảnh báo lỗi hoặc warning nghiêm trọng, bắt buộc fix ngay trước khi bước sang giai đoạn tiếp theo.
+
+4. **Bước 4: Edge-Case & Cross-Platform Review (Tự đánh giá ca biên & thiết bị)**:
+   - Tự đặt mình vào vai người dùng trên các môi trường khác nhau: Máy tính (Chrome/Edge/Firefox), Điện thoại (Safari iOS, Chrome Android), tình trạng mạng chậm (độ trễ Firestore vài trăm ms khi vừa mount trang).
+   - Kiểm tra các ca biên: User mới chưa có data, ca thi có mật khẩu vs không mật khẩu, thời điểm chuyển giao khung giờ.
+
+5. **Bước 5: Deploy & Close (Triển khai & Bàn giao)**:
+   - Triển khai lên Production / Hosting và commit git đồng bộ cả repository submodule lẫn root.
+   - **Chỉ khi và chỉ khi** đã qua đủ 4 bước kiểm thử ở trên và kiểm tra hosting finalize thành công mới được phép thông báo cho người dùng kiểm tra kết quả. Báo cáo phải nêu rõ: Đã fix nguyên nhân gì, đã audit những ca biên nào và kết quả xác thực ra sao.
+
+
