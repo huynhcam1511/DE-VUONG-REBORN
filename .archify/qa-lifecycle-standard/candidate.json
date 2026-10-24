@@ -1,0 +1,85 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "Vòng Đời Kiểm Thử Phần Mềm Toàn Diện (QA/QC Lifecycle)",
+    "animation": "trace",
+    "visual_preset": "signal-flow",
+    "quality_profile": "standard",
+    "output": ".archify/qa-lifecycle-standard/qa-lifecycle.html"
+  },
+  "lanes": [
+    { "id": "spec_lane", "label": "1. Đặc Tả & Kịch Bản (Requirements & Scenarios)" },
+    { "id": "exec_lane", "label": "2. Thực Thi & Giám Sát (Test Cases & Execution)", "variant": "normal" },
+    { "id": "defect_lane", "label": "3. Quản Lý Khiếm Khuyết (Bugs & Triage)", "variant": "exception" },
+    { "id": "regress_lane", "label": "4. Tái Kiểm & Khép Vòng (Regression & Sign-off)" }
+  ],
+  "phases": [
+    { "id": "ph_design", "label": "Thiết Kế Test", "fromCol": 0, "toCol": 1 },
+    { "id": "ph_run", "label": "Chạy Kiểm Thử", "fromCol": 2, "toCol": 3, "variant": "emphasis" },
+    { "id": "ph_defect", "label": "Xử Lý Lỗi", "fromCol": 4, "toCol": 4 },
+    { "id": "ph_close", "label": "Kiểm Thử Hồi Quy", "fromCol": 5, "toCol": 5, "variant": "dashed" }
+  ],
+  "groups": [
+    { "id": "grp_spec", "label": "Phân tích yêu cầu và kịch bản", "lane": "spec_lane", "fromCol": 0, "toCol": 1 },
+    { "id": "grp_exec", "label": "Thực thi ca kiểm thử", "lane": "exec_lane", "fromCol": 2, "toCol": 3, "variant": "emphasis" },
+    { "id": "grp_bug", "label": "Phân loại mức độ nghiêm trọng", "lane": "defect_lane", "fromCol": 3, "toCol": 4, "variant": "security" },
+    { "id": "grp_reg", "label": "Kiểm tra lại toàn hệ thống", "lane": "regress_lane", "fromCol": 4, "toCol": 5, "variant": "dashed" }
+  ],
+  "mainPath": [
+    "qa_req",
+    "qa_scenario",
+    "qa_testcase",
+    "qa_dashboard",
+    "qa_bug",
+    "qa_triage",
+    "qa_fix",
+    "qa_regression"
+  ],
+  "nodes": [
+    { "id": "qa_req", "lane": "spec_lane", "col": 0, "type": "backend", "label": "1. Requirement", "sublabel": "Yêu cầu & Điều kiện", "tag": "Đầu vào", "width": 132 },
+    { "id": "qa_scenario", "lane": "spec_lane", "col": 1, "type": "backend", "label": "2. Test Scenario", "sublabel": "Nhìn tổng thể WHAT", "tag": "Kịch bản", "width": 132 },
+
+    { "id": "qa_testcase", "lane": "exec_lane", "col": 2, "type": "frontend", "label": "3. Test Case", "sublabel": "Chi tiết HOW (Steps, Data)", "tag": "Ca test", "width": 132 },
+    { "id": "qa_dashboard", "lane": "exec_lane", "col": 3, "type": "database", "label": "4. QA Dashboard", "sublabel": "Pass / Fail / Blocked", "tag": "Báo cáo", "width": 132 },
+
+    { "id": "qa_bug", "lane": "defect_lane", "col": 3, "type": "security", "label": "5. Bug / Defect", "sublabel": "Lỗi sai lệch kỳ vọng", "tag": "Phát hiện", "width": 132 },
+    { "id": "qa_triage", "lane": "defect_lane", "col": 4, "type": "security", "label": "6. Phân Loại Lỗi", "sublabel": "Severity & Priority", "tag": "Phân loại", "width": 132 },
+
+    { "id": "qa_fix", "lane": "regress_lane", "col": 4, "type": "backend", "label": "7. Dev Fix & Deploy", "sublabel": "Sửa tận gốc căn nguyên", "width": 132 },
+    { "id": "qa_regression", "lane": "regress_lane", "col": 5, "type": "cloud", "label": "8. Regression Test", "sublabel": "Kiểm thử hồi quy", "tag": "Khép vòng", "width": 132 }
+  ],
+  "edges": [
+    { "id": "e1", "from": "qa_req", "to": "qa_scenario", "label": "Phân tích", "variant": "default" },
+    { "id": "e2", "from": "qa_scenario", "to": "qa_testcase", "label": "Chi tiết hóa", "variant": "emphasis" },
+    { "id": "e3", "from": "qa_testcase", "to": "qa_dashboard", "label": "Chạy test", "variant": "emphasis" },
+    
+    { "id": "e4", "from": "qa_dashboard", "to": "qa_bug", "label": "Phát hiện lỗi", "variant": "security" },
+    { "id": "e5", "from": "qa_bug", "to": "qa_triage", "label": "Đánh giá", "variant": "security" },
+    
+    { "id": "e6", "from": "qa_triage", "to": "qa_fix", "label": "Giao Dev sửa", "variant": "emphasis" },
+    { "id": "e7", "from": "qa_fix", "to": "qa_regression", "label": "Deploy bản vá", "variant": "emphasis" },
+    
+    { "id": "e8", "from": "qa_regression", "to": "qa_dashboard", "label": "Xác nhận Pass", "variant": "dashed", "fromSide": "right", "toSide": "right", "route": "outside-right", "role": "return" }
+  ],
+  "cards": [
+    {
+      "dot": "emerald",
+      "title": "Bộ Ba Nền Tảng: Requirement -> Scenario -> Test Case",
+      "items": [
+        "Requirement: Mô tả cách hệ thống chạy. QA phải tìm điểm thiếu, điểm mơ hồ và rủi ro",
+        "Test Scenario (WHAT): Kịch bản tổng thể (Login thành công, Sai mật khẩu, Tài khoản bị khóa, Bỏ trống ô)",
+        "Test Case (HOW): Pre-condition -> Test Steps -> Test Data -> Expected Result"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Vòng Lặp Quản Lý Lỗi: Bug -> Triage -> Regression",
+      "items": [
+        "Severity (Mức độ nghiêm trọng kỹ thuật): Blocker, Critical, Major, Minor",
+        "Priority (Mức ưu tiên xử lý kinh doanh): P1 (sửa ngay trong giờ), P2, P3",
+        "Regression Testing: Đảm bảo sau khi fix bug cũ, không làm phát sinh lỗi mới ở các module khác"
+      ]
+    }
+  ]
+}

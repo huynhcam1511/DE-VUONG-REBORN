@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "1737a458-236c-4280-91c1-dad6cc4411a8",
+  "status": "current",
+  "command": "deliver",
+  "type": "workflow",
+  "input": "C:\\Users\\zit\\Documents\\Antigravity\\DE VUONG REBORN\\.archify\\qa-lifecycle-standard\\candidate.json",
+  "output": "C:\\Users\\zit\\Documents\\Antigravity\\DE VUONG REBORN\\.archify\\qa-lifecycle-standard\\qa-lifecycle.html",
+  "specification": {
+    "sha256": "0be0f5c9b365a83c141c3a0df957f1f7ca66d2e6e12215d18d285a758461d535",
+    "bytes": 5304
+  },
+  "artifact": {
+    "sha256": "7dbfd0baf53ef5db926f3f8475112307d430c2d1a684f11f6b677c898133f01c",
+    "bytes": 829388
+  }
+}
