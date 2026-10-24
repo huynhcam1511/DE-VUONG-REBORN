@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "c6bddf73-b51d-4cec-8105-50a7779f11a8",
+  "status": "current",
+  "command": "deliver",
+  "type": "workflow",
+  "input": "C:\\Users\\zit\\Documents\\Antigravity\\DE VUONG REBORN\\.archify\\business-flow-b2c-b2b\\candidate.json",
+  "output": "C:\\Users\\zit\\Documents\\Antigravity\\DE VUONG REBORN\\.archify\\business-flow-b2c-b2b\\business-flow-full.html",
+  "specification": {
+    "sha256": "f17b2e4340218a405bfc066f8b3d12574ef3d78e0514df379f2cd0248b5e4c1a",
+    "bytes": 6097
+  },
+  "artifact": {
+    "sha256": "045cf6f2bb6abcde4d531c128e8ac47b67a91913f4ecc2b9c864b40d6237ec34",
+    "bytes": 836604
+  }
+}

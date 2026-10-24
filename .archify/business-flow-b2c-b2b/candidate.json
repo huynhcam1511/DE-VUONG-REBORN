@@ -1,0 +1,92 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "Hệ Thống Vận Hành Tổng Thể B2C Storefront & B2B Doanh Nghiệp Khảo Thí",
+    "animation": "trace",
+    "visual_preset": "signal-flow",
+    "quality_profile": "standard",
+    "output": ".archify/business-flow-b2c-b2b/business-flow-full.html"
+  },
+  "lanes": [
+    { "id": "b2c_lane", "label": "1. B2C Storefront (Tự Mua Khóa)" },
+    { "id": "b2b_sales", "label": "2. B2B Doanh Nghiệp (Tư Vấn & Hợp Đồng)" },
+    { "id": "finance_lane", "label": "3. Tài Chính & Kế Toán (SePay / Thu Chi)", "variant": "normal" },
+    { "id": "lms_class", "label": "4. Vận Hành Lớp (Điểm Danh & Học Tập)" },
+    { "id": "exam_lane", "label": "5. Khảo Thí (Thi Quá Trình, Giữa Kỳ, Cuối Kỳ)", "variant": "exception" }
+  ],
+  "phases": [
+    { "id": "ph_lead", "label": "Tiếp Nhận & Mua", "fromCol": 0, "toCol": 1 },
+    { "id": "ph_deal", "label": "Hợp Đồng & Thanh Toán", "fromCol": 2, "toCol": 2, "variant": "emphasis" },
+    { "id": "ph_lms", "label": "Lớp Học & Điểm Danh", "fromCol": 3, "toCol": 4 },
+    { "id": "ph_exam", "label": "Khảo Thí & Đánh Giá", "fromCol": 5, "toCol": 5, "variant": "dashed" }
+  ],
+  "groups": [
+    { "id": "grp_b2c", "label": "Luồng B2C Tự Động", "lane": "b2c_lane", "fromCol": 0, "toCol": 3 },
+    { "id": "grp_b2b", "label": "Luồng B2B Tư Vấn Doanh Nghiệp", "lane": "b2b_sales", "fromCol": 0, "toCol": 3, "variant": "emphasis" },
+    { "id": "grp_fin", "label": "Xử Lý Dòng Tiền", "lane": "finance_lane", "fromCol": 1, "toCol": 3 },
+    { "id": "grp_class", "label": "Vận Hành Giảng Dạy", "lane": "lms_class", "fromCol": 3, "toCol": 4 },
+    { "id": "grp_exam", "label": "Đánh Giá & Chấm Điểm", "lane": "exam_lane", "fromCol": 4, "toCol": 5, "variant": "security" }
+  ],
+  "mainPath": [
+    "b2b_lead",
+    "b2b_quote",
+    "b2b_contract",
+    "fin_collect",
+    "cls_create",
+    "cls_attend",
+    "exm_process",
+    "exm_grade"
+  ],
+  "nodes": [
+    { "id": "b2c_browse", "lane": "b2c_lane", "col": 0, "type": "frontend", "label": "Duyệt Khóa Học", "sublabel": "Landing Page B2C", "width": 130 },
+    { "id": "b2c_qr", "lane": "b2c_lane", "col": 1, "type": "frontend", "label": "Quét VietQR", "sublabel": "Checkout Modal SePay", "tag": "SePay QR", "width": 130 },
+    { "id": "b2c_access", "lane": "b2c_lane", "col": 3, "type": "cloud", "label": "Cấp Quyền Học", "sublabel": "Kích hoạt tức thì", "tag": "Auto Active", "width": 130 },
+
+    { "id": "b2b_lead", "lane": "b2b_sales", "col": 0, "type": "backend", "label": "Nhu Cầu B2B", "sublabel": "Tư vấn doanh nghiệp", "width": 130 },
+    { "id": "b2b_quote", "lane": "b2b_sales", "col": 1, "type": "backend", "label": "Lập Báo Giá", "sublabel": "Quotation Builder", "tag": "BG-xxxx", "width": 130 },
+    { "id": "b2b_contract", "lane": "b2b_sales", "col": 2, "type": "backend", "label": "Ký Hợp Đồng", "sublabel": "Contract & Đề cương", "tag": "HD-xxxx", "width": 130 },
+
+    { "id": "fin_collect", "lane": "finance_lane", "col": 2, "type": "database", "label": "Thu Tiền & Sổ Quỹ", "sublabel": "Khớp lệnh SePay / CK", "tag": "COL-xxxx", "width": 130 },
+
+    { "id": "cls_create", "lane": "lms_class", "col": 3, "type": "backend", "label": "Tạo Lớp & Học Viên", "sublabel": "Gán Giảng viên, Lịch", "tag": "CLS-xxxx", "width": 130 },
+    { "id": "cls_attend", "lane": "lms_class", "col": 4, "type": "frontend", "label": "Điểm Danh & Học", "sublabel": "Timeline buổi học", "width": 130 },
+
+    { "id": "exm_process", "lane": "exam_lane", "col": 4, "type": "security", "label": "Ca Thi Quá Trình", "sublabel": "Passcode tĩnh / AUTO", "tag": "30% Quá trình", "width": 130 },
+    { "id": "exm_grade", "lane": "exam_lane", "col": 5, "type": "security", "label": "Chấm Điểm & Báo Cáo", "sublabel": "Giữa kỳ (20%) + Cuối (50%)", "tag": "Chấm tự luận + MCQ", "width": 130 }
+  ],
+  "edges": [
+    { "id": "e_b2c_1", "from": "b2c_browse", "to": "b2c_qr", "label": "Đặt mua", "variant": "default" },
+    { "id": "e_b2c_fin", "from": "b2c_qr", "to": "fin_collect", "label": "SePay khớp", "variant": "emphasis" },
+    { "id": "e_b2c_grant", "from": "fin_collect", "to": "b2c_access", "label": "Tự kích hoạt", "variant": "emphasis" },
+
+    { "id": "e_b2b_1", "from": "b2b_lead", "to": "b2b_quote", "label": "Khảo sát TNA", "variant": "default" },
+    { "id": "e_b2b_2", "from": "b2b_quote", "to": "b2b_contract", "label": "Chốt Deal", "variant": "emphasis" },
+    { "id": "e_b2b_fin", "from": "b2b_contract", "to": "fin_collect", "label": "Đợt thu 1/2", "variant": "emphasis" },
+
+    { "id": "e_fin_to_class", "from": "fin_collect", "to": "cls_create", "label": "Khởi động lớp", "variant": "emphasis" },
+    { "id": "e_class_attend", "from": "cls_create", "to": "cls_attend", "label": "Lên lịch", "variant": "default" },
+
+    { "id": "e_class_to_exam", "from": "cls_attend", "to": "exm_process", "label": "Giao đề thi", "variant": "emphasis" },
+    { "id": "e_exam_grade", "from": "exm_process", "to": "exm_grade", "label": "Nộp bài", "variant": "security" }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Luồng B2C E-learning (Zero Human Touch)",
+      "items": [
+        "Khách tự duyệt danh mục khóa học trên Landing Page",
+        "Quét VietQR SePay: tiền vào tài khoản -> hệ thống tự cấp quyền học ngay lập tức"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Luồng B2B Đào Tạo Doanh Nghiệp (Enterprise Lifecycle)",
+      "items": [
+        "Khảo sát TNA -> Soạn Báo giá -> Ký Hợp đồng -> Theo dõi đợt thanh toán",
+        "Khởi tạo lớp: Điểm danh từng buổi, gán học liệu Chuyên đề TPC-xxx",
+        "Khảo thí toàn diện: Đánh giá quá trình (30%), Giữa kỳ (20%), Cuối kỳ (50%) với hệ thống chấm trắc nghiệm & tự luận kèm nhật ký giám sát thi"
+      ]
+    }
+  ]
+}
