@@ -198,7 +198,7 @@ Bắt buộc tuân thủ ranh giới nghiệp vụ chuẩn mực của 5 modules
      3. **Học viên**: Danh sách học viên lớp (`LRN-XXXXXXXX`).
      4. **Bài kiểm tra & Đề thi**: Quản lý các đề thi gắn vào lớp theo mã `EXM-XXXXXXXX` & kết quả làm bài.
      5. **Bảng điểm**: Bảng điểm tổng hợp các đầu điểm của học viên (CC, BT, Thi, GPA).
-## 15. Xử lý ngày tháng an toàn với Firestore (Safe Firestore Date Parsing)
+## 17. Xử lý ngày tháng an toàn với Firestore (Safe Firestore Date Parsing)
 
 Trong Firestore, các trường thời gian (`createdAt`, `updatedAt`, `lastLogin`, v.v.) thường được lưu dưới dạng đối tượng Firestore `Timestamp` (`{ seconds, nanoseconds }` hoặc có hàm `.toDate()`), chuỗi ISO hoặc JavaScript `Date`.
 
@@ -221,30 +221,30 @@ Trong Firestore, các trường thời gian (`createdAt`, `updatedAt`, `lastLogi
   };
   ```
 
-## 16. Nút xóa nhanh trên Ô tìm kiếm Toolbar (Search Clear 'x' Button)
+## 18. Nút xóa nhanh trên Ô tìm kiếm Toolbar (Search Clear 'x' Button)
 
 - Mọi ô nhập tìm kiếm trên thanh Toolbar cố định của module quản trị bắt buộc phải có nút xóa `x` (`<X size={12} />`) ở góc phải khi ô tìm kiếm có nội dung (`searchQuery !== ''`).
 - Khi click vào nút `x` (`onClick={() => setSearchQuery('')}`), ô tìm kiếm lập tức được xóa trắng về rỗng.
 - Ô input phải có padding phải `pr-7` để văn bản không bị đè lên icon `x`.
 
-## 17. Quy ước Biệt đội IT Team 10 Subagents (@IT team) & Mã Tag Danh định
+## 19. Quy ước Biệt đội IT Team 10 Subagents (@IT team) & Mã Tag Danh định
 
 Khi người dùng nhắc đến **`@IT team`** (hoặc `IT team:`), hệ thống Antigravity bắt buộc huy động và điều phối **Biệt đội 10 Subagents chuyên trách** dưới sự chỉ huy của Main Orchestrator. Người dùng cũng có thể tag trực tiếp từng cá nhân bằng mã danh định:
 
 | Mã Tag Subagent | Vị trí chuyên trách | Chuyên môn & Trách nhiệm bắt buộc |
 | :--- | :--- | :--- |
-| **`@it_architect`** | **Lead Solution Architect** | Gác cổng [SYSTEM_BLUEPRINT_V1.0.md](file:///c:/Users/ADMIN-PC/Documents/ANTIGRAVITY/DE%20VUONG%20REBORN/De_Vuong_Webapp/docs/SYSTEM_BLUEPRINT_V1.0.md) & 16 quy tắc trong `AGENTS.md`. Thẩm định kiến trúc, không cho phép code lệch chuẩn. |
+| **`@it_architect`** | **Lead Solution Architect** | Gác cổng [SYSTEM_BLUEPRINT_V1.0.md](file:///c:/Users/ADMIN-PC/Documents/ANTIGRAVITY/DE%20VUONG%20REBORN/De_Vuong_Webapp/docs/SYSTEM_BLUEPRINT_V1.0.md) & các quy tắc trong `AGENTS.md`. Thẩm định kiến trúc, không cho phép code lệch chuẩn. |
 | **`@it_ba`** | **Senior Business Analyst** | Bóc tách luồng nghiệp vụ kinh doanh & đào tạo (Lead $\to$ Deal $\to$ Báo giá $\to$ Hợp đồng $\to$ Đào tạo), đảm bảo dữ liệu liên thông không bị gãy. |
 | **`@it_frontend_ui`** | **Frontend UI Lead** | Dựng giao diện SaaS cao cấp, Freeze Panes header, Toolbar 1 dòng, triệt tiêu Pill Overload, không tự sinh cột mã thừa. |
 | **`@it_frontend_ux`** | **Frontend UX & Interaction** | Xử lý kéo thả Kanban, modal, popover, phím tắt, dropdown, tránh layout shift và click nhầm. |
 | **`@it_backend_data`** | **Backend Data Architect** | Thiết kế Firestore Schema, Collections, Composite Indexes, đảm bảo toàn vẹn dữ liệu. |
-| **`@it_backend_logic`** | **Backend Logic & Rules** | State Machine, Firestore Transactions, Cloud Functions, an toàn `parseFirestoreDate` (Quy tắc 15), lưu DB vĩnh viễn (Quy tắc 13). |
+| **`@it_backend_logic`** | **Backend Logic & Rules** | State Machine, Firestore Transactions, Cloud Functions, an toàn `parseFirestoreDate` (Quy tắc 17), lưu DB vĩnh viễn (Quy tắc 13). |
 | **`@it_integration`** | **Integration Specialist** | Tích hợp SePay Webhook, Firebase Storage, nhúng bộ tính giá Pricing Simulator, xuất PDF/Excel. |
 | **`@it_security`** | **Security & IAM Officer** | Kiểm tra phân quyền RBAC (`authorization.ts`, `firestore.rules`), bảo vệ thông tin cá nhân PII. |
 | **`@it_qa`** | **QA & Test Engineer** | Kiểm thử kiểu TypeScript `npm run lint` (`tsc --noEmit`), bắt lỗi logic, kiểm tra dữ liệu biên. |
 | **`@it_devops`** | **DevOps & Release Engineer** | Chạy `npm run build`, kiểm soát dung lượng bundle, deploy Firebase Hosting (`https://anti-gravity-katc-academy.web.app`). |
 
-## 18. Chuẩn Topbar hệ thống & Avatar Profile Dropdown (System Topbar & User Menu Standard)
+## 20. Chuẩn Topbar hệ thống & Avatar Profile Dropdown (System Topbar & User Menu Standard)
 
 - **Tên & Email đầy đủ**: Hiển thị tên người dùng và email đầy đủ (`whitespace-nowrap`), không dùng `max-w` hay `truncate` làm cắt cụt email trên Topbar.
 - **Tuyệt đối KHÔNG bọc viền Pill xám hay viền hộp nổi quanh nút Profile/Cổng**: Nút Profile và Cổng làm việc trên Topbar sử dụng dạng tương tác tinh gọn (`bg-transparent hover:bg-slate-100 rounded-xl`), tuyệt đối không bọc khung viền xám hay ô Pill trắng nổi gây rối mắt.
@@ -252,28 +252,28 @@ Khi người dùng nhắc đến **`@IT team`** (hoặc `IT team:`), hệ thốn
 - **Popover Profile gọn gàng (Chống lặp Header)**: Khi nhấp vào Avatar, Popover Menu xổ xuống tuyệt đối không lặp lại khối Header (Avatar circle + Tên + Email) khi nút trên Topbar đã phơi bày thông tin này. Popover chỉ chứa lối tắt Chuyển nhanh Cổng và nút **Đăng xuất**.
 - **Không chèn thanh Search toàn cục vô nghĩa lên Topbar chung**: Thanh Topbar chung chỉ dành cho các tác vụ điều hướng hệ thống (Ghim sidebar, Chuyển cổng, Profile), không nhét ô `Tìm kiếm nhanh...` dư thừa.
 
-## 19. Chuẩn hóa Menu 3 chấm (Action Toolkit) & Thuật ngữ đối tượng (Action Popovers & Terminology)
+## 21. Chuẩn hóa Menu 3 chấm (Action Toolkit) & Thuật ngữ đối tượng (Action Popovers & Terminology)
 
 - **Tuyệt đối KHÔNG chèn Emoji màu sắc (🔵, 📄, 💼, 📁) hoặc dấu `+` rườm rà vào nhãn Action**: Tên các thao tác trong Menu 3 chấm phải là văn bản thường thanh lịch (ví dụ: *Chỉnh sửa*, *Đổi tên*, *Nhân bản*, *Tạo Nhu cầu CRM*, *Tạo Báo giá Mới*, *Tạo Thương vụ (Deal)*, *Lập Hợp đồng / Chứng từ*, *Xóa vĩnh viễn*), đi kèm SVG icon đơn sắc trung tính (`text-slate-400`).
 - **Giao diện Popover 3 chấm bo tròn đều góc**: Popover card phải bo tròn góc mềm mại (`rounded-2xl border border-slate-200/90 shadow-xl p-1.5`). Các dòng bấm bên trong được bo tròn đều `rounded-xl px-2.5 py-2 hover:bg-slate-100/80`, triệt tiêu góc vuông sắc cạnh khi di chuột vào dòng.
 - **Đồng bộ 100% Thuật ngữ trong Module**: Các tiêu chí phân loại phải dùng chung một tên gọi duy nhất (ví dụ: `Phân loại đối tác` phải đồng bộ 100% ở Nút Filter Dropdown trên Toolbar, Tiêu đề Cột Bảng và Nhãn ô Form Chi tiết, tuyệt đối không gọi lúc thì *Nhóm đối tác*, lúc thì *Phân loại*, lúc thì *Phân loại đối tác*).
 
-## 20. Chuẩn Cột Ngày tháng (CreatedAt/UpdatedAt) & Trạng thái Hủy (Soft Cancel) vs Xóa vĩnh viễn (Hard Delete)
+## 22. Chuẩn Cột Ngày tháng (CreatedAt/UpdatedAt) & Trạng thái Hủy (Soft Cancel) vs Xóa vĩnh viễn (Hard Delete)
 
 - **Cột Ngày tạo / Ngày cập nhật (`createdAt` / `updatedAt`)**:
   - Tất cả các bảng quản trị dữ liệu **bắt buộc** phải có cột hiển thị thời gian (`Ngày tạo` hoặc `Ngày cập nhật`) định dạng chuẩn `DD/MM/YYYY` (ví dụ: `27/09/2026`).
-  - Xử lý ngày tháng bắt buộc tuân thủ **Quy tắc 15** (`parseFirestoreDate`) để tránh lỗi crash `Invalid Date` trên Firestore objects.
+  - Xử lý ngày tháng bắt buộc tuân thủ **Quy tắc 17** (`parseFirestoreDate`) để tránh lỗi crash `Invalid Date` trên Firestore objects.
 - **Phân định Trạng thái "Đã hủy" (Soft Cancel) & "Xóa vĩnh viễn" (Hard Delete)**:
   - **Trạng thái "Đã hủy"**: Bắt buộc bổ sung tùy chọn **`Đã hủy`** vào danh mục Trạng thái của các module vận hành (CRM, Deal, Báo giá, Hợp đồng). Thao tác này giúp chuyển trạng thái hồ sơ/giao dịch sang nhóm đã hủy (`bg-rose-50 text-rose-700`) để lưu trữ vết lịch sử phục vụ báo cáo và kiểm toán.
   - **Duy trì nút "Xóa vĩnh viễn"**: Menu 3 chấm (Toolkit) vẫn **bắt buộc duy trì hành động "Xóa vĩnh viễn"** (`destructive: true`) kèm modal xác nhận (`AdminConfirm`) để người quản trị xóa cứng dữ liệu thừa/lỗi khỏi Firestore DB khi cần.
 
-## 21. Chuẩn trạng thái Tải dữ liệu Mượt mà (Standardized Skeleton Loading Rows)
+## 23. Chuẩn trạng thái Tải dữ liệu Mượt mà (Standardized Skeleton Loading Rows)
 
 - **Ngăn chặn Layout Shift (Chống nhảy khung)**: Mỗi khi chuyển giữa các module tab hoặc nạp bất đồng bộ dữ liệu từ Cloud Firestore/Backend API, tất cả các Bảng quản trị (`table`) bắt buộc phải hiển thị **Trạng thái Skeleton Loading** trong khoảng thời gian chờ (`isLoading === true`).
 - **Cấu trúc Dòng Skeleton chuẩn**: Hiển thị từ 5 dòng `<tr>` có hiệu ứng `animate-pulse`, trong đó các ô `<td>` chứa thẻ `<div>` mờ (`h-4 rounded bg-slate-100/80`) mô phỏng độ dài tương ứng của từng cột.
 - **Khởi tạo State an toàn**: Khi nạp trang ban đầu (F5), state khởi tạo của Bảng phải sử dụng helper khởi tạo đồng bộ (đã lọc các ID bị xóa trong `localStorage`) để triệt tiêu hoàn toàn hiện tượng chớp nạp lại dữ liệu mẫu (`DEFAULT_SEED`).
 
-## 22. Ưu tiên Full Page View cho các luồng công việc & Nhập liệu (Full Page View Standard - Zero Popup Policy)
+## 24. Ưu tiên Full Page View cho các luồng công việc & Nhập liệu (Full Page View Standard - Zero Popup Policy)
 
 - **Tuyệt đối KHÔNG sử dụng Modal Popup nổi** cho các luồng nghiệp vụ chính, các biểu mẫu nhập liệu dài, hoặc các tính năng xử lý dữ liệu lớn (như Import file Excel B2B, Soạn thảo Báo giá, Quản lý Chi tiết Học viên/Doanh nghiệp).
 - **Thiết kế chuẩn mực Full Page View (Giữ nguyên Sidebar & Topbar toàn cục)**:
@@ -283,7 +283,7 @@ Khi người dùng nhắc đến **`@IT team`** (hoặc `IT team:`), hệ thốn
   - Trải nghiệm liền mạch, chuyên nghiệp như ứng dụng Desktop/SaaS cao cấp, loại bỏ hoàn toàn các khung Popup/Modal chèn ngang màn hình.
 - **Ngoại lệ duy nhất**: Chỉ các Menu Toolkit 3 chấm (Action Dropdown Popover) và Hộp thoại xác nhận thao tác nguy hiểm ngắn (`AdminConfirmModal` - Xóa vĩnh viễn) mới được phép hiển thị dạng Popover/Modal nhỏ.
 
-## 23. Tiêu chuẩn Dữ liệu Vận hành Thực tế & An toàn Mã định danh (Zero Hardcoded Seed Data & Code Immutability)
+## 25. Tiêu chuẩn Dữ liệu Vận hành Thực tế & An toàn Mã định danh (Zero Hardcoded Seed Data & Code Immutability)
 
 - **Triệt tiêu hoàn toàn Hardcoded Seed Data đối với dữ liệu thực tế (Zero Mock Fallback)**:
   - **Tuyệt đối KHÔNG** tạo các mảng dữ liệu mẫu chứa tên người, tên công ty, chức danh, sếp hoặc số điện thoại giả định (như `INITIAL_SEED_PARTNERS`, `DEFAULT_CRM_RECORDS`...) nằm lẫn trong file nghiệp vụ (`services/`).
@@ -296,7 +296,7 @@ Khi người dùng nhắc đến **`@IT team`** (hoặc `IT team:`), hệ thốn
   - Một khi bản ghi đã được tạo và cấp mã, **mã đó là bất biến vĩnh viễn**, tuyệt đối không tự ý thay đổi, tái tạo ngẫu nhiên khi F5/reload trang, hoặc sử dụng mã mẫu giả định (như `p-1`, `p-districtk`).
   - Mọi thao tác lưu/cập nhật bắt buộc phải bám chặt theo Mã ID duy nhất này để ngăn chặn triệt để tình trạng ghi đè chéo hoặc làm gãy liên kết dữ liệu giữa các phân hệ.
 
-## 24. Quy trình Đảm bảo Chất lượng Code & Khép vòng Task (IDE Pipeline: Build -> Audit/Test -> Self-Review -> Fix -> Close)
+## 26. Quy trình Đảm bảo Chất lượng Code & Khép vòng Task (IDE Pipeline: Build -> Audit/Test -> Self-Review -> Fix -> Close)
 
 Cấm tuyệt đối thói quen "vừa sửa xong 1 dòng hoặc chạy lệnh build xong là vội vàng báo thành công/xong task" cho người dùng khi chưa tự kiểm thử và tự rà soát toàn bộ vòng đời thực thi. Mọi task chỉnh sửa code BẮT BUỘC phải trải qua đủ 5 bước khép kín trước khi được phép báo cáo hoàn tất:
 
@@ -320,7 +320,7 @@ Cấm tuyệt đối thói quen "vừa sửa xong 1 dòng hoặc chạy lệnh b
    - Triển khai lên Production / Hosting và commit git đồng bộ cả repository submodule lẫn root.
    - **Chỉ khi và chỉ khi** đã qua đủ 4 bước kiểm thử ở trên và kiểm tra hosting finalize thành công mới được phép thông báo cho người dùng kiểm tra kết quả. Báo cáo phải nêu rõ: Đã fix nguyên nhân gì, đã audit những ca biên nào và kết quả xác thực ra sao.
 
-## 25. Phương Pháp Ma Trận Tìm & Rà Soát Lỗi Toàn Diện: Trục Ngang Đa Dạng x Trục Dọc Tuyến Tính (2-Axis Bug Audit Standard)
+## 27. Phương Pháp Ma Trận Tìm & Rà Soát Lỗi Toàn Diện: Trục Ngang Đa Dạng x Trục Dọc Tuyến Tính (2-Axis Bug Audit Standard)
 
 Khi nhận báo cáo lỗi hoặc chuẩn bị bàn giao bất kỳ tính năng nào, tuyệt đối không được điều tra hời hợt chỉ ở điểm người dùng bấm. Bắt buộc phải triển khai phương pháp rà soát ma trận 2 trục:
 
@@ -338,7 +338,7 @@ Rà soát từng bước theo đúng hành trình thực tế của người dù
 
 **Nguyên tắc cốt tử**: Khi sửa một mắt xích, BẮT BUỘC phải đi dọc toàn bộ luồng tuyến tính này để đảm bảo mắt xích trước không tạo dữ liệu lệch cho mắt xích sau, và mắt xích sau không bị sập vì dữ liệu chưa kịp tới.
 
-## 26. Chuẩn Mực Kiểm Thử Phần Mềm Chuyên Nghiệp (Professional QA/QC Lifecycle Standard)
+## 28. Chuẩn Mực Kiểm Thử Phần Mềm Chuyên Nghiệp (Professional QA/QC Lifecycle Standard)
 
 Mọi tính năng mới hoặc bản vá lỗi (bug fix) trong toàn bộ dự án bắt buộc phải áp dụng quy trình kiểm thử chất lượng 4 giai đoạn chuẩn quốc tế (chuẩn CO-WELL Tech Academy & ISTQB):
 
@@ -380,6 +380,7 @@ Requirement (Tìm điểm thiếu/mơ hồ/rủi ro) ➔ Test Scenario (WHAT - K
 ### 5. Kiểm Thử Hồi Quy Bắt Buộc (Mandatory Regression Testing):
 - **Cấm tuyệt đối**: Fix lỗi ở module này làm vỡ hoặc phát sinh lỗi mới ở module khác (Side-effect bugs).
 - **Hành động bắt buộc**: Sau khi sửa xong 1 lỗi (ví dụ: sửa mã passcode trong ca thi), bắt buộc phải thực hiện kiểm thử hồi quy (Regression Test) quét lại toàn bộ các module liên quan: Quản lý lớp học (`ClassDetail`), Điểm danh (`Attendance`), Sổ điểm (`Gradebook`), và Trang chủ (`Landing Page`) trước khi đóng task.
+
 
 
 
