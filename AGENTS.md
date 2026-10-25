@@ -381,6 +381,24 @@ Requirement (Tìm điểm thiếu/mơ hồ/rủi ro) ➔ Test Scenario (WHAT - K
 - **Cấm tuyệt đối**: Fix lỗi ở module này làm vỡ hoặc phát sinh lỗi mới ở module khác (Side-effect bugs).
 - **Hành động bắt buộc**: Sau khi sửa xong 1 lỗi (ví dụ: sửa mã passcode trong ca thi), bắt buộc phải thực hiện kiểm thử hồi quy (Regression Test) quét lại toàn bộ các module liên quan: Quản lý lớp học (`ClassDetail`), Điểm danh (`Attendance`), Sổ điểm (`Gradebook`), và Trang chủ (`Landing Page`) trước khi đóng task.
 
+## 25. Phân định Nghiệp vụ Tuyển sinh & Bán hàng (Sales & CRM Architecture)
+
+1. **Phân định 4 Luồng Kinh doanh chuẩn mực**:
+   - **Đào tạo Doanh nghiệp (B2B)**: Lớp đào tạo In-house cho tổ chức/doanh nghiệp. Luồng: Khảo sát Nhu cầu (TNA) $\rightarrow$ Báo giá B2B $\rightarrow$ Hợp đồng đào tạo $\rightarrow$ Lớp học.
+   - **Học viên 1-1 (Trực tiếp)**: Học viên đăng ký học trực tiếp 1-1 (qua Web hoặc Cẩm tự tạo). Cần tư vấn, xếp lịch giáo viên và mở lớp kèm.
+   - **Tự mua Web (Video)**: Khách mua gói khóa học tự học qua Video bài giảng trên Landing Page. Tự thanh toán qua VietQR và học tự động trên Student Portal.
+   - **Dịch vụ Webapp**: Dự án công nghệ, phần mềm, tool tự động hóa cho doanh nghiệp/cá nhân. Cần Khảo sát yêu cầu $\rightarrow$ Báo giá Webapp $\rightarrow$ Hợp đồng dịch vụ.
+2. **Quy tắc Gắn nhãn Phân loại trên Bảng Tuyển sinh (`tab=leads`)**:
+   - Cột **Phân loại** hiển thị dạng Plain Text tinh gọn (`text-[12px] font-medium text-slate-700`):
+     - `Doanh nghiệp`
+     - `Học viên 1-1` / `Tư vấn 1-1 trực tiếp`
+     - `Tự mua Web (Video)`
+     - `Dịch vụ Webapp`
+   - Tuyệt đối không để nhãn mờ ảo chung chung làm lẫn lộn giữa đơn mua video tự động và học viên kèm 1-1 trực tiếp.
+3. **Thống nhất Mã định danh ID Nghiệp vụ**:
+   - Toàn bộ hồ sơ tuyển sinh (kể cả từ Landing Page mua khóa học) dùng mã duy nhất **`LEA-XXXXXXXX`**, tuyệt đối không tự bịa mã `ORD-` gây phân mảnh dữ liệu.
+
+
 
 
 
