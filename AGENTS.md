@@ -398,6 +398,31 @@ Requirement (Tìm điểm thiếu/mơ hồ/rủi ro) ➔ Test Scenario (WHAT - K
 3. **Thống nhất Mã định danh ID Nghiệp vụ**:
    - Toàn bộ hồ sơ tuyển sinh (kể cả từ Landing Page mua khóa học) dùng mã duy nhất **`LEA-XXXXXXXX`**, tuyệt đối không tự bịa mã `ORD-` gây phân mảnh dữ liệu.
 
+## 26. Chuẩn Thiết Kế Form Công Khai Phẳng Toàn Diện (Full-Bleed Document Form Standard)
+
+Áp dụng cho các màn hình làm biểu mẫu công khai trực tiếp của học viên / đối tác (như Đánh giá chất lượng đào tạo `PublicQualitySurveyPage.tsx`, Khảo sát TNA, v.v.):
+
+1. **Triết lý Thiết kế Clean Document (Phong cách Tài liệu / Google Forms cao cấp)**:
+   - **Tuyệt đối KHÔNG lộng card hộp lồng nhau (`bg-slate-50`, `border rounded-2xl shadow`)**: Triệt tiêu cảm giác nặng nề, bí bách của các "hộp kẹo" lồi lõm xếp chồng lên nhau.
+   - **Nền trắng thuần khiết (`bg-white`)**: Khung trang phẳng, thoáng đãng, sang trọng như một tài liệu khảo sát chuyên nghiệp.
+   - **Full-Width Mở Rộng Linh Hoạt**: Sử dụng chiều rộng thoải mái `w-full px-4 sm:px-8 md:px-12 lg:px-20` (tràn viền 100%, loại bỏ `max-w-*` gây co cụm ở giữa màn hình lớn), padding chuẩn `py-8 sm:py-12`.
+
+2. **Bố cục 2 Cột Đối Xứng Ngang (Horizontal 2-Column Row Layout)**:
+   - **Cột Trái (Nội dung câu hỏi - Chiếm 7 phần)**: Trình bày dạng văn bản thuần `text-xs sm:text-sm text-slate-800 leading-relaxed font-normal`. Số thứ tự bôi đậm nhẹ nhàng (`1., 2., 3.`).
+   - **Cột Phải (Thang đo / Lựa chọn - Chiếm 5 phần)**: Căn sát lề phải, thẳng hàng tuyệt đối giữa các dòng.
+   - **Đường viền phân cách ngang siêu mảnh**: Quản lý ngăn cách giữa các dòng câu hỏi bằng `divide-y divide-slate-100` kết hợp `py-4 hover:bg-slate-50/50 transition-colors`.
+
+3. **Cơ chế Lựa chọn Chấm Tròn Radio Single Choice (Minimalist Radio Dots)**:
+   - Không nhét nút sao to tướng hay đóng khung nút vuông thô cứng.
+   - Sử dụng các chấm tròn SVG radio thanh mảnh (`w-5 h-5 rounded-full border`):
+     - Khi chưa chọn: `border-slate-300 bg-white group-hover:border-slate-400`.
+     - Khi chọn: `border-emerald-600 bg-emerald-600` với tâm tròn màu trắng `w-2 h-2 rounded-full bg-white`.
+     - Số điểm mono tinh gọn phía dưới (`text-[11px] font-mono text-slate-400`, khi active chuyển sang `text-emerald-700 font-bold`).
+
+4. **Cơ chế Ẩn Danh Mặc Định & Bảo Mật Danh Tính (Default Anonymous)**:
+   - Các khảo sát đánh giá chất lượng (CSI/NPS) **mặc định bật chế độ ẩn danh 100%** để học viên hoàn toàn an tâm và đưa ra nhận xét khách quan nhất.
+   - Banner giải thích ẩn danh xanh ngọc nhẹ nhàng (`bg-emerald-50/60 border border-emerald-100 text-emerald-900`) kèm tùy chọn tick box nếu học viên chủ động muốn công khai danh tính.
+
 
 
 
