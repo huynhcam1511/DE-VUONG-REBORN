@@ -428,3 +428,15 @@ Requirement (Tìm điểm thiếu/mơ hồ/rủi ro) ➔ Test Scenario (WHAT - K
 
 
 
+
+
+## 27. Định Hướng Thiết Kế Thu Gọn & Tối Ưu Hóa Sidebar Navigation (Dự Trọng Tương Lai)
+
+Khi số lượng phân hệ và module trên hệ thống ngày càng mở rộng (hơn 8 nhóm với hơn 25 menu con), hệ thống bảo lưu 2 phương án kiến trúc điều hướng để nâng cấp khi có yêu cầu:
+
+1. **Phương án 1 (Single-Column Accordion - Mở 1 nhóm duy nhất):**
+   - Click vào tiêu đề nhóm nào thì mở bung các menu con của nhóm đó ra, đồng thời tự động thu gọn tất cả các nhóm còn lại.
+   - Ưu điểm: Giữ nguyên bố cục thanh Sidebar 1 cột hiện tại, loại bỏ tình trạng phải cuộn chuột dài, tập trung cao độ vào nhóm nghiệp vụ đang thao tác.
+2. **Phương án 2 (Dual-Sidebar / Activity Bar 2 cột kiểu Codex / VS Code / Slack):**
+   - **Cột trong cùng (Activity Bar hẹp ~48-56px cố định):** Luôn hiện diện ở mép trái, chỉ chứa các icon đại diện của từng Phân hệ lớn (*Tổng quan, Tuyển sinh & B2B, Đào tạo & Học vụ, Tài chính, Truyền thông, Nhân sự, Pháp chế, Hệ thống*).
+   - **Cột thứ 2 (Sidebar Panel ~200-240px linh hoạt):** Khi nhấp vào icon phân hệ nào ở cột 1 thì panel cột 2 sẽ mở ra và chỉ hiển thị cây danh sách module chi tiết của riêng phân hệ đó. Cho phép đóng/mở panel này để giải phóng tối đa 100% diện tích làm việc.
