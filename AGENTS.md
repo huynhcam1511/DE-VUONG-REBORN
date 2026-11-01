@@ -258,6 +258,27 @@ Khi người dùng nhắc đến **`@IT team`** (hoặc `IT team:`), hệ thốn
 - **Giao diện Popover 3 chấm bo tròn đều góc**: Popover card phải bo tròn góc mềm mại (`rounded-2xl border border-slate-200/90 shadow-xl p-1.5`). Các dòng bấm bên trong được bo tròn đều `rounded-xl px-2.5 py-2 hover:bg-slate-100/80`, triệt tiêu góc vuông sắc cạnh khi di chuột vào dòng.
 - **Đồng bộ 100% Thuật ngữ trong Module**: Các tiêu chí phân loại phải dùng chung một tên gọi duy nhất (ví dụ: `Phân loại đối tác` phải đồng bộ 100% ở Nút Filter Dropdown trên Toolbar, Tiêu đề Cột Bảng và Nhãn ô Form Chi tiết, tuyệt đối không gọi lúc thì *Nhóm đối tác*, lúc thì *Phân loại*, lúc thì *Phân loại đối tác*).
 
+## 22. Chuẩn thiết kế Màn hình Chi tiết nghiệp vụ (Detail View Canvas & Key-Value Grid Standard)
+
+Khi xây dựng hoặc refactor các màn hình Xem / Chỉnh sửa chi tiết bản ghi (Detail View) như Đơn hàng, Hợp đồng, Lớp học, Hồ sơ Học viên, Đối tác, Quy trình SOP, v.v., bắt buộc tuân thủ triệt để mô hình **Flat Canvas của SaaS ERP/CRM cao cấp (MISA AMIS / Salesforce style)**:
+
+1. **Triệt tiêu tư duy "Lậm Card & Đóng hộp" (No Box-in-Box / Anti-Card Clutter)**:
+   - **Nền phẳng toàn diện (Full-Bleed Flat Canvas)**: Toàn bộ body chi tiết nằm trên nền trắng phẳng (`bg-white w-full flex-1 overflow-y-auto px-6 py-5`). Tuyệt đối **KHÔNG** đặt nền xám (`bg-slate-50`) rồi nhét từng nhóm thông tin vào các khối card lồi lõm (`p-5 bg-white border border-slate-200 rounded-2xl shadow-xs`).
+   - **Tận dụng 100% diện tích chiều ngang (Full-Width)**: Tuyệt đối không dùng `max-w-4xl` hay `max-w-5xl mx-auto` làm co cụm nội dung ở giữa màn hình lớn và tạo khoảng hở thừa hai bên mép.
+   - **Phân đoạn tự nhiên bằng Đường Hairline & Khoảng đệm (Whitespace & Hairline Dividers)**: Giữa các phân đoạn (Thông tin chung, Bảng hàng hóa/chuyên đề, Tình trạng thực hiện, Ghi chú) chỉ dùng tiêu đề phân đoạn mỏng (`text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3`) và đường hairline siêu mảnh (`border-b border-slate-100 pb-6 mb-6`).
+
+2. **Quy chuẩn Cặp Dữ liệu Key - Value (Data Grid Hierarchy)**:
+   - Khi hiển thị thông tin tra cứu (Read-only data):
+     - **Nhãn (Label)**: Dùng chữ thường mỏng màu trung tính (`text-xs font-normal text-slate-500` hoặc `text-slate-400`).
+     - **Giá trị (Value)**: Dùng chữ đậm rõ nét (`text-xs font-medium text-slate-800` hoặc `text-slate-900`).
+     - Căn thẳng hàng theo lưới 2 cột hoặc 4 cột (`grid grid-cols-2 lg:grid-cols-4 gap-y-3 gap-x-6`).
+   - **Tuyệt đối KHÔNG bọc giá trị vào badge/pill viền xám hay nền màu**: Không dùng `bg-slate-100 px-2 py-0.5 rounded border border-slate-200` cho các giá trị text thông thường (như Tên khách hàng, Mã quy trình, Nút bấm, Phân hệ). Chỉ duy nhất trạng thái vận hành/kết nối mới dùng chấm tròn nhỏ (`•`) hoặc tag trạng thái tối giản.
+
+3. **Cấu trúc Header & Action Menu màn hình Chi tiết**:
+   - Header cố định trên cùng (`sticky top-0 z-30 bg-white border-b border-slate-200 px-6 py-3.5`).
+   - Bên trái: Nút Quay lại (`ArrowLeft`), **Mã ID mono không bọc pill** (`font-mono text-xs font-semibold text-slate-700`), dấu chấm phân cách `•`, và Tiêu đề chính (`text-base font-semibold text-slate-900`).
+   - Bên phải: Tối đa 1-2 nút hành động nghiệp vụ quan trọng nhất (như *Lưu*, *Duyệt*, hoặc *Xuất chứng từ*). Toàn bộ các thao tác thứ cấp (In, Nhân bản, Chia sẻ, Xóa) gom gọn vào nút **Menu 3 chấm (`MoreVertical`)** ở góc ngoài cùng bên phải.
+
 ## 22. Chuẩn Cột Ngày tháng (CreatedAt/UpdatedAt) & Trạng thái Hủy (Soft Cancel) vs Xóa vĩnh viễn (Hard Delete)
 
 - **Cột Ngày tạo / Ngày cập nhật (`createdAt` / `updatedAt`)**:
