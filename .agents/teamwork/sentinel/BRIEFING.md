@@ -1,46 +1,54 @@
-# BRIEFING — 2026-11-02T10:25:30Z
+# BRIEFING — 2026-11-14T16:20:00Z
 
 ## Mission
-Supervise end-to-end synchronization of Student Identity (LRN/Phone) across CRM Admissions (LEA), LeadPaymentModal/VietQR popup debt offsetting, and Admin Ledger transactions.
+Supervise implementation of "Phí nhận lớp" and "Phí chênh lệch hàng tháng" in CRM Admissions Module (De_Vuong_Webapp/src/components/admin/CRMAdmissionsModule.tsx).
 
 ## 🔒 My Identity
 - Archetype: sentinel
 - Working directory: c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\.agents\teamwork\sentinel
-- Orchestrator: 3f29a7db-f167-4091-994a-bb237f2c6dd5
-- Victory Auditor: aa771da0-a708-4f61-82bf-efb6cde43c47
-- Active Orchestrator: 172bc567-8630-477a-939d-7495c3c6423e (completed)
-- Active Victory Auditor: aa771da0-a708-4f61-82bf-efb6cde43c47 (confirmed)
+- Orchestrator: 08099f55-bb2b-4fd9-835b-93c0480cae41
+- Victory Auditor: ffc7599e-581b-4f9d-93af-0c4241e60038
 
 ## 🔒 Key Constraints
 - No technical decisions — relay only
 - Victory Audit is MANDATORY before reporting completion
 - Must not write code, analyze problems, or make technical decisions
 - Keep context ultra-light
+- Editable application: De_Vuong_Webapp/ only, never archives/
+- Full compliance with Admin Module UI standards (MoreVertical, freeze panes, AdminFilterDropdown, full-bleed, no pill-wrapping on IDs)
+- Persistent API/Firestore updates (no local-only state)
+- Dry-run script & verification report for historic Firestore data cleanup (no direct deletes during dry-run)
+- Phí nhận lớp: VNĐ input with thousands separator
+- Phí chênh lệch hàng tháng: Monthly commission breakdown with default Month 1, (+) add, delete row
+- Auto calculation: Thực nhận = Học phí - Phí nhận lớp - Tổng hoa hồng
+- Full sync with CRMRecord and Firestore
+- TypeScript check and 'npm run build' clean pass
 
 ## User Context
-- **Last user request**: Đồng bộ liên kết gốc định danh Học viên (LRN / SĐT) với các đợt Tuyển sinh (LEA đa đợt), tự động tính toán bù trừ công nợ trên Popup VietQR/Phiếu thu và Sổ cái kế toán toàn diện.
+- **Last user request**: Approved task prompt executed, audited, and verified.
 - **Pending clarifications**: none
-- **Delivered results**: Mission complete. All acceptance criteria certified by Independent Victory Auditor (VICTORY CONFIRMED).
+- **Delivered results**:
+  - "Phí nhận lớp" VNĐ currency input with caret position stability.
+  - "Phí chênh lệch hàng tháng" dynamic list with default Month 1, (+) add month, delete row with auto-renumbering.
+  - Live cash flow calculations on form summary banner & master table.
+  - Dual Firestore persistence & listener mapping across `customer_profiles` and `crm_records`.
+  - Full adherence to AGENTS.md UI standards.
+  - 100% test pass (28 unit tests + 36 adversarial tests) and clean production build.
 
 ## Project Status
 - **Phase**: complete
-- **Active Orchestrator**: none (cleaned up)
-- **Active Victory Auditor**: none (cleaned up)
-
-## Active Crons
-- All crons killed (task-30, task-32).
 
 ## Routing Decision
-- **Path**: General (teamwork_preview_orchestrator)
-- **Rationale**: Multi-subsystem synchronization touching CRM Admissions, Payment Popup, and Ledger Accounting.
+- **Path**: General (teamwork_orchestrator)
+- **Rationale**: Feature addition touching frontend UI, state management, calculation formulas, Firestore synchronization, and TypeScript build verification.
 
 ## Victory Audit Status
 - **Triggered**: yes
 - **Verdict**: VICTORY CONFIRMED
 - **Retry count**: 0
-- **Auditor Report**: c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\.agents\teamwork\victory_auditor_1\handoff.md
 
 ## Artifact Index
 - c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\.agents\teamwork\ORIGINAL_REQUEST.md — Authoritative user request
-- c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\.agents\teamwork\orchestrator_2\handoff.md — Orchestrator completion report
-- c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\.agents\teamwork\victory_auditor_1\handoff.md — Victory Auditor report (VICTORY CONFIRMED)
+- c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\.agents\teamwork\orchestrator_4\handoff.md — Orchestrator handoff report
+- c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\.agents\teamwork\victory_auditor_3\handoff.md — Victory Auditor handoff report
+- c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\.agents\teamwork\sentinel\handoff.md — Sentinel handoff report

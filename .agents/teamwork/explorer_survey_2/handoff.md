@@ -1,619 +1,160 @@
-# Handoff Report — Explorer 2: Tuition & Real-time Debt Sync in LeadPaymentModal (Requirement R2)
-
-**Task**: Deep investigation of Requirement R2 (Tự động liên kết Học phí dự kiến và Bám gốc Công nợ thực tế trong `LeadPaymentModal.tsx`) and the exact Acceptance Criteria.  
-**Author**: Explorer Survey 2  
-**Date**: 2026-11-02T09:43:00Z  
-**Status**: Completed (Read-only Investigation)  
-**Target Files**:
-- `src/components/admin/LeadPaymentModal.tsx`
-- `src/components/admin/CRMAdmissionsModule.tsx`
-- `src/components/admin/CommercialLifecycleBar.tsx`
-
----
+# Handoff Report: Quiz Submission Audit for EXM-57035431 & EXM-75958058 (CLS-63191700 / 631917)
 
 ## 1. Observation
 
-### Obs 1.1: `LeadPaymentModalProps` Interface & Data Ingestion
-In `src/components/admin/LeadPaymentModal.tsx` (lines 11–44):
-```typescript
-export interface LeadPaymentModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  existingCollectionCode?: string;
-  lead?: {
-    id: string | number;
-    code?: string;
-    name?: string;
-    partnerName?: string;
-    phone?: string;
-    email?: string;
-    tuition?: number;
-    paidAmount?: number;
-    note?: string;
-    internalNote?: string;
-    programName?: string;
-    roadmap?: string;
-    targetAudience?: string;
-    studentId?: string;
-  } | null;
-  student?: {
-    id: string;
-    studentCode?: string;
-    fullName?: string;
-    phone?: string;
-    email?: string;
-    debt?: number;
-    totalAmount?: number;
-    paidAmount?: number;
-    className?: string;
-    notes?: string;
-  } | null;
-  onPaymentRecorded?: (data: { collectionCode: string; amount: number; method: string }) => void;
-}
-```
-**Finding**:
-- `lead` does **not** contain `studentCode` (e.g. `LRN-xxxxxxxx`). It only has `studentId?: string`.
-- `LeadPaymentModalProps` does **not** accept `allLedgerTransactions?: LedgerTransaction[]`.
-- `LeadPaymentModal.tsx` does **not** import `ledgerService` or query Firebase Firestore collection `ledger_transactions`.
+### 1.1 Document Status: `classes/CLS-63191700` vs `classes/631917`
+Direct inspection of Firestore `classes` collection documents revealed two documents for the same class ("Lớp 02"):
 
----
+- **`classes/CLS-63191700`**:
+  * `createTime`: `2026-10-30T14:50:00.434Z`
+  * `updateTime`: `2026-10-31T05:26:56.128Z`
+  * `status`: `"inactive"`
+  * `mergedInto`: `"631917"`
+  * `mergedAt`: `"2026-10-30T15:05:06.853Z"`
+  * `classCode`: `"631917"`
+  * `studentIds` (11 students): `['Dlun5bbgaFYeYeCICoYJxajL4Dx1', 'V5RsPUBtGWUfiGH1UtACSiyjIYm1', '610a3MjR1lazmH3flleUYH969Dm2', 'BYuPWOXOgmMFeqEBTiWzFto0Fmv2', 'FEUKtQ00sFVeXZDM4qYHg0JSnY72', 'M8jbxeaBRzSsjxzXSB9dvqUg4n12', 'QRaGeez0ovSpai01tQNk4iGGSLY2', 'XTS1ebFZBrN4SlZPpfqR9ZoY6jl2', 'YiIuQLgdkDbL6dMlEZjc1dx5hux1', 'xQ3zCo1PxRXtXf97hTqhGAXkRbg1', 'lr6SUzzFSGRc2Qp2953IllZXuBq1']`
+  * Target assessments in `assessments` array:
+    - `assess-exam-1791498498715-1791540316712-6mjky` (`EXM-57035431`, `exam-1791498498715`): `submissions = []` (length 0)
+    - `assess-exam-1791498498715-1791498580829-1dya3` (`EXM-75958058`, `exam-1791498515804`): `submissions = []` (length 0)
+    - `EXM-26133037` (Midterm MCQ): `submissions = []` (length 0)
+    - `EXM-27408327` (Dashboard MCQ): `submissions = []` (length 0)
+    - `EXM-38232725` (Dashboard MCQ): `submissions = []` (length 0)
 
-### Obs 1.2: Modal Header Rendering
-In `src/components/admin/LeadPaymentModal.tsx` (lines 69–77 and 230–248):
-```typescript
-// Resolve target identifier strictly based on type
-const targetCode = isStudent
-  ? ensureValidBusinessCode(student!.studentCode || student!.id, 'LRN')
-  : ensureValidBusinessCode(String(lead?.code || lead?.id), 'LEA');
+- **`classes/631917` (Canonical Active Class)**:
+  * `createTime`: `2026-10-05T18:06:41.389Z`
+  * `updateTime`: `2026-11-12T13:19:01.720Z`
+  * `status`: `"active"`
+  * `classCode`: `"631917"`
+  * `studentIds` (11 students): Identical 11 UIDs to `CLS-63191700`.
+  * Target assessments in `assessments` array:
+    - `assess-exam-1791498498715-1791540316712-6mjky` (`EXM-57035431`, `exam-1791498498715`): `submissions = 1`
+      * Student: Trần Ngọc Minh Tùng (`xQ3zCo1PxRXtXf97hTqhGAXkRbg1`, `LRN-24669238`, `solic.tran@gmail.com`)
+      * Score: `6.5`, MCQ Score: `6.5`, Duration: `599s`, Violations: `0`
+      * SubmittedAt: `2026-11-04T14:47:21.669Z`
+      * Attempt ID: `att_xQ3zCo1PxRXtXf97hTqhGAXkRbg1_1793803641746_bm6lg7k6`
+    - `assess-exam-1791498498715-1791498580829-1dya3` (`EXM-75958058`, `exam-1791498515804`): `submissions = 1`
+      * Student: Trần Ngọc Minh Tùng (`xQ3zCo1PxRXtXf97hTqhGAXkRbg1`, `LRN-24669238`, `solic.tran@gmail.com`)
+      * Score: `9.0`, MCQ Score: `9.0`, Duration: `429s`, Violations: `0`
+      * SubmittedAt: `2026-11-04T14:56:50.706Z`
+      * Attempt ID: `att_xQ3zCo1PxRXtXf97hTqhGAXkRbg1_1793804210746_sqqvsyo4`
+    - `EXM-26133037` (Midterm MCQ): `submissions = 9` (taken 2026-10-31 and 2026-11-11)
+    - `EXM-27408327` (Dashboard MCQ): `submissions = 7` (taken 2026-11-07)
+    - `EXM-38232725` (Dashboard MCQ): `submissions = 7` (taken 2026-11-07 and 2026-11-12)
+    - `EXM-26497864` (PivotTable): `submissions = 11` (10 on 2026-10-17 + Trần Ngọc Minh Tùng on 2026-11-04)
+    - `EXM-22628955` (PivotTable): `submissions = 10` (9 on 2026-10-17 + Trần Ngọc Minh Tùng on 2026-11-04)
+    - `EXM-89094264` (PivotTable): `submissions = 9` (8 on 2026-10-17 + Trần Ngọc Minh Tùng on 2026-11-04)
+    - `EXM-41014955` (PivotTable): `submissions = 10` (9 on 2026-10-17 + Trần Ngọc Minh Tùng on 2026-11-04)
 
-const clientName = isStudent
-  ? (student!.fullName || 'Học viên')
-  : (lead?.partnerName || lead?.name || 'Khách hàng');
-```
-Header JSX (lines 232–248):
-```tsx
-<div className="flex items-center gap-2.5">
-  <h3 className="text-sm font-bold text-slate-900">
-    Tạo mã VietQR & Thu học phí
-  </h3>
-  <span className="font-mono text-xs font-semibold text-slate-700">{targetCode}</span>
-  {currentColCode && (
-    <>
-      <span className="text-xs text-slate-400">·</span>
-      <span className="font-mono text-xs font-semibold text-slate-700">
-        {currentColCode}
-      </span>
-    </>
-  )}
-  <span className="text-xs text-slate-400">·</span>
-  <span className="text-xs font-medium text-slate-600 truncate max-w-xs">{clientName}</span>
-</div>
-```
-**Finding**:
-- When opened for a lead, `{targetCode}` displays strictly `LEA-xxxxxxxx`.
-- The student's `LRN-xxxxxxxx` identifier is **omitted** from the header entirely.
-- Even if `lead.studentId` is present, it is never resolved or rendered alongside `LEA`.
+### 1.2 `quiz_attempts` Collection Audit (Total: 201 records)
+A full-collection scan across all 201 documents in `quiz_attempts` returned **exactly 2 attempts** matching `exam-1791498498715` / `EXM-57035431` or `exam-1791498515804` / `EXM-75958058`:
+1. `att_xQ3zCo1PxRXtXf97hTqhGAXkRbg1_1793803641746_bm6lg7k6`:
+   - `quizId`: `"exam-1791498498715"`
+   - `studentId`: `"xQ3zCo1PxRXtXf97hTqhGAXkRbg1"` (Trần Ngọc Minh Tùng)
+   - `classId`: `"631917"`
+   - `score`: `6.5`
+   - `status`: `"submitted"`
+   - `submitTime`: `"2026-11-04T14:47:21.669Z"`
+2. `att_xQ3zCo1PxRXtXf97hTqhGAXkRbg1_1793804210746_sqqvsyo4`:
+   - `quizId`: `"exam-1791498515804"`
+   - `studentId`: `"xQ3zCo1PxRXtXf97hTqhGAXkRbg1"` (Trần Ngọc Minh Tùng)
+   - `classId`: `"631917"`
+   - `score`: `9.0`
+   - `status`: `"submitted"`
+   - `submitTime`: `"2026-11-04T14:56:50.706Z"`
 
----
+No other attempt exists in `quiz_attempts` for either quiz. Zero attempts were submitted by the remaining 10 students of the class.
 
-### Obs 1.3: Initialization of "1. Tổng học phí" (Ô 1) & Fallback Bug
-In `src/components/admin/LeadPaymentModal.tsx` (lines 61 and 106–110):
-```typescript
-const [customTotalTuition, setCustomTotalTuition] = useState<string>('');
-...
-useEffect(() => {
-  if (isOpen) {
-    ...
-    if (student) {
-      ...
-    } else if (lead) {
-      const leadTuition = Number(lead.tuition || 0);
-      const paid = Number(lead.paidAmount || 0);
-      setCustomTotalTuition(leadTuition > 0 ? String(leadTuition) : '3000000');
-      setPreviouslyPaidAmount(paid);
-      const remaining = Math.max(0, leadTuition - paid);
-      setCollectionAmount(remaining > 0 ? String(remaining) : (leadTuition > 0 ? String(leadTuition) : ''));
-      setInternalNote(lead.internalNote || lead.note || '');
-    }
-```
-**Finding**:
-- If `lead.tuition > 0` (e.g. 6.000đ), `customTotalTuition` is initialized to `'6000'`.
-- If `lead.tuition` is 0 or undefined, it defaults to hardcoded `'3000000'` (3.000.000đ).
-- In Ô 1 input (lines 337–347): It renders formatted number with commas, and updates `customTotalTuition` onChange.
+### 1.3 `student_sessions` Collection Audit (Total: 1,233 records)
+- Total sessions belonging to the 11 students: 246 records (121 associated with `631917`, 66 with `CLS-63191700`, remainder with other historical classes).
+- Sessions mentioning "PivotChart": exactly 13 records, all corresponding to Session 3 of class `631917` (`<studentId>_631917_3`, date: `2026-10-17`). Each contains teacher note: `"Học hết Pivot Chart chapter 1, 2"`.
+- Quiz assessment scores in `student_sessions`: Zero records. `assessmentScores` array is empty for all 13 session documents.
 
----
-
-### Obs 1.4: Outer Admission Form Tuition & `handleOpenLeadPayment`
-In `src/components/admin/CRMAdmissionsModule.tsx`:
-1. "Học phí dự kiến" input in Detail View (lines 4895–4903):
-```tsx
-<label className="block text-xs font-semibold text-slate-700 mb-1">Học phí dự kiến (VNĐ)</label>
-<div className="relative">
-  <input
-    type="text"
-    value={formTuition ? (parseInt(formTuition.replace(/\D/g, ''), 10) || 0).toLocaleString('vi-VN') : ''}
-    onChange={(e) => setFormTuition(e.target.value.replace(/\D/g, ''))}
-    placeholder="Nhập mức học phí..."
-    className="..."
-  />
-  <span className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-xs font-medium text-slate-400">₫</span>
-</div>
-```
-2. Opener `handleOpenLeadPayment` (lines 1357–1394):
-```typescript
-const handleOpenLeadPayment = (rec?: CRMRecord | null) => {
-  const target = rec || editingRecord;
-  const effectiveTuition = parseInt(String(formTuition || target?.tuition || '').replace(/\D/g, ''), 10) || 0;
-  
-  // Tìm mã lệnh thu đang mở gần nhất nếu có
-  const targetLeadId = String(target?.id || '');
-  const targetCode = ensureValidBusinessCode(target?.code || target?.id || '', 'LEA');
-  const targetCodeClean = targetCode.replace('-', '');
-  const targetStudentId = target?.studentId || (target === editingRecord ? formStudentId : undefined);
-
-  const existingCol = allLedgerTransactions.find(tx => {
-    if (!tx.refCode?.startsWith('COL')) return false;
-    const desc = tx.description || '';
-    const sId = String(tx.studentId || '');
-    return (
-      sId === targetLeadId ||
-      (targetStudentId && sId === String(targetStudentId)) ||
-      desc.includes(targetCode) ||
-      desc.includes(targetCodeClean)
-    );
-  });
-
-  setPaymentModalColCode(existingCol?.refCode);
-  setPaymentModalLead({
-    id: target?.id || 'new',
-    code: target?.code || '',
-    name: (target === editingRecord && formName) ? formName : (target?.name || ''),
-    partnerName: (target === editingRecord && formPartnerName) ? formPartnerName : (target?.partnerName || ''),
-    phone: (target === editingRecord && formPhone) ? formPhone : (target?.phone || target?.contact || ''),
-    email: (target === editingRecord && formEmail) ? formEmail : (target?.email || ''),
-    tuition: effectiveTuition,
-    paidAmount: Number(target?.paidAmount || 0),
-    studentId: target?.studentId || (target === editingRecord ? formStudentId : undefined),
-    programName: formProgramName || (target as any)?.programName || target?.roadmap || (target as any)?.interestCourse || target?.need || '',
-    targetAudience: (formKind || target?.kind) === 'Doanh nghiệp' ? 'Khách hàng Doanh nghiệp' : 'Học viên cá nhân',
-  });
-  setIsLeadPaymentModalOpen(true);
-};
-```
-**Findings**:
-1. When opening from Detail View (`target === editingRecord`), `effectiveTuition` takes `formTuition` (e.g. 6.000đ).
-2. **Stale state bug**: When opening from Table View row action menu (lines 5835 and 6591: `handleOpenLeadPayment(rec)`), `target = rec`. But `parseInt(String(formTuition || target?.tuition || ''))` checks `formTuition` first! If another record was previously opened in Detail View, `formTuition` leaks into `rec.tuition`!
-3. **Critical Debt calculation bug**: Line 1388 strictly passes:
-   `paidAmount: Number(target?.paidAmount || 0)`.
-   It **never** queries `allLedgerTransactions` for payments received via SePay or bank!
-   In Firestore `crm_records`, `target.paidAmount` is usually 0 unless manually updated. Consequently, `paymentModalLead.paidAmount` is 0.
-
----
-
-### Obs 1.5: How `previouslyPaidAmount` Is Handled vs Ledger Transactions
-- In `CRMAdmissionsModule.tsx` (lines 1517 and 1529–1531), the module has an active real-time subscription to `ledgerService`:
-  ```typescript
-  const [allLedgerTransactions, setAllLedgerTransactions] = useState<LedgerTransaction[]>([]);
-  ...
-  const unsubLedger = ledgerService.subscribeToTransactions((txs) => {
-    setAllLedgerTransactions(txs || []);
-  });
-  ```
-- In `CRMAdmissionsModule.tsx` (lines 1764–1773), when calculating lead status, it **does** aggregate from `allLedgerTransactions`:
-  ```typescript
-  const ledgerPaidSum = allLedgerTransactions.reduce((sum, tx) => {
-    if ((tx.credit || 0) <= 0) return sum;
-    const raw = ((tx.description || '') + ' ' + (tx.originalContent || '') + ' ' + (tx.studentId || '') + ' ' + (tx.refCode || '')).toUpperCase();
-    const cleanLea = String(targetCode || targetLeadId).toUpperCase().replace(/[^A-Z0-9]/g, '');
-    const cleanDigits = cleanLea.replace(/^LEA/, '');
-    const matches = cleanDigits.length >= 6 && (raw.includes(cleanLea) || raw.includes('LEA' + cleanDigits) || raw.includes('LEA-' + cleanDigits));
-    return matches ? sum + (tx.credit || 0) : sum;
-  }, 0);
-  const actualTotalPaid = Math.max(Number(rec.paidAmount || 0), ledgerPaidSum);
-  ```
-- Similarly, `activeCollectionOrder` (lines 1654–1673) calculates:
-  ```typescript
-  const collectedAmount = allLedgerTransactions
-    .filter((stx) => {
-      if (stx.type === 'expected_revenue') return false;
-      if ((stx.credit || 0) <= 0) return false;
-      ...
-    })
-    .reduce((acc, stx) => acc + (stx.credit || 0), 0);
-  ```
-- **Contrast**: While `CRMAdmissionsModule` calculates `ledgerPaidSum` and `collectedAmount` for status chips and `CommercialLifecycleBar`, `handleOpenLeadPayment` passes **only** `Number(target?.paidAmount || 0)` into `LeadPaymentModal`!
-- Therefore, in `LeadPaymentModal.tsx`:
-  - `previouslyPaidAmount` becomes 0.
-  - The multi-stage progress bar (`previouslyPaidAmount > 0`) is **hidden**.
-  - Ô 2 proposes the entire 6.000đ instead of the 3.000đ remaining debt.
-  - VietQR generates 6.000đ instead of 3.000đ.
-
----
-
-### Obs 1.6: How "2. Thu đợt này", "3. Còn lại sau đợt này", and VietQR Behave
-In `src/components/admin/LeadPaymentModal.tsx`:
-1. **Ô 2 ("Thu đợt này")**:
-   - Lines 111–112:
-     ```typescript
-     const remaining = Math.max(0, leadTuition - paid);
-     setCollectionAmount(remaining > 0 ? String(remaining) : (leadTuition > 0 ? String(leadTuition) : ''));
-     ```
-   - Input (lines 357–371): Controlled by `collectionAmount`.
-2. **VietQR Amount**:
-   - Line 128: `const numericAmount = parseInt(collectionAmount.replace(/\D/g, ''), 10) || 0;`
-   - Lines 137–144:
-     ```typescript
-     const qrUrl = vietQR.generateUrl(
-       PAYMENT_CONFIG.BANK_ID,
-       PAYMENT_CONFIG.ACCOUNT_NO,
-       numericAmount,
-       currentMemo,
-       PAYMENT_CONFIG.ACCOUNT_NAME,
-       'print'
-     );
-     ```
-   - The VietQR code and the manual transfer box (lines 526–528) strictly use `numericAmount`. If `collectionAmount` is 3.000, VietQR immediately generates 3.000đ.
-3. **Ô 3 ("Còn lại sau đợt này")**:
-   - Lines 132–134:
-     ```typescript
-     const currentRemainingDebt = Math.max(0, numericTotalTuition - previouslyPaidAmount);
-     const numericRemainingAfterThis = Math.max(0, currentRemainingDebt - numericAmount);
-     ```
-   - Rendered in Ô 3 (lines 374–382):
-     `{numericRemainingAfterThis.toLocaleString()} đ`.
-   - Real-time reactivity: Whenever `customTotalTuition` or `collectionAmount` changes, `numericRemainingAfterThis` recalculates synchronously.
+### 1.4 Multi-Class Audit across `classes` (Total: 36 classes)
+- Duplicate/merged class pattern:
+  * `CLS-91269700` is `inactive` and has `mergedInto: "912697"`.
+  * `CLS-63191700` is `inactive` and has `mergedInto: "631917"`.
+  * `CLS-58706041` is `inactive` and has `mergedInto: "587060"`.
+- Target exams in other classes:
+  * Classes `188969` and `587060` contain definitions for `EXM-57035431` and `EXM-75958058`, but have 0 submissions.
+- Student cross-submission check:
+  * Only Huỳnh Kiến Cẩm (`Dlun5bbgaFYeYeCICoYJxajL4Dx1`) has submissions in another class (`912697`, Lớp 01, Microsoft Word exams). No students submitted PivotChart exams to another class.
 
 ---
 
 ## 2. Logic Chain
 
-1. **Premise 1 (Obs 1.3 & 1.4)**: The admission detail form stores tuition in `formTuition`. When clicking "Thu tiền & Xuất VietQR" on an active lead, `handleOpenLeadPayment` populates `paymentModalLead.tuition = effectiveTuition`. In `LeadPaymentModal`, `customTotalTuition` is set to `lead.tuition`.
-   - *Direct Consequence*: If the user inputs 6.000đ in "Học phí dự kiến", Ô 1 correctly initializes to 6.000đ.
-   - *Flaw Identified*: When opening from Table View, `formTuition` can leak across records because `formTuition || target?.tuition` is used without checking `target === editingRecord`.
-
-2. **Premise 2 (Obs 1.1, 1.4 & 1.5)**: When payments are transferred via bank/SePay, entries are stored in `ledger_transactions` with `type: 'payment'` (or credit > 0). They do not automatically update `crm_records.paidAmount`.
-   - *Direct Consequence*: `target.paidAmount` in `crm_records` remains 0 or stale.
-   - *Flaw Identified*: Because `handleOpenLeadPayment` passes `paidAmount: Number(target?.paidAmount || 0)` and `LeadPaymentModal` does not query `allLedgerTransactions`, `previouslyPaidAmount` becomes 0.
-
-3. **Premise 3 (Obs 1.3 & 1.6)**: In `LeadPaymentModal.tsx`, `remaining` is computed as `Math.max(0, leadTuition - paid)`.
-   - When `paid = 0`: `remaining = 6.000đ - 0 = 6.000đ`.
-   - Result: Ô 2 is set to 6.000đ, VietQR displays 6.000đ, and the progress bar (`previouslyPaidAmount > 0`) does not render.
-   - Conversely, when `paid = 3.000đ`: `remaining = 6.000đ - 3.000đ = 3.000đ`. Ô 2 is initialized to 3.000đ, VietQR generates 3.000đ, progress bar shows `Đã thu 3.000đ / Còn nợ 3.000đ`, and Ô 3 shows `0 đ`.
-
-4. **Premise 4 (Obs 1.2 & Code Generator)**: The header of `LeadPaymentModal` renders `{targetCode}` and `{clientName}`. When `lead` is present, `targetCode` is only `LEA-xxxxxxxx`.
-   - *Direct Consequence*: The `LRN` code is missing from the header.
-   - *Solution*: By passing `studentCode` (resolved from `students` via `formStudentId`, `lead.studentId`, phone, or email) to `lead` in `LeadPaymentModal`, the header can render `LEA-xxxxxxxx · LRN-xxxxxxxx · [Họ tên]`.
+1. **Premise**: User observed 0 or 1 submissions in `classes/CLS-63191700` for PivotChart quizzes `EXM-57035431` and `EXM-75958058`.
+2. **Observation 1.1**: `classes/CLS-63191700` was flagged `status: 'inactive'` with `mergedInto: '631917'` at `2026-10-30T15:05:06.853Z`.
+3. **Observation 1.1 & 1.2**: When students submit quizzes through the webapp, the backend and frontend use the active class document ID (`631917`), saving all submissions to `classes/631917.assessments[].submissions` and `quiz_attempts` with `classId: "631917"`.
+4. **Deduction**: Because `CLS-63191700` was superseded and frozen on October 30, any submissions made in November (such as Trần Ngọc Minh Tùng's submissions on 2026-11-04) went exclusively to `classes/631917`.
+5. **Observation 1.1 & 1.2**: In `classes/631917`, both `EXM-57035431` and `EXM-75958058` DO contain the submission of Trần Ngọc Minh Tùng (scores 6.5 and 9.0).
+6. **Observation 1.2**: In `quiz_attempts`, exactly 2 attempts exist in the entire database for both PivotChart exam IDs (`exam-1791498498715` and `exam-1791498515804`), both belonging to Trần Ngọc Minh Tùng.
+7. **Observation 1.1 & Timeline Trace**: On 2026-10-17, the class took 4 PivotTable exams (`EXM-26497864`, `EXM-22628955`, `EXM-41014955`, `EXM-89094264`), and on 2026-10-31 took Midterm exams (`EXM-26133037` & `EXM-67637099`). The other 10 students were never administered or never submitted `EXM-57035431` or `EXM-75958058`.
+8. **Observation 1.3**: `student_sessions` stores attendance, schedule, and lesson notes ("Học hết Pivot Chart chapter 1, 2"), not automated quiz submissions.
 
 ---
 
 ## 3. Caveats
 
-- **No Caveats** regarding the core problem and root cause. The data flow, state variables, and failure points are 100% determined.
-- **Architectural observation**: `LeadPaymentModal` is rendered in two places within `CRMAdmissionsModule.tsx`:
-  1. Line 5673 (Inside Detail View)
-  2. Line 6796 (Inside Table/List View)
-  Both instances must receive the updated props (`allLedgerTransactions={allLedgerTransactions}`) so that opening from either view exhibits identical, robust behavior.
-- **Cross-admission protection**: If a student has multiple admission waves (`LEA-1` and `LEA-2`), a bank transaction whose description specifically contains `LEA-2` must not count towards `LEA-1`. The query matching logic must verify that if another LEA code is explicitly stated in the transaction, it does not contaminate the current LEA.
+1. **Exam Delivery Intent**: It cannot be determined purely from database records whether the instructor intended for all 11 students to take `EXM-57035431` and `EXM-75958058` on 2026-10-17, or if they skipped them in favor of the 4 PivotTable exams, with only Trần Ngọc Minh Tùng completing them on 2026-11-04 as self-practice or makeup.
+2. **Read-Only Scope**: This audit did not alter or copy any records between `classes/631917` and `classes/CLS-63191700`.
 
 ---
 
-## 4. Conclusion & Required Adjustments
+## 4. Conclusion
 
-To satisfy the Acceptance Criteria:
-- **6.000đ total tuition, 3.000đ paid -> 3.000đ due, VietQR = 3.000đ**
-- **Header displaying `LEA`, `LRN`, and student name**
-
-The following concrete adjustments are required:
-
-### Summary of State Variables, Props & UI Elements to Adjust
-
-| Component | Element / State / Prop | Nature of Adjustment |
-|---|---|---|
-| `LeadPaymentModalProps` | `lead.studentCode?: string;` | Add field to receive the resolved `LRN` code (e.g. `LRN-62517882`). |
-| `LeadPaymentModalProps` | `allLedgerTransactions?: LedgerTransaction[];` | Add optional prop to accept the ledger transaction list. |
-| `LeadPaymentModal.tsx` | `targetLrnCode` resolution | Resolve `targetLrnCode` from `student?.studentCode` or `lead?.studentCode` or `lead?.studentId`. |
-| `LeadPaymentModal.tsx` | Header UI (lines 232–248) | Render `targetLeaCode · targetLrnCode · clientName` (e.g. `LEA-64817788 · LRN-62517882 · Nguyễn Thị Anh Thi`). |
-| `LeadPaymentModal.tsx` | Left column customer info (lines 304–307) | Display both `targetLeaCode` and `targetLrnCode` mono badges. |
-| `LeadPaymentModal.tsx` | `previouslyPaidAmount` calculation | Calculate ledger paid sum matching `targetLeaCode`, `targetLrnCode`, `phone`, or `COL` code (excluding `expected_revenue`), taking `Math.max(lead.paidAmount, ledgerPaidSum)`. |
-| `LeadPaymentModal.tsx` | Ô 2 suggestion | Propose `remaining = Math.max(0, leadTuition - previouslyPaidAmount)` (e.g. 3.000đ). |
-| `CRMAdmissionsModule.tsx` | `handleOpenLeadPayment` (lines 1357–1394) | 1. Fix tuition priority: if `rec && rec !== editingRecord`, use `rec.tuition` instead of stale `formTuition`.<br>2. Resolve student `LRN` via `students` lookup.<br>3. Compute `actualPaidAmount` from `allLedgerTransactions` and pass to `paymentModalLead`. |
-| `CRMAdmissionsModule.tsx` | `<LeadPaymentModal>` tags (lines 5673 & 6796) | Pass `allLedgerTransactions={allLedgerTransactions}`. |
-
----
-
-### Exact Implementation Specifications
-
-#### A. In `src/components/admin/LeadPaymentModal.tsx`
-
-1. **Update `LeadPaymentModalProps`**:
-```typescript
-export interface LeadPaymentModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  existingCollectionCode?: string;
-  lead?: {
-    id: string | number;
-    code?: string;
-    name?: string;
-    partnerName?: string;
-    phone?: string;
-    email?: string;
-    tuition?: number;
-    paidAmount?: number;
-    note?: string;
-    internalNote?: string;
-    programName?: string;
-    roadmap?: string;
-    targetAudience?: string;
-    studentId?: string;
-    studentCode?: string; // NEW: LRN code
-  } | null;
-  student?: {
-    id: string;
-    studentCode?: string;
-    fullName?: string;
-    phone?: string;
-    email?: string;
-    debt?: number;
-    totalAmount?: number;
-    paidAmount?: number;
-    className?: string;
-    notes?: string;
-  } | null;
-  allLedgerTransactions?: any[]; // NEW: ledger transactions list
-  onPaymentRecorded?: (data: { collectionCode: string; amount: number; method: string }) => void;
-}
-```
-
-2. **Dual-code Resolution**:
-```typescript
-const isStudent = Boolean(student);
-
-const targetLeaCode = !isStudent && (lead?.code || lead?.id)
-  ? ensureValidBusinessCode(String(lead.code || lead.id), 'LEA')
-  : undefined;
-
-const targetLrnCode = isStudent
-  ? ensureValidBusinessCode(student!.studentCode || student!.id, 'LRN')
-  : (lead?.studentCode
-      ? ensureValidBusinessCode(lead.studentCode, 'LRN')
-      : (lead?.studentId ? ensureValidBusinessCode(lead.studentId, 'LRN') : undefined));
-
-const targetCode = isStudent
-  ? (targetLrnCode || ensureValidBusinessCode(student!.studentCode || student!.id, 'LRN'))
-  : (targetLeaCode || ensureValidBusinessCode(String(lead?.code || lead?.id), 'LEA'));
-```
-
-3. **Ledger Debt Calculation Logic**:
-```typescript
-const calculateLedgerPaid = (
-  transactions: any[] | undefined,
-  leaCode?: string,
-  lrnCode?: string,
-  phone?: string,
-  colCode?: string
-): number => {
-  if (!transactions || transactions.length === 0) return 0;
-  
-  const cleanLea = leaCode ? leaCode.toUpperCase().replace(/[^A-Z0-9]/g, '') : '';
-  const digitsLea = cleanLea.replace(/^LEA/, '');
-  
-  const cleanLrn = lrnCode ? lrnCode.toUpperCase().replace(/[^A-Z0-9]/g, '') : '';
-  const digitsLrn = cleanLrn.replace(/^LRN/, '');
-  
-  const cleanPhone = phone ? phone.replace(/\D/g, '') : '';
-  const cleanCol = colCode ? colCode.toUpperCase().replace(/[^A-Z0-9]/g, '') : '';
-
-  return transactions
-    .filter(tx => {
-      if (tx.type === 'expected_revenue') return false;
-      if ((tx.credit || 0) <= 0) return false;
-
-      const raw = `${tx.originalContent || ''} ${tx.transaction_content || ''} ${tx.description || ''} ${tx.refCode || ''} ${tx.studentId || ''}`.toUpperCase();
-
-      // Guard: If tx mentions a DIFFERENT LEA code, do not cross-contaminate
-      const txLeaMatch = raw.match(/\bLEA[\s-]?(\d{6,10})\b/i);
-      if (txLeaMatch && digitsLea && txLeaMatch[1] !== digitsLea) {
-        return false;
-      }
-
-      const matchesLea = Boolean(digitsLea.length >= 6 && (raw.includes(cleanLea) || raw.includes('LEA' + digitsLea) || raw.includes('LEA-' + digitsLea)));
-      const matchesLrn = Boolean(digitsLrn.length >= 6 && (raw.includes(cleanLrn) || raw.includes('LRN' + digitsLrn) || raw.includes('LRN-' + digitsLrn)));
-      const matchesPhone = Boolean(cleanPhone.length >= 9 && raw.includes(cleanPhone));
-      const matchesCol = Boolean(cleanCol && raw.includes(cleanCol));
-
-      return matchesLea || matchesLrn || matchesPhone || matchesCol;
-    })
-    .reduce((sum, tx) => sum + (tx.credit || 0), 0);
-};
-```
-
-4. **In `useEffect`**:
-```typescript
-} else if (lead) {
-  const leadTuition = Number(lead.tuition || 0);
-  const ledgerPaid = calculateLedgerPaid(
-    allLedgerTransactions,
-    targetLeaCode,
-    targetLrnCode,
-    clientPhone,
-    currentColCode || existingCollectionCode
-  );
-  const paid = Math.max(Number(lead.paidAmount || 0), ledgerPaid);
-  
-  setCustomTotalTuition(leadTuition > 0 ? String(leadTuition) : '3000000');
-  setPreviouslyPaidAmount(paid);
-  const remaining = Math.max(0, leadTuition - paid);
-  setCollectionAmount(remaining > 0 ? String(remaining) : (leadTuition > 0 ? '0' : ''));
-  setInternalNote(lead.internalNote || lead.note || '');
-}
-```
-
-5. **Header UI**:
-```tsx
-<div className="flex items-center gap-2.5">
-  <h3 className="text-sm font-bold text-slate-900">
-    Tạo mã VietQR & Thu học phí
-  </h3>
-  {targetLeaCode && (
-    <span className="font-mono text-xs font-semibold text-slate-700">{targetLeaCode}</span>
-  )}
-  {targetLeaCode && targetLrnCode && (
-    <span className="text-xs text-slate-400">·</span>
-  )}
-  {targetLrnCode && (
-    <span className="font-mono text-xs font-semibold text-slate-700">{targetLrnCode}</span>
-  )}
-  {currentColCode && (
-    <>
-      <span className="text-xs text-slate-400">·</span>
-      <span className="font-mono text-xs font-semibold text-slate-700">
-        {currentColCode}
-      </span>
-    </>
-  )}
-  <span className="text-xs text-slate-400">·</span>
-  <span className="text-xs font-medium text-slate-600 truncate max-w-xs">{clientName}</span>
-</div>
-```
-
----
-
-#### B. In `src/components/admin/CRMAdmissionsModule.tsx`
-
-1. **In `handleOpenLeadPayment`**:
-```typescript
-const handleOpenLeadPayment = (rec?: CRMRecord | null) => {
-  const target = rec || editingRecord;
-  const isEditing = target === editingRecord;
-  const effectiveTuition = isEditing
-    ? (parseInt(String(formTuition || target?.tuition || '').replace(/\D/g, ''), 10) || 0)
-    : (parseInt(String(target?.tuition || '').replace(/\D/g, ''), 10) || 0);
-
-  const targetLeadId = String(target?.id || '');
-  const targetCode = ensureValidBusinessCode(target?.code || target?.id || '', 'LEA');
-  const targetCodeClean = targetCode.replace('-', '');
-  const targetStudentId = target?.studentId || (isEditing ? formStudentId : undefined);
-  const targetPhone = (isEditing && formPhone ? formPhone : (target?.phone || target?.contact || '')).trim().replace(/\D/g, '');
-  const targetEmail = (isEditing && formEmail ? formEmail : (target?.email || '')).trim().toLowerCase();
-  const targetName = (isEditing && formName ? formName : (target?.name || target?.partnerName || '')).trim().toLowerCase();
-
-  // Smart student lookup from students list
-  const matchedStudent = students.find(s => {
-    if (targetStudentId && s.uid === targetStudentId) return true;
-    const sPhone = (s.phone || s.phoneNumber || '').trim().replace(/\D/g, '');
-    const sEmail = (s.email || '').trim().toLowerCase();
-    const sName = (s.fullName || s.displayName || '').trim().toLowerCase();
-    return (targetPhone && sPhone === targetPhone) ||
-           (targetEmail && sEmail === targetEmail) ||
-           (targetName && sName === targetName);
-  });
-
-  const resolvedStudentCode = matchedStudent
-    ? ensureValidBusinessCode(matchedStudent.student_code_internal || (matchedStudent as any).studentCode || matchedStudent.uid, 'LRN')
-    : (targetStudentId ? ensureValidBusinessCode(targetStudentId, 'LRN') : undefined);
-
-  // Compute ledger payments
-  const cleanLea = targetCode.toUpperCase().replace(/[^A-Z0-9]/g, '');
-  const digitsLea = cleanLea.replace(/^LEA/, '');
-  const cleanLrn = resolvedStudentCode ? resolvedStudentCode.toUpperCase().replace(/[^A-Z0-9]/g, '') : '';
-  const digitsLrn = cleanLrn.replace(/^LRN/, '');
-
-  const ledgerPaidSum = allLedgerTransactions
-    .filter(tx => {
-      if (tx.type === 'expected_revenue') return false;
-      if ((tx.credit || 0) <= 0) return false;
-      const raw = `${(tx as any).originalContent || ''} ${(tx as any).transaction_content || ''} ${tx.description || ''} ${tx.refCode || ''} ${(tx as any).studentId || ''}`.toUpperCase();
-      const txLeaMatch = raw.match(/\bLEA[\s-]?(\d{6,10})\b/i);
-      if (txLeaMatch && digitsLea && txLeaMatch[1] !== digitsLea) return false;
-
-      const matchesLea = Boolean(digitsLea.length >= 6 && (raw.includes(cleanLea) || raw.includes('LEA' + digitsLea) || raw.includes('LEA-' + digitsLea)));
-      const matchesLrn = Boolean(digitsLrn.length >= 6 && (raw.includes(cleanLrn) || raw.includes('LRN' + digitsLrn) || raw.includes('LRN-' + digitsLrn)));
-      const matchesPhone = Boolean(targetPhone.length >= 9 && raw.includes(targetPhone));
-      return matchesLea || matchesLrn || matchesPhone;
-    })
-    .reduce((sum, tx) => sum + (tx.credit || 0), 0);
-
-  const actualPaidAmount = Math.max(Number(target?.paidAmount || 0), ledgerPaidSum);
-
-  const existingCol = allLedgerTransactions.find(tx => {
-    if (!tx.refCode?.startsWith('COL')) return false;
-    const desc = tx.description || '';
-    const sId = String(tx.studentId || '');
-    return (
-      sId === targetLeadId ||
-      (targetStudentId && sId === String(targetStudentId)) ||
-      desc.includes(targetCode) ||
-      desc.includes(targetCodeClean)
-    );
-  });
-
-  setPaymentModalColCode(existingCol?.refCode);
-  setPaymentModalLead({
-    id: target?.id || 'new',
-    code: target?.code || '',
-    name: isEditing && formName ? formName : (target?.name || ''),
-    partnerName: isEditing && formPartnerName ? formPartnerName : (target?.partnerName || ''),
-    phone: isEditing && formPhone ? formPhone : (target?.phone || target?.contact || ''),
-    email: isEditing && formEmail ? formEmail : (target?.email || ''),
-    tuition: effectiveTuition,
-    paidAmount: actualPaidAmount,
-    studentId: matchedStudent?.uid || targetStudentId,
-    studentCode: resolvedStudentCode,
-    programName: formProgramName || (target as any)?.programName || target?.roadmap || (target as any)?.interestCourse || target?.need || '',
-    targetAudience: (formKind || target?.kind) === 'Doanh nghiệp' ? 'Khách hàng Doanh nghiệp' : 'Học viên cá nhân',
-  });
-  setIsLeadPaymentModalOpen(true);
-};
-```
-
-2. **Pass `allLedgerTransactions` Prop**:
-Lines 5673 and 6796:
-```tsx
-<LeadPaymentModal
-  isOpen={isLeadPaymentModalOpen}
-  onClose={() => setIsLeadPaymentModalOpen(false)}
-  existingCollectionCode={paymentModalColCode}
-  lead={paymentModalLead}
-  allLedgerTransactions={allLedgerTransactions}
-  ...
-/>
-```
+1. **No Lost Data**: All submissions that were ever made for `EXM-57035431` and `EXM-75958058` are fully intact, graded, and stored in `classes/631917` and `quiz_attempts`.
+2. **Root Cause of Missing Submissions in `CLS-63191700`**:
+   - `CLS-63191700` is an **inactive, merged duplicate** document (`mergedInto: "631917"`, merged on 2026-10-30).
+   - Inquiries or dashboard views looking at document ID `CLS-63191700` are viewing a stale pre-merger snapshot.
+   - The production application correctly routes to `classes/631917`, where all submissions (including Trần Ngọc Minh Tùng's scores 6.5 and 9.0) are present.
+3. **Roster Completion Status**:
+   - Only 1 student (Trần Ngọc Minh Tùng) ever took `EXM-57035431` and `EXM-75958058`.
+   - The other 10 students never submitted attempts for these two quizzes anywhere in the database.
+4. **Remediation Plan**:
+   - Consumers and reporting queries must use `classes/631917` (or follow the `mergedInto` pointer if queried with `CLS-63191700`).
+   - If UI or legacy components explicitly query `classes/CLS-63191700`, a one-time synchronization script can copy `classes/631917.assessments` into `classes/CLS-63191700.assessments` for parity.
 
 ---
 
 ## 5. Verification Method
 
-To independently verify the implementation once applied by the implementer:
+To independently verify these findings, run the read-only audit scripts in `De_Vuong_Webapp/`:
 
-1. **Build Verification**:
-   ```powershell
-   npm run build
-   ```
-   Must pass with zero TypeScript errors or broken imports.
+```bash
+cd "c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\De_Vuong_Webapp"
 
-2. **Step-by-step UI Verification of Acceptance Criteria**:
-   - Navigate to CRM Admissions Module (`tab=leads`).
-   - Create or edit an admission lead:
-     - Set "Học phí dự kiến" = `6.000` (6.000đ).
-     - Link to an existing student (or enter matching phone/email) who has an `LRN` code (e.g. `LRN-62517882`, Nguyễn Thị Anh Thi).
-     - Ensure a ledger transaction exists in `ledger_transactions` with `credit: 3000` matching this `LEA` or `LRN`.
-   - Click "Thu tiền & Xuất mã VietQR" to open `LeadPaymentModal`.
-   - **Inspect Header**:
-     Verify header displays: `LEA-64817788 · LRN-62517882 · Nguyễn Thị Anh Thi` (no missing LRN, no placeholder).
-   - **Inspect Ô 1 ("1. Tổng học phí")**:
-     Verify value is `6,000` (inherited from the outer form).
-   - **Inspect Progress Bar**:
-     Verify progress bar is visible and shows: `Đã thu: 3.000đ / Học phí: 6.000đ · Còn nợ: 3.000đ`.
-   - **Inspect Ô 2 ("2. Thu đợt này")**:
-     Verify value is automatically pre-filled with `3,000` (the 3.000đ remaining debt).
-   - **Inspect Ô 3 ("3. Còn lại sau đợt này")**:
-     Verify value displays `0 đ`.
-     Type `1,000` in Ô 2 -> verify Ô 3 changes in real time to `2,000 đ`.
-   - **Inspect VietQR**:
-     Verify VietQR image contains `3000` and the manual transfer box displays `3.000 đ`.
+# 1. Compare classes/631917 vs classes/CLS-63191700
+node -e "
+const admin = require('firebase-admin');
+const fs = require('fs');
+const acc = JSON.parse(fs.readFileSync('service-account.json'));
+if (!admin.apps.length) admin.initializeApp({ credential: admin.credential.cert(acc) });
+const db = admin.firestore();
+Promise.all([db.collection('classes').doc('631917').get(), db.collection('classes').doc('CLS-63191700').get()]).then(([d1, d2]) => {
+  console.log('631917 status:', d1.data().status, 'mergedInto:', d1.data().mergedInto);
+  console.log('CLS-63191700 status:', d2.data().status, 'mergedInto:', d2.data().mergedInto);
+  const a1 = d1.data().assessments.filter(a => a.code === 'EXM-57035431' || a.code === 'EXM-75958058');
+  const a2 = d2.data().assessments.filter(a => a.code === 'EXM-57035431' || a.code === 'EXM-75958058');
+  console.log('631917 target subs:', a1.map(a => ({ code: a.code, subs: (a.submissions||[]).length })));
+  console.log('CLS-63191700 target subs:', a2.map(a => ({ code: a.code, subs: (a.submissions||[]).length })));
+});
+"
 
-3. **Invalidation Conditions**:
-   - If Ô 1 defaults to `3.000.000đ` when "Học phí dự kiến" is `6.000đ`.
-   - If Ô 2 proposes `6.000đ` instead of `3.000đ` when a 3.000đ payment exists in the ledger.
-   - If the header does not display the `LRN` code.
+# 2. Check all attempts in quiz_attempts for PivotChart
+node -e "
+const admin = require('firebase-admin');
+const fs = require('fs');
+const acc = JSON.parse(fs.readFileSync('service-account.json'));
+if (!admin.apps.length) admin.initializeApp({ credential: admin.credential.cert(acc) });
+const db = admin.firestore();
+db.collection('quiz_attempts').get().then(snap => {
+  const matches = snap.docs.filter(d => {
+    const q = d.data().quizId;
+    return q === 'exam-1791498498715' || q === 'exam-1791498515804';
+  });
+  console.log('Total PivotChart attempts in quiz_attempts:', matches.length);
+  matches.forEach(m => console.log('Attempt:', m.id, m.data().studentId, m.data().score, m.data().submitTime));
+});
+"
+```

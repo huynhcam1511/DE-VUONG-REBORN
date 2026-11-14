@@ -1,67 +1,42 @@
-# Handoff Report — Project Sentinel
-
-**Mission**: Student Identity & Multi-Stage Admissions Debt Sync (R1, R2, R3)  
-**Execution Path**: General (`teamwork_preview_orchestrator`)  
-**Sentinel Directory**: `c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\.agents\teamwork\sentinel`  
-**Application Root**: `c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\De_Vuong_Webapp`  
-**Date**: 2026-11-02T10:25:30Z  
-
----
+# Sentinel Final Handoff Report — CRM Admissions Fee Extension
 
 ## 1. Observation
-
-1. **User Request Intake & Routing**:
-   - Recorded user request verbatim in `ORIGINAL_REQUEST.md` (timestamp `2026-11-02T09:30:40Z`).
-   - Evaluated against the Routing Decision Table: Task required multi-subsystem engineering spanning CRM admissions, payment modals, ledger accounting, and SePay webhook processing without explicit smallness/lightness constraints $\to$ routed to **General** (`teamwork_preview_orchestrator`).
-   - Project Orchestrator dispatched to `.agents/teamwork/orchestrator_2/`. Monitoring crons (*/8 progress reporting, */10 liveness check) scheduled.
-
-2. **Team Execution & Gates**:
-   - Orchestrator mobilized 3 Explorers (Phase 0), synthesized architecture into `PROJECT.md` (Phase 1), dispatched Implementation Worker `worker_m1` (Phase 2), and executed an exhaustive adversarial verification gate with 2 Reviewers, 2 Challengers, and 1 Forensic Auditor (Phase 3).
-   - All gate verdicts returned unanimous PASS without any integrity compromises or regressions.
-
-3. **Mandatory Independent Victory Audit**:
-   - Upon the Orchestrator's victory claim, Sentinel dispatched `teamwork_preview_victory_auditor` to `.agents/teamwork/victory_auditor_1/`.
-   - The auditor executed an independent 3-phase verification:
-     - Phase A (Timeline & Provenance): PASS (Zero edits in `archives/`).
-     - Phase B (Forensics & Cheating Detection): PASS (Zero hardcoding, zero facades, zero pseudo-LRNs, strict AGENTS.md compliance).
-     - Phase C (Independent Execution): PASS (`npm test` 22/22 passed, challenger suites 11/11 & 7/7 passed, `npm run build` completed with exit code 0 in 9.57s).
-   - Structured Verdict: **VICTORY CONFIRMED**.
-
-4. **Cleanup Protocol**:
-   - Both monitoring crons (task-30, task-32) terminated.
-   - All subagents terminated via `manage_subagents(Action="kill_all")`.
-
----
+- **Original User Request**: Approved task prompt received requesting the addition of "Phí nhận lớp" (VND currency input with thousands grouping) and "Phí chênh lệch hàng tháng" (monthly commission breakdown with default Month 1, add month `+`, and delete month row controls) to the CRM Tuyển sinh Master view (`De_Vuong_Webapp/src/components/admin/CRMAdmissionsModule.tsx`), real-time calculation of net cash flow (`Học phí - Phí nhận lớp - Tổng hoa hồng`), persistent Firestore synchronization, strict adherence to AGENTS.md, and clean TypeScript/npm build pass.
+- **Execution**: Routed via General path to Project Orchestrator (`teamwork_orchestrator`, conversation `08099f55-bb2b-4fd9-835b-93c0480cae41`). The orchestrator dispatched 3 parallel exploratory agents, synthesized findings, dispatched `worker_crm_1` with exclusive file ownership of `CRMAdmissionsModule.tsx`, and conducted multi-agent review and stress testing with 2 Reviewers, 2 Challengers, and a Milestone Forensic Auditor (verdict: PASS 100%).
+- **Independent Victory Audit**: Spawned `teamwork_victory_auditor` (`ffc7599e-581b-4f9d-93af-0c4241e60038`) with isolated context to audit Phase A (timeline), Phase B (integrity/cheating detection), and Phase C (independent test & build execution).
+- **Audit Verdict**: `VICTORY CONFIRMED`.
 
 ## 2. Logic Chain
-
-- The project objective was to anchor genuine student identity (`LRN-xxxxxxxx`) across admissions leads (`LEA-xxxxxxxx`), calculate real-time debt offset from accounting ledger transactions on payment popups, and resolve real student identity on the accounting ledger while eliminating generic placeholders (`Học viên E-learning`) and synthetic pseudo-LRNs.
-- Changes were strictly localized within `De_Vuong_Webapp/` (`CRMAdmissionsModule.tsx`, `LeadPaymentModal.tsx`, `AdminLedgerModule.tsx`, `AdminDashboard.tsx`, `server.ts`).
-- Verification was conducted through automated testing, empirical challenge suites, production build compilation, and an independent post-victory audit.
-- With VICTORY CONFIRMED from the independent auditor, the mission is successfully completed and safe for delivery.
-
----
+1. **Scope & Architecture**: Changes were strictly isolated to `De_Vuong_Webapp/src/components/admin/CRMAdmissionsModule.tsx` in full compliance with the workspace policy (`archives/` remained completely untouched).
+2. **Schema & Data Modeling**:
+   - Extended `CRMRecord` interface with `classIntakeFee?: number` and `monthlyCommissions?: MonthlyCommissionItem[]`.
+   - Defined `MonthlyCommissionItem` (`{ id?: string; month: number; amount: number | string; note: string; }`).
+3. **UI / UX & AGENTS.md Compliance**:
+   - Implemented `SaaSCurrencyInput` with caret position tracking (`digitsBeforeCursor` + `requestAnimationFrame`) preventing cursor jumps when editing numbers.
+   - Dynamic month list with default Month 1, sequential numbering, `(+) Thêm tháng tiếp theo`, and delete row with auto-renumbering (resets to empty values if only 1 row remains).
+   - Form Section 2 restructured with clean typography, no pill wrapping on numeric fields, and a real-time Cashflow Summary Banner.
+   - Master Table "Học phí" column enhanced with a secondary plain-text preview: `Thực: {netCash.toLocaleString('vi-VN')} đ` for records with deductions.
+4. **Formulas & Calculations**:
+   - `computedTotalMonthlyCommission = sum(clean(amount))`
+   - `computedNetCashflow = computedTuitionNumber - computedClassIntakeFeeNumber - computedTotalMonthlyCommission`
+   - Real-time reactivity via `useMemo`.
+5. **Persistence & Synchronization**:
+   - Dual-collection Firestore persistence via `setDoc(..., { merge: true })` to both `customer_profiles` and `crm_records` with `removeUndefinedFields`.
+   - Real-time snapshot listener mappings, merge resolution (`mergeCRMRecord`), and record duplication (`handleDuplicateRecord`) preserve fee data integrity.
+6. **Integrity & Verification**:
+   - Zero hardcoding, zero facade stubs, genuine mathematical and persistence logic.
+   - Full regression suite (28/28 passed), adversarial suite (36/36 passed), and production build `npm run build` succeeded cleanly with exit code 0.
 
 ## 3. Caveats
-
-- Pre-existing TypeScript warnings in unrelated legacy files (`HrPolicyModule.tsx`, `StudentPortal.tsx`, `QualityAssessmentModule.tsx`) were confirmed to be outside the scope of this mission and do not affect runtime execution or Vite production builds.
-- The canonical production build (`npm run build`) succeeds cleanly with exit code 0.
-
----
+- Firestore writes update both `customer_profiles` and `crm_records`. The application maintains backward compatibility for legacy records where `classIntakeFee` or `monthlyCommissions` are undefined (falling back cleanly to 0 and default Month 1).
+- Existing records without custom fee data display standard tuition; the net cash flow subline only activates when deductions are present.
 
 ## 4. Conclusion
-
-- **Verdict**: **VICTORY CONFIRMED**.
-- All requirements R1, R2, R3 and Acceptance Criteria from `ORIGINAL_REQUEST.md` have been fully implemented, rigorously verified, and certified.
-
----
+All requirements and acceptance criteria from `ORIGINAL_REQUEST.md` have been fully delivered, rigorously tested, and independently verified. The project milestone is complete.
 
 ## 5. Verification Method
-
-- Independent Victory Audit Report: `c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\.agents\teamwork\victory_auditor_1\handoff.md`
-- Orchestrator Master Handoff: `c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\.agents\teamwork\orchestrator_2\handoff.md`
-- Automated test suite execution:
-  - `npm test` (22/22 passed)
-  - `node --import tsx --test tests/challenger_m1_debt_vietqr.test.ts` (11/11 passed)
-  - `node --import tsx --test tests/empiricalChallengerM1.test.ts` (7/7 passed)
-  - `npm run build` (Exit code 0, 9.57s)
+- Independent Victory Auditor ran:
+  1. `npm test` -> 28/28 tests passed (exit code 0).
+  2. `npx tsx --test tests/crmAdmissionsAdversarial.test.ts tests/challenger_crm_persistence_cursor.test.ts` -> 36/36 adversarial tests passed (exit code 0).
+  3. `npm run build` -> 3786 modules transformed, built in 17.85s (exit code 0), zero TypeScript errors.
+- Victory Auditor Report: `c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\.agents\teamwork\victory_auditor_3\handoff.md` (VICTORY CONFIRMED).

@@ -1,22 +1,51 @@
-## 2026-11-02T09:34:01Z
-You are Explorer 3 for the Student Identity & Multi-Stage Admissions Debt Sync project.
+# Dispatch: Explorer 3 (Survey - exam_banks & Code Submission Flow)
 
-Working directory: `c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\.agents\teamwork\explorer_survey_3`
-Canonical app directory: `c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\De_Vuong_Webapp`
-Authoritative requirements: `c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\.agents\teamwork\ORIGINAL_REQUEST.md` (read section ## 2026-11-02T09:30:40Z).
+## Objective
+Investigate `exam_banks`, exam definitions for `EXM-57035431` & `EXM-75958058`, and analyze the full application code flow for quiz/exam submission to understand how attempts and submissions are routed and stored.
 
-YOUR FOCUS:
-Investigate Requirement R3 - Đồng bộ hiển thị và Nhận diện trên Sổ cái Kế toán (`AdminLedgerModule`):
-1. Examine `AdminLedgerModule.tsx` and transaction enrichment/lookup logic:
-   - When a transaction comes from SePay or manual entry with a `LEA` code or description:
-   - How does the ledger resolve the customer/student name and `LRN` code?
-   - Why do some transactions show "Học viên E-learning" or "---"? Where in the code is that placeholder assigned or defaulted?
-   - How can we guarantee that transactions with a `LEA` code cross-reference CRM leads (or users) to display the real student name and genuine `LRN` code?
-   - What about transaction descriptions and AGENTS.md compliance (table styles, typography, freeze panes, action menus, 1-line descriptions)?
-2. What changes are required in `AdminLedgerModule.tsx` (and any shared transaction processing / webhook logic) to satisfy R3 and acceptance criteria?
+## Input Files
+- `ORIGINAL_REQUEST.md`: c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\.agents\teamwork\ORIGINAL_REQUEST.md
+- `PROJECT.md`: c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\PROJECT.md
 
-Strict Constraints:
-- READ-ONLY exploration. Do NOT modify source code files.
-- Document exact file paths, line numbers, data structures, and function signatures.
-- Write your comprehensive findings to `c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\.agents\teamwork\explorer_survey_3\handoff.md`.
-- Send a completion message to your parent when finished.
+## Scope & Tasks
+1. Investigate `exam_banks` collection:
+   - Find documents corresponding to `EXM-57035431` and `EXM-75958058` (or search by title "PivotChart").
+   - Extract their document IDs, codes, question count, and creation/update timestamps.
+2. Codebase Investigation in `De_Vuong_Webapp/`:
+   - Trace how an assessment is assigned/delivered to a class:
+     * How are assessment IDs (e.g. `assess-exam-...`) and Codes generated?
+     * Why are there two assessments (`assess-exam-1791498498715-1791540316712-6mjky` and `assess-exam-1791498498715-1791498580829-1dya3`) for PivotChart in CLS-63191700?
+   - Trace the student quiz taking and submission flow:
+     * Where in UI/routes does a student open and submit a quiz?
+     * Which backend API / Firebase call handles submission? (e.g. `apiRequests.post(...)`, direct Firestore update, Cloud Function?)
+     * What collections and fields does the submission write to? (`quiz_attempts`, `classes/{classId}`, `student_sessions`, etc.)
+     * Are there key mismatches? (e.g., mismatch between `assessmentId`, `examCode`, `quizId`, `studentId` vs `userId` vs `uid`?)
+     * Is there any bug or race condition that would cause submissions not to be recorded in `classes/{classId}.assessments[].submissions`?
+3. Synthesize findings and explain why submissions are missing or where they might be stored.
+4. Produce a comprehensive report in your working directory (`handoff.md`).
+
+## Working Directory
+`c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\.agents\teamwork\explorer_survey_3\`
+
+
+## 2026-11-12T20:24:38Z
+You are Explorer 3 for the Quiz Submission Audit of EXM-57035431 and EXM-75958058 (CLS-63191700).
+
+Your working directory is:
+c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\.agents\teamwork\explorer_survey_3\
+
+Scope:
+- Target: `exam_banks` collection and application codebase in `De_Vuong_Webapp/`.
+- Inspect `exam_banks` collection for `EXM-57035431` and `EXM-75958058` (or search by title "PivotChart"):
+  * Extract their document IDs, codes, question count, and creation/update timestamps.
+- Codebase investigation in `De_Vuong_Webapp/`:
+  * Trace how an assessment is assigned/delivered to a class: How are assessment IDs (e.g. `assess-exam-...`) and Codes generated? Why are there two assessments (`assess-exam-1791498498715-1791540316712-6mjky` and `assess-exam-1791498498715-1791498580829-1dya3`) for PivotChart in CLS-63191700?
+  * Trace the student quiz taking and submission flow:
+    - Where does a student open and submit a quiz in UI/routes?
+    - Which backend API or Firebase call handles submission?
+    - What collections and fields does the submission write to? (`quiz_attempts`, `classes/{classId}`, `student_sessions`, etc.)
+    - Are there key mismatches or bug conditions? (e.g., mismatch between `assessmentId`, `examCode`, `quizId`, `studentId` vs `userId` vs `uid`?)
+    - Why would submissions fail to appear in `classes/{classId}.assessments[].submissions`?
+- Synthesize findings and explain where submissions are routed or why they might not appear in the class document.
+- Produce a detailed handoff report in your working directory (`handoff.md`).
+- Communicate your completion report to your caller via send_message.

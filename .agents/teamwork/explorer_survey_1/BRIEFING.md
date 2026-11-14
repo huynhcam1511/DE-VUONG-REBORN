@@ -1,49 +1,55 @@
-# BRIEFING — 2026-11-02T09:46:00Z
+# BRIEFING — 2026-11-12T20:56:00Z
 
 ## Mission
-Investigate Requirement R1 - Neo gốc định danh Học viên (LRN / SĐT) trong Tuyển sinh & LeadPaymentModal in De_Vuong_Webapp.
+Audit Firestore collections `quiz_attempts` and `student_grades` for any attempts/submissions related to PivotChart quizzes `EXM-57035431` and `EXM-75958058` or students of class `CLS-63191700`.
 
 ## 🔒 My Identity
 - Archetype: Explorer
-- Roles: Read-only investigator, codebase analyst, evidence collector
+- Roles: Read-only investigator, Firestore auditor, evidence collector
 - Working directory: c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\.agents\teamwork\explorer_survey_1
-- Original parent: 172bc567-8630-477a-939d-7495c3c6423e
-- Milestone: Investigation R1 (Lead identity anchoring & payment modal handover)
+- Original parent: 0cddbbf5-4841-4fc9-a481-1790ad791569
+- Milestone: Milestone 1: Multi-Collection Audit & Pipeline Trace
 
 ## 🔒 Key Constraints
 - Read-only investigation — do NOT implement
-- Strictly read-only on De_Vuong_Webapp/ source files
-- Document exact file paths, line numbers, data structures, and function signatures
-- Write findings to handoff.md in working directory
-- Send completion message to parent via send_message
+- Strictly read-only queries on Firestore database — do NOT modify or delete database records
+- Audit scripts placed in De_Vuong_Webapp/scripts/
+- Output comprehensive findings in handoff.md
 
 ## Current Parent
-- Conversation ID: 172bc567-8630-477a-939d-7495c3c6423e
-- Updated: 2026-11-02T09:34:01Z
+- Conversation ID: 0cddbbf5-4841-4fc9-a481-1790ad791569
+- Updated: 2026-11-12T20:24:14Z
 
 ## Investigation State
 - **Explored paths**:
-  - `De_Vuong_Webapp/src/components/admin/CRMAdmissionsModule.tsx` (lines 656-738, 1256-1510, 1585-1685, 2070-2100, 2660-2855, 3010-3356, 3505-3535, 3805-4320, 4605-4660, 5665-5740, 6360-6405, 6790-6860)
-  - `De_Vuong_Webapp/src/components/admin/LeadPaymentModal.tsx` (lines 11-150, 151-285, 295-360, 500-660)
-  - `De_Vuong_Webapp/src/components/admin/CommercialLifecycleBar.tsx` (lines 1-225, 585-615)
-  - `De_Vuong_Webapp/src/components/admin/AdminLedgerModule.tsx` (lines 98-240, 1360-1375)
-  - `De_Vuong_Webapp/src/components/admin/StudentDetail.tsx` (lines 3441-3465)
-  - `De_Vuong_Webapp/src/services/userService.ts` (lines 10-170)
-  - `De_Vuong_Webapp/src/utils/codeGenerator.ts` (lines 1-100)
-  - `De_Vuong_Webapp/src/utils/studentUtils.ts` (lines 1-115)
+  - `classes/CLS-63191700` and `classes/631917` in Firestore
+  - `quiz_attempts` collection (all 94 attempts for class 631917 students)
+  - `student_grades` collection (all 26 documents in collection)
+  - `exam_bank_items` for target exams `exam-1791498498715` (EXM-57035431) & `exam-1791498515804` (EXM-75958058)
+  - `student_sessions` collection for 631917 session scores
+  - Source code in `De_Vuong_Webapp/src/components/portal/ExamTakingPage.tsx` (lines 1020-1070)
 - **Key findings**:
-  1. `CRMRecord` defines `studentId?: string`. In Firestore, this is written to both `customer_profiles` and `crm_records`.
-  2. However, currently `formStudentId` and `studentOptions` store internal Firestore `uid` (`student_174...` or auth uid) rather than canonical `student_code_internal` (`LRN-xxxxxxx`).
-  3. When typing SĐT/Email, there is no automatic student matching hook; if the user doesn't pick from dropdown, `studentId` remains `undefined`.
-  4. In `LeadPaymentModal.tsx`, the header completely ignores `lead.studentId` and only renders `targetCode` (`LEA-xxxxxxx`) and `clientName`, failing to display the LRN code parallel to the LEA code.
-  5. In `CommercialLifecycleBar.tsx`, `studentCode` prop lookup fails when `studentId` is an LRN or when student profile only has `student_code_internal` (omitting `studentCode`).
-- **Unexplored areas**: None for R1 focus scope.
+  1. `classes/CLS-63191700` was merged into `classes/631917` on `2026-10-30T15:05:06.853Z` (`mergedInto: "631917"`).
+  2. `ExamTakingPage.tsx` resolves `mergedInto` to the canonical class ID `631917`. All subsequent quiz submissions were saved to `classes/631917.assessments` and `quiz_attempts` with `classId: "631917"`.
+  3. In `quiz_attempts`, exactly 2 attempts exist for EXM-57035431 and EXM-75958058 across the entire database, both submitted on 2026-11-04 by student Trần Ngọc Minh Tùng (`xQ3zCo1PxRXtXf97hTqhGAXkRbg1`).
+  4. In `classes/631917`, both assessments have 1 submission (Minh Tùng), matching `quiz_attempts`. In `classes/CLS-63191700`, submissions count is 0 because the document was frozen upon merge.
+  5. The other 10 students took 4 PivotTable quizzes on Oct 17 and Midterm on Oct 31, but never took the two PivotChart quizzes. No submissions were lost.
+  6. `student_grades` documents for 631917 only record composite `midtermPractice` grades, not granular quiz attempts.
+- **Unexplored areas**: None within the Explorer 1 scope.
 
 ## Key Decisions Made
-- Document exact root causes and provide specific before/after code proposals and function signatures for `CRMAdmissionsModule.tsx` and `LeadPaymentModal.tsx`.
+- Executed read-only scripts in `De_Vuong_Webapp/scripts/` to query Firestore safely via admin SDK.
+- Preserved all data intact.
+- Wrote full 5-component report to `handoff.md`.
 
 ## Artifact Index
-- DISPATCH.md — Initial dispatch message
+- DISPATCH.md — Task assignment and instructions
 - BRIEFING.md — Persistent context & state
 - progress.md — Liveness heartbeat
-- handoff.md — 5-component handoff report (complete)
+- handoff.md — Final 5-component handoff report
+- `De_Vuong_Webapp/scripts/audit_explorer1_quiz_attempts.mjs` — Initial audit script
+- `De_Vuong_Webapp/scripts/audit_target_exams.mjs` — Target exams audit
+- `De_Vuong_Webapp/scripts/print_target_attempts.mjs` — Target attempts extraction
+- `De_Vuong_Webapp/scripts/check_classes_and_subs.mjs` — Class comparison & submission verification
+- `De_Vuong_Webapp/scripts/analyze_student_attempts.mjs` — Full chronological breakdown by student
+- `De_Vuong_Webapp/scripts/inspect_all_student_grades.mjs` — student_grades collection audit
