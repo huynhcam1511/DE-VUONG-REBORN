@@ -1,51 +1,39 @@
-# Project: SePay Webhook, Ledger & Multi-Module Cross-Reconciliation (LEA/LRN & COL)
+# Project: Audit & Recovery of Quiz Submissions EXM-57035431 & EXM-75958058 (CLS-63191700)
 
 ## Architecture
-- **Webapp Core**: `De_Vuong_Webapp/` (React + Vite + TailwindCSS + Firebase Firestore + Express backend in `server.ts`).
-- **Data Flow & Cross-Module Linkage**:
-  - `server.ts`: SePay Webhook (`/api/sepay/webhook`) processes incoming bank transfers (`bank_events`), creates `ledger_transactions` with `refCode: COL-...`, queries `crm_records` & `customer_profiles` for student details, and accumulates `paidAmount`.
-  - `AdminLedgerModule.tsx`: Renders financial transactions, parses smart info (`parseLedgerSmartInfo`), enriches student name and genuine `LRN-` code from `allCrmRecords` and `allStudents`, formats description to single line with tooltip, maintaining uniform row height.
-  - `CRMAdmissionsModule.tsx`: Computes `activeCollectionOrder` by aggregating all payments (including `COL-` and bank transactions matching LEA code), passing `paidAmount` to `CommercialLifecycleBar.tsx`.
-  - `CommercialLifecycleBar.tsx`: Displays commercial progress, transitioning to "Đã nộp đủ 100%" (0đ debt) when cumulative payments reach tuition.
-  - `SepayReconciliationModule.tsx`: Matches SePay transactions against collection orders using both `refCode` and `LEA-` identifiers.
+- **Canonical Webapp**: `c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\De_Vuong_Webapp/`
+- **Data Stores (Firestore Collections)**:
+  - `classes`: contains active canonical class `classes/631917` and inactive merged alias `classes/CLS-63191700`. Assessments and submissions are stored in `classDoc.assessments[].submissions[]`.
+  - `quiz_attempts`: stores quiz attempt records, containing `quizId`, `quizTemplateId`, `studentId`, `userId`, `classId`, scores, answers, timestamps.
+  - `student_sessions`: stores individual student session data, attendance, and lesson notes.
+  - `exam_bank_items`: exam definitions, questions, and master assessment templates (36 items).
+  - `student_grades`: grade summaries and evaluation records (12 records for class 631917, storing composite practical grades).
+- **Application Flow**:
+  - Student takes exam via quiz interface -> writes to `quiz_attempts` and atomically updates `classes/{classId}.assessments[].submissions`.
+  - In `ExamTakingPage.tsx`, alias class references resolve `mergedInto: "631917"`, writing to canonical `classes/631917`.
 
-## Feature Inventory
-| # | Feature | Description | Milestone | Source |
-|---|---------|-------------|-----------|--------|
-| 1 | R1.1: Consistent Student Name on Ledger | All transactions for a given `LEA-XXXXXXXX` show consistent CRM student name (e.g. "Nguyễn Thị Anh Thi") instead of placeholder "Học viên E-learning". | M1 | ORIGINAL_REQUEST §R1 |
-| 2 | R1.2: Authentic LRN Code Resolution | Resolve genuine `LRN-XXXXXXXX` from CRM/Users profile (`LRN-20510493`), eliminating fake LRN prefix fabrication (`LRN-91690914`). | M1 | ORIGINAL_REQUEST §R1 |
-| 3 | R2.1: Clean Description & No Duplication | Strip prefixes `[SePay-COL]`, `[SePay-HP]`, `[LENH THU]`, remove redundant LEA code and student name from Diễn giải. | M2 | ORIGINAL_REQUEST §R2 |
-| 4 | R2.2: Uniform Row Height & Tooltip | Display Diễn giải in single line (`truncate`/`line-clamp-1`), tuck raw SePay content into `title` tooltip. | M2 | ORIGINAL_REQUEST §R2 |
-| 5 | R3.1: Multi-payment Accumulation in Webhook | Accumulate `paidAmount = (currentPaid || 0) + amount_in` in `server.ts` for CRM records, query `crm_records` alongside `customer_profiles`. | M3 | ORIGINAL_REQUEST §R3 |
-| 6 | R3.2: Cumulative Collection Order Calculation | In `CRMAdmissionsModule.tsx`, do not exclude `COL-` payments, sum all credit transactions matching LEA/receiptCode. | M3 | ORIGINAL_REQUEST §R3 |
-| 7 | R3.3: CommercialLifecycleBar 100% Transition | Update `CommercialLifecycleBar` to display 100% completed status and 0đ remaining debt when multiple payments sum to tuition (e.g. 3.000đ + 2.000đ = 5.000đ). | M3 | ORIGINAL_REQUEST §R3 |
-| 8 | R3.4: SePay Reconciliation Matching | Update `getCollectedAmountForOrder` in `SepayReconciliationModule.tsx` & `AdminDashboard.tsx` to match on LEA code. | M3 | ORIGINAL_REQUEST §R3 |
+## Feature / Audit Inventory
+| # | Audit Item | Description | Milestone | Status |
+|---|------------|-------------|-----------|--------|
+| 1 | `quiz_attempts` Audit | Search for all attempts matching `EXM-57035431`, `EXM-75958058`, bank ID, or student UIDs of CLS-63191700 | M1 | DONE |
+| 2 | `student_sessions` & `student_grades` Audit | Search session records for `assessmentScores` across CLS-63191700 students | M1 | DONE |
+| 3 | `classes` Multi-Class & Delivery Audit | Check CLS-63191700, CLS-91269700, and other classes for misrouted submissions or duplicate assessments | M1 | DONE |
+| 4 | Code Submission Pipeline Trace | Analyze code in `De_Vuong_Webapp/` to understand how submissions are saved, key names used, and failure modes | M1 | DONE |
+| 5 | Findings Synthesis & Root Cause | Aggregate all audit findings, determine where submissions are located or why missing | M2 | DONE |
+| 6 | Data Remediation / Re-linking | Sync `classes/CLS-63191700` assessments with canonical `classes/631917` for 100% data parity | M3 | DONE |
+| 7 | Verification & Comprehensive Report | Verify data integrity, build/test passes, independent audit | M4 | DONE |
 
 ## Milestones
 | # | Name | Scope | Dependencies | Status |
 |---|------|-------|-------------|--------|
-| 1 | M1: Data Consistency (LEA/LRN & Name Resolution) | `AdminLedgerModule.tsx`, `codeGenerator.ts` guard, `server.ts` | Survey | IN_PROGRESS |
-| 2 | M2: Description Cleaning & UI/UX Uniformity | `AdminLedgerModule.tsx` | M1 | PLANNED |
-| 3 | M3: Payment Accumulation (COL & CommercialLifecycleBar) | `CRMAdmissionsModule.tsx`, `server.ts`, `SepayReconciliationModule.tsx`, `AdminDashboard.tsx` | M1 | PLANNED |
-| 4 | M4: E2E Verification & Forensic Integrity Audit | Full test suite, manual check, reviewer, challenger, auditor | M1, M2, M3 | PLANNED |
+| 1 | Milestone 1: Multi-Collection Audit & Pipeline Trace | Parallel audit of quiz_attempts, student_sessions, classes, and code submission flow | none | DONE |
+| 2 | Milestone 2: Findings Synthesis & Root Cause Determination | Reconcile findings across all collections, verify student rosters, identify discrepancies | M1 | DONE |
+| 3 | Milestone 3: Data Remediation & Re-linking | Sync script `sync-merged-class-assessments.mjs` executed atomically with backup | M2 | DONE |
+| 4 | Milestone 4: Verification & Final Report | Reviewer APPROVE, Forensic Auditor CLEAN, 100% parity verified | M3 | DONE |
 
-## Interface Contracts
-### Ledger ↔ CRM Records & Users
-- Input: `tx.studentId`, `tx.description`, `tx.originalContent`, `tx.refCode`.
-- Extracted: `normalizedLeaCode` (e.g. `'LEA-91690914'`).
-- Lookup: `allCrmRecords.find(r => r.code === normalizedLeaCode || r.id === normalizedLeaCode || r.allIds?.includes(normalizedLeaCode))`. Filter out empty stub docs.
-- Student Name: `matchedCrm.name || matchedCrm.fullName`.
-- Learner Code: `allStudents.find(s => s.uid === matchedCrm.studentId)?.student_code_internal` (`'LRN-20510493'`).
-- Safeguard: NEVER pass `LEA-` code into `ensureValidBusinessCode(..., 'LRN')`. If no genuine LRN code exists, leave `lrnCode` as `null`.
-
-### Collection Order ↔ Ledger Payments
-- Matching criteria for LEA record: All `ledger_transactions` with `credit > 0` and `type !== 'expected_revenue'` whose content, `studentId`, or `refCode` matches `targetCode` or `receiptCode`.
-- `paidAmount = sum(all matching credit)`.
-- Status: `paidAmount >= tuition ? 'completed' : 'partial'`.
-
-## Code Layout
-- `De_Vuong_Webapp/src/components/admin/AdminLedgerModule.tsx`: Sổ cái table, `parseLedgerSmartInfo`, column rendering.
-- `De_Vuong_Webapp/src/components/admin/CRMAdmissionsModule.tsx`: CRM lead details, `activeCollectionOrder`.
-- `De_Vuong_Webapp/src/components/admin/CommercialLifecycleBar.tsx`: Commercial progress visualization.
-- `De_Vuong_Webapp/src/components/admin/SepayReconciliationModule.tsx`: SePay IPN order reconciliation.
-- `De_Vuong_Webapp/server.ts`: SePay webhook endpoint & Firestore updates.
+## Code & Artifact Layout
+- `De_Vuong_Webapp/scripts/sync-merged-class-assessments.mjs` — Synchronization tool with dry-run, backup, and atomic transaction
+- `De_Vuong_Webapp/scripts/audit_target_exams.mjs` — Read-only examination auditor
+- `De_Vuong_Webapp/node_modules/.cache/class-sync-backup/` — Pre-sync safety snapshot backups
+- `.agents/teamwork/orchestrator/GATE_STATUS.md` — Quality and forensic gate verdicts
+- `.agents/teamwork/orchestrator/handoff.md` — Final orchestrator state dump and synthesis
