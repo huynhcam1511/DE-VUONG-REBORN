@@ -1,28 +1,22 @@
 # Progress Tracking — orchestrator_1
 
 ## Current Status
-Last visited: 2026-11-01T17:40:45Z
+Last visited: 2026-11-16T15:10:45Z
 
-- [x] Initialized orchestrator workspace, recorded dispatch, briefing, and plan template
-- [x] Phase 0: Survey codebase with 3 parallel Explorers (completed with detailed handoff reports)
-  - [x] Explorer 1: Ledger module & SePay webhook flow
-  - [x] Explorer 2: CRM Admissions, Leads vs Learner matching (LEA vs LRN IDs)
-  - [x] Explorer 3: Collection Orders (COL) & CommercialLifecycleBar payment aggregation
-- [x] Phase 1: Synthesize findings and create PROJECT.md with Feature Inventory, Architecture, and Milestones
-- [/] Phase 2: Implementation & Iteration
-  - [/] Worker r1: Implementing R1 (LEA/LRN resolution), R2 (Clean Diễn giải, 1 line tooltip), R3 (Multi-payment accumulation in CRM, COL, CommercialLifecycleBar & server.ts)
-- [ ] Phase 3: Verification Gate & Integrity Audit
-  - [ ] 2 Reviewers independently verify
-  - [ ] 2 Challengers independently challenge
-  - [ ] 1 Forensic Auditor integrity check (CLEAN required)
-- [ ] Phase 4: Final Acceptance & Completion Report
+- [x] Phase 0: Survey codebase with 3 parallel Explorers (R1, R2, R3, R4, R5) (COMPLETED)
+- [x] Phase 1: Synthesize findings into PROJECT.md and plan.md (COMPLETED)
+- [/] Phase 2: Implementation (Worker) across WorkspaceLayout, CalendarView, BoardView, GanttView (RUNNING: `1702f2b4-1890-4b2c-87f4-0031dcbd8651`)
+- [ ] Phase 3: Independent Verification Gate (2 Reviewers, 2 Challengers, 1 Forensic Auditor)
+- [ ] Phase 4: Production Build Verification & Deployment to Firebase hosting
+- [ ] Phase 5: Synthesis and Final Parent Report
 
 ## Iteration Status
 Current iteration: 1 / 32
 
 ## Subagent Registry
-- explorer_survey_1 (ac51862f-af26-493d-9a33-2cf254607fe3): Completed survey
-- explorer_survey_2 (b73763e2-3d60-4304-bf50-4be56ad1dfed): Completed survey
-- explorer_survey_3 (7dad23c6-d843-4cfd-a771-d750da444648): Completed survey
-- worker_r1 (039c0715-004f-4817-9126-46a2e7b8e45b): Running implementation for R1, R2, R3
-
+| Agent | Type | Work Item | Status | Conv ID |
+|-------|------|-----------|--------|---------|
+| explorer_ws_full_1 | teamwork_explorer | WorkspaceLayout & Toolbar Filters Survey (R1) | completed | 7b16aa1a-171e-427b-bb11-78ef6ea73040 |
+| explorer_ws_full_2 | teamwork_explorer | CalendarView & 112 Tasks Loading Survey (R2) | completed | 108c178f-22e9-46f8-a192-9ae15f83e8aa |
+| explorer_ws_full_3 | teamwork_explorer | BoardView Google Tasks, GanttView & Deploy Survey (R3-R5) | completed | b91d8985-8fb0-4204-9a34-96bf51d09ecc |
+| worker_ws_gtasks | teamwork_worker | Implement R1-R4 in De_Vuong_Webapp | running | 1702f2b4-1890-4b2c-87f4-0031dcbd8651 |
