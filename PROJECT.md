@@ -1,39 +1,54 @@
-# Project: Audit & Recovery of Quiz Submissions EXM-57035431 & EXM-75958058 (CLS-63191700)
+# Project: Accounting & Financial Workflow (Quỹ Phí Dư & CRM Admissions)
 
 ## Architecture
-- **Canonical Webapp**: `c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\De_Vuong_Webapp/`
-- **Data Stores (Firestore Collections)**:
-  - `classes`: contains active canonical class `classes/631917` and inactive merged alias `classes/CLS-63191700`. Assessments and submissions are stored in `classDoc.assessments[].submissions[]`.
-  - `quiz_attempts`: stores quiz attempt records, containing `quizId`, `quizTemplateId`, `studentId`, `userId`, `classId`, scores, answers, timestamps.
-  - `student_sessions`: stores individual student session data, attendance, and lesson notes.
-  - `exam_bank_items`: exam definitions, questions, and master assessment templates (36 items).
-  - `student_grades`: grade summaries and evaluation records (12 records for class 631917, storing composite practical grades).
-- **Application Flow**:
-  - Student takes exam via quiz interface -> writes to `quiz_attempts` and atomically updates `classes/{classId}.assessments[].submissions`.
-  - In `ExamTakingPage.tsx`, alias class references resolve `mergedInto: "631917"`, writing to canonical `classes/631917`.
+- **Webapp Root**: `De_Vuong_Webapp/` (Strict adherence to AGENTS.md rules).
+- **Primary Data Model**:
+  - `ledger_transactions` collection in Firestore:
+    * `credit`: Cash Inflow to bank / revenue.
+    * `debit`: Cash Outflow from bank / expense.
+    * `surplus`: Quỹ Phí Dư adjustment (+ for credit upon Non-Start refund, - for new class offset or HOANPHI withdrawal).
+    * `refCode`: Class Code (e.g. `RY2337`, `LG4729`), or `HOANPHI`.
+  - `crm_records` & `customer_profiles` collections in Firestore:
+    * `classIntakeFee`: Phí nhận lớp ban đầu.
+    * `intakeFeePaymentSource`: `'cash'` vs `'surplus_offset'`.
+    * `hasInvoiceDemand`: boolean for Corporate VAT invoice.
+    * `intermediary`: Corporate VAT issuing partner.
+    * `intermediaryFeePercent`: Fee charged by intermediary (default 8%).
+    * `vatSurchargePercent`: 10%.
+- **Key Modules**:
+  - `AdminLedgerModule.tsx` (Sổ cái, Báo cáo Dòng tiền, HOANPHI withdrawal).
+  - `CRMAdmissionsModule.tsx` (Quản lý Tuyển sinh, Phí nhận lớp, Cấn trừ Phí Dư, Non-Start refund, VAT Calculator).
 
-## Feature / Audit Inventory
-| # | Audit Item | Description | Milestone | Status |
-|---|------------|-------------|-----------|--------|
-| 1 | `quiz_attempts` Audit | Search for all attempts matching `EXM-57035431`, `EXM-75958058`, bank ID, or student UIDs of CLS-63191700 | M1 | DONE |
-| 2 | `student_sessions` & `student_grades` Audit | Search session records for `assessmentScores` across CLS-63191700 students | M1 | DONE |
-| 3 | `classes` Multi-Class & Delivery Audit | Check CLS-63191700, CLS-91269700, and other classes for misrouted submissions or duplicate assessments | M1 | DONE |
-| 4 | Code Submission Pipeline Trace | Analyze code in `De_Vuong_Webapp/` to understand how submissions are saved, key names used, and failure modes | M1 | DONE |
-| 5 | Findings Synthesis & Root Cause | Aggregate all audit findings, determine where submissions are located or why missing | M2 | DONE |
-| 6 | Data Remediation / Re-linking | Sync `classes/CLS-63191700` assessments with canonical `classes/631917` for 100% data parity | M3 | DONE |
-| 7 | Verification & Comprehensive Report | Verify data integrity, build/test passes, independent audit | M4 | DONE |
+## Feature Inventory
+| # | Feature | Description | Milestone | Source |
+|---|---------|-------------|-----------|--------|
+| 1 | "Phí dư" Column Display | Rename "Tồn quỹ" to "Phí dư", add +/- semantic styling (+ emerald, - amber, 0 dash) in General Ledger table | M1 | Survey 2 & 3 |
+| 2 | Quỹ Phí Dư KPI Summary Cards | Real-time available balance card in Cashflow (`activeSubTab === 'summary'`) and compact badge in Ledger toolbar header | M1 | Survey 2 & 3 |
+| 3 | Quick Action "Rút quỹ (HOANPHI)" | Toolbar button and modal to record HOANPHI fund withdrawals (`credit: amount, debit: 0, surplus: -amount`) with Firestore persistence | M1 | Survey 2 & 3 |
+| 4 | Fix Modal Surplus Logic | Ensure `surplus` is correctly recorded for surplus types in `handleSaveModalTransaction` | M1 | Survey 2 & 3 |
+| 5 | Intake Fee Payment Source Selector | Add selector in CRM financial section for "Tiền mặt / MoMo" vs "Cấn trừ từ Quỹ phí dư" with live available balance display | M2 | Survey 1 & 3 |
+| 6 | Auto Quỹ Phí Dư Credit on Non-Start | When lead status transitions to "Không thành công / Non-Start", automatically credit `classIntakeFee` to `ledger_transactions` with `surplus: +fee` | M2 | Survey 1 & 3 |
+| 7 | Corporate VAT Invoice Calculation Card | Interactive 10% VAT surcharge, 8% intermediary fee, and net payout calculation ribbon in CRM Admissions | M2 | Survey 1 & 3 |
+| 8 | E2E Testing & Audit Verification | Linting, test suite execution, build verification, Reviewer, Challenger, and Forensic Audit checks | M3 | System |
 
 ## Milestones
 | # | Name | Scope | Dependencies | Status |
 |---|------|-------|-------------|--------|
-| 1 | Milestone 1: Multi-Collection Audit & Pipeline Trace | Parallel audit of quiz_attempts, student_sessions, classes, and code submission flow | none | DONE |
-| 2 | Milestone 2: Findings Synthesis & Root Cause Determination | Reconcile findings across all collections, verify student rosters, identify discrepancies | M1 | DONE |
-| 3 | Milestone 3: Data Remediation & Re-linking | Sync script `sync-merged-class-assessments.mjs` executed atomically with backup | M2 | DONE |
-| 4 | Milestone 4: Verification & Final Report | Reviewer APPROVE, Forensic Auditor CLEAN, 100% parity verified | M3 | DONE |
+| M1 | General Ledger & Cashflow Engine | `src/types/admin.ts`, `src/components/admin/AdminLedgerModule.tsx` | None | DONE |
+| M2 | CRM Admissions Financial & VAT Workflow | `src/components/admin/CRMAdmissionsModule.tsx` | M1 | DONE |
+| M3 | Comprehensive Verification & Hardening | Full build, unit tests, Challenger, Reviewer, Auditor | M1, M2 | DONE |
 
-## Code & Artifact Layout
-- `De_Vuong_Webapp/scripts/sync-merged-class-assessments.mjs` — Synchronization tool with dry-run, backup, and atomic transaction
-- `De_Vuong_Webapp/scripts/audit_target_exams.mjs` — Read-only examination auditor
-- `De_Vuong_Webapp/node_modules/.cache/class-sync-backup/` — Pre-sync safety snapshot backups
-- `.agents/teamwork/orchestrator/GATE_STATUS.md` — Quality and forensic gate verdicts
-- `.agents/teamwork/orchestrator/handoff.md` — Final orchestrator state dump and synthesis
+## Interface Contracts
+### `ledgerService` & `AdminLedgerModule` ↔ `CRMAdmissionsModule`
+- `availableSurplusFund = sum(tx.surplus)` across all non-test `ledger_transactions`.
+- When `intakeFeePaymentSource === 'surplus_offset'`:
+  - `ledger_transactions` receives `{ type: 'class_accept_wallet', debit: intakeFee, surplus: -intakeFee, refCode: classCode, ... }`.
+- When class outcome is Non-Start:
+  - `ledger_transactions` receives `{ type: 'class_cancel_surplus', credit: intakeFee, surplus: +intakeFee, refCode: classCode, ... }`.
+- When withdrawing funds:
+  - `ledger_transactions` receives `{ type: 'surplus_withdrawal', credit: amount, debit: 0, surplus: -amount, refCode: 'HOANPHI', ... }`.
+
+## Code Layout
+- `De_Vuong_Webapp/src/types/admin.ts`: Transaction types & schemas.
+- `De_Vuong_Webapp/src/components/admin/AdminLedgerModule.tsx`: Sổ cái, Dòng tiền, Quỹ Phí Dư cards, HOANPHI action.
+- `De_Vuong_Webapp/src/components/admin/CRMAdmissionsModule.tsx`: Lead financial section, intake fee payment source, VAT calculator, Non-Start handler.
