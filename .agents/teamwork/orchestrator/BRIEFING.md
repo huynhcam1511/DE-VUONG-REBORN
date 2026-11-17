@@ -1,35 +1,38 @@
-# BRIEFING — 2026-11-16T13:49:30Z
+# BRIEFING — 2026-11-17T02:39:00Z
 
 ## Mission
-Triển khai toàn diện 3 hạng mục nâng cấp cho Workspace Module trong De_Vuong_Webapp: tinh gọn Board View chuẩn SaaS, nâng cấp Calendar View sang timeline tuần (08:00 - 22:00) kèm toggle Tháng/Tuần và khu vực All-Day, xây dựng mới Gantt View với split-view và tùy chọn thu phóng Ngày/Tuần/Tháng, sau đó kiểm tra build và deploy lên Firebase Hosting.
+Thực thi tinh chỉnh giao diện Board View chuẩn Google Tasks và triển khai Production:
+1. Sửa Header cột Workspace: bỏ uppercase font-bold, dùng text-sm font-semibold text-slate-800, số lượng cùng hàng không lệch.
+2. Sửa chip dueDate: bỏ nền màu (bg-rose-50 / bg-slate-50), dùng viền mảnh trong suốt (border-rose-200/80 hoặc border-slate-200/80), chỉ dùng text color text-rose-600 / text-slate-600.
+3. Sửa tiêu đề task: chữ thường tự nhiên, text-[13.5px] font-normal text-slate-800 rõ nét, không mờ.
+4. Render subtasks thụt lề dưới task cha (ml-4 pl-2 space-y-1.5 border-l border-slate-100, checkbox tròn nhỏ 14px, text-[12px] text-slate-700).
+5. Build test (npm run build trong De_Vuong_Webapp), commit Git cả repo con và root, deploy production Firebase Hosting.
 
 ## 🔒 My Identity
 - Archetype: teamwork_orchestrator
 - Roles: orchestrator, user_liaison, human_reporter, successor
 - Working directory: c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\.agents\teamwork\orchestrator\
-- Original parent: sentinel (conversation ID: ed6e1396-913c-4012-a7ec-ab1f50f36e07)
-- Original parent conversation ID: ed6e1396-913c-4012-a7ec-ab1f50f36e07
+- Original parent: sentinel (conversation ID: 70bc2703-c15a-40f2-942b-41c08dbb73ee)
+- Original parent conversation ID: 70bc2703-c15a-40f2-942b-41c08dbb73ee
 
 ## 🔒 My Workflow
 - **Pattern**: Project Orchestrator
 - **Scope document**: c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\.agents\teamwork\orchestrator\PROJECT.md
 1. **Decompose**:
    - Phase 0: Survey with 3 parallel Explorers [COMPLETED].
-   - Phase 1: Milestone Execution (M1 [DONE], M2 [DONE], M3 [DONE]).
-   - Phase 2: Milestone 4 (Build Verification & Firebase Deployment [DONE]).
+   - Phase 1: Milestone Execution (M1-M4 [DONE], M5 [DONE]).
 2. **Dispatch & Execute**:
-   - Iteration loops per milestone with mandatory Reviewers, Challengers, and Forensic Auditor. All passed.
-3. **On failure**: N/A (All milestones passed on first iteration).
-4. **Succession**: N/A (Mission complete).
+   - Milestone 5 Iteration: 3 Explorers (Done) -> 1 Worker (Done) -> 2 Reviewers (APPROVE) -> 2 Challengers (APPROVE) -> 1 Forensic Auditor (CLEAN) -> Gate PASSED.
+3. **On failure**: N/A (Gate passed on first iteration).
+4. **Succession**: N/A (Mission complete, 9 spawns < 16).
 - **Work items**:
-  1. Survey & Codebase Exploration [done]
-  2. Scope & Milestone Decomposition [done]
-  3. Milestone 1: Board View SaaS Polish [done]
-  4. Milestone 2: Calendar View Week Timeline & Defaults [done]
-  5. Milestone 3: Gantt View Creation & Integration [done]
-  6. Milestone 4: Build Verification & Firebase Deployment [done]
+  1. M1: Board View SaaS Polish [done]
+  2. M2: Calendar View Week Timeline & Defaults [done]
+  3. M3: Gantt View Creation & Integration [done]
+  4. M4: Build Verification & Firebase Deployment [done]
+  5. M5: Board View Google Tasks Polish & Production Deployment [done]
 - **Current phase**: Final Reporting
-- **Current focus**: Final Report to Sentinel
+- **Current focus**: Report completion to Sentinel
 
 ## 🔒 Key Constraints
 - NEVER write, modify, or create source code files directly.
@@ -42,46 +45,34 @@ Triển khai toàn diện 3 hạng mục nâng cấp cho Workspace Module trong 
 - Maintain ORIGINAL_REQUEST.md path in all dispatches.
 
 ## Current Parent
-- Conversation ID: ed6e1396-913c-4012-a7ec-ab1f50f36e07
-- Updated: 2026-11-16T12:26:14Z
+- Conversation ID: 70bc2703-c15a-40f2-942b-41c08dbb73ee
+- Updated: 2026-11-17T02:01:27Z
 
 ## Key Decisions Made
-- Milestone 1 fully PASSED quality gate (2 Reviewers APPROVE, 2 Challengers APPROVE, Forensic Auditor CLEAN).
-- Milestone 2 fully PASSED quality gate (2 Reviewers APPROVE, 2 Challengers APPROVE, Forensic Auditor CLEAN).
-- Milestone 3 fully PASSED quality gate (2 Reviewers APPROVE, 2 Challengers APPROVE, Forensic Auditor CLEAN).
-- Milestone 4 fully PASSED quality gate (Reviewer APPROVE, Forensic Auditor CLEAN). Production site https://huynhkiencam.web.app verified live with matching bundle index-BMkkyVqY.js.
+- Milestone 5 fully PASSED quality gate:
+  - reviewer_bp_1: APPROVE
+  - reviewer_bp_2: APPROVE
+  - challenger_bp_1: APPROVE (34/34 stress tests passed)
+  - challenger_bp_2: APPROVE
+  - auditor_bp_1: CLEAN (bundle hash verified on live site)
+- Production site `https://huynhkiencam.web.app` actively serves the latest build with Google Tasks aesthetic.
 
 ## Team Roster
 | Agent | Type | Work Item | Status | Conv ID |
 |-------|------|-----------|--------|---------|
-| explorer_ws_survey_1 | teamwork_explorer | Survey BoardView.tsx | completed | a9bda297-0933-4e8b-b36d-887f17ee8be2 |
-| explorer_ws_survey_2 | teamwork_explorer | Survey CalendarView.tsx & ScheduleModule | completed | 05b84579-8ccb-4322-b19f-716815dc4bcb |
-| explorer_ws_survey_3 | teamwork_explorer | Survey GanttView, Layout, Build & Deploy | completed | d56b0113-3e0f-411a-8120-8c366cb1bb18 |
-| worker_ws_m1 | teamwork_worker | Implement M1 Board View Polish | completed | 8bb31543-292f-46d8-a060-9b406d9e0c3a |
-| reviewer_ws_m1_1 | teamwork_reviewer | Quality Review 1 for M1 | completed | b0815d92-daf9-4e00-8128-d572b4b2c058 |
-| reviewer_ws_m1_2 | teamwork_reviewer | Quality Review 2 for M1 | completed | f8e1def0-cf7b-4dea-affc-d678c6827225 |
-| challenger_ws_m1_1 | teamwork_challenger | Empirical Verification 1 for M1 | completed | 11e997c4-2603-498d-b74f-18d6fb6f9b6f |
-| challenger_ws_m1_2 | teamwork_challenger | Empirical Verification 2 for M1 | completed | 26fe9858-39d6-447e-b804-fb57521e6d82 |
-| auditor_ws_m1_1 | teamwork_auditor | Forensic Integrity Audit for M1 | completed | d0268d02-a841-477c-98ba-5ba812d0bd4f |
-| worker_ws_m2 | teamwork_worker | Implement M2 Calendar View & Defaults | completed | 9b8a5957-2f82-42dd-8c8c-c934fe36c4cc |
-| reviewer_ws_m2_1 | teamwork_reviewer | Quality Review 1 for M2 | completed | 8197c446-0e3c-46d7-8d15-181a7d066652 |
-| reviewer_ws_m2_2 | teamwork_reviewer | Quality Review 2 for M2 | completed | f87d6bcc-80af-465b-a9f6-4a82688ee6ae |
-| challenger_ws_m2_1 | teamwork_challenger | Empirical Verification 1 for M2 | completed | 9fd68ebf-b257-4dcf-b4e4-9430b7e18024 |
-| challenger_ws_m2_2 | teamwork_challenger | Empirical Verification 2 for M2 | completed | 368c9766-f89a-48a4-98d6-8ff060698b62 |
-| auditor_ws_m2_1 | teamwork_auditor | Forensic Integrity Audit for M2 | completed | e0f1915d-95a4-4a02-9404-d0fc5c7b1967 |
-| worker_ws_m3 | teamwork_worker | Implement M3 Gantt View Creation & Integration | completed | 6aafdea9-2a05-4ea0-9517-e2a535271dd0 |
-| reviewer_ws_m3_1 | teamwork_reviewer | Quality Review 1 for M3 | completed | 6ace797f-450f-43e9-aea9-a11409e568e3 |
-| reviewer_ws_m3_2 | teamwork_reviewer | Quality Review 2 for M3 | completed | 4e4ff368-e1c4-4122-8e57-92e143904fa3 |
-| challenger_ws_m3_1 | teamwork_challenger | Empirical Verification 1 for M3 | completed | e1820394-3a41-433b-95e9-c5ba9f8939e1 |
-| challenger_ws_m3_2 | teamwork_challenger | Empirical Verification 2 for M3 | completed | cf82b07a-0b3c-438b-bd50-796937148c00 |
-| auditor_ws_m3_1 | teamwork_auditor | Forensic Integrity Audit for M3 | completed | dfcccb21-d5d8-42cd-a9f3-268447a70d8c |
-| worker_ws_m4 | teamwork_worker | Build & Firebase Hosting Deployment | completed | 89d01896-86a7-448b-9ab5-e68d5817d037 |
-| reviewer_ws_m4_1 | teamwork_reviewer | Quality Review for M4 | completed | b74896be-ffe1-420e-9660-fb3e0879ccc4 |
-| auditor_ws_m4_1 | teamwork_auditor | Forensic Integrity Audit for M4 | completed | b5bb0737-5b3c-4d24-8a31-7ba68fc7d02d |
+| explorer_bp_1 | teamwork_explorer | Explore Header & Column layout in BoardView.tsx | completed | 44f9530a-405d-4ccb-a2b4-69644716efdf |
+| explorer_bp_2 | teamwork_explorer | Explore DueDate chip & Task Title formatting in BoardView.tsx | completed | e8d32ff9-606c-4110-9e31-5c70190130c0 |
+| explorer_bp_3 | teamwork_explorer | Explore Subtasks data structure & toggle logic in BoardView.tsx & workspace.service.ts | completed | ff418450-3a54-4fa9-aa3f-6a958a8f6118 |
+| worker_bp_1 | teamwork_worker | Implement M5 Board View Polish, Build, Commit & Deploy | completed | 645d57d2-7a1f-4f07-aedb-2844ce8587cd |
+| reviewer_bp_1 | teamwork_reviewer | Quality Review 1 for M5 | completed | f3e55810-35e3-4afb-9345-e57752213886 |
+| reviewer_bp_2 | teamwork_reviewer | Quality Review 2 for M5 | completed | e684dd40-82d2-4e02-a862-877fc29f8399 |
+| challenger_bp_1 | teamwork_challenger | Empirical Verification 1 for M5 | completed | 0a18b291-a880-4cf8-ade7-df7c21341a64 |
+| challenger_bp_2 | teamwork_challenger | Empirical Verification 2 for M5 | completed | f0aa04b2-d11d-4968-b7e6-fa49acfcbe3d |
+| auditor_bp_1 | teamwork_auditor | Forensic Integrity Audit for M5 | completed | 8680f2d9-f89d-4beb-ae79-c48f04b67394 |
 
 ## Succession Status
 - Succession required: no
-- Spawn count: 24 / 128
+- Spawn count: 9 / 16 (Current Orchestrator invocation)
 - Pending subagents: none
 - Predecessor: none
 - Successor: none
@@ -97,7 +88,6 @@ Triển khai toàn diện 3 hạng mục nâng cấp cho Workspace Module trong 
 - c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\.agents\teamwork\orchestrator\progress.md — Liveness & status tracking
 - c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\.agents\teamwork\orchestrator\PROJECT.md — Global project scope & inventory
 - c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\.agents\teamwork\orchestrator\GATE_STATUS.md — Gate verdicts
-- c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\.agents\teamwork\worker_ws_m1\handoff.md — Worker 1 Report
-- c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\.agents\teamwork\worker_ws_m2\handoff.md — Worker 2 Report
-- c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\.agents\teamwork\worker_ws_m3\handoff.md — Worker 3 Report
-- c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\.agents\teamwork\worker_ws_m4\handoff.md — Worker 4 Report
+- C:\Users\zit\.gemini\antigravity\brain\84d01a92-09d9-4389-8e0e-1485fedb54eb\board_view_google_tasks_polish_plan.md — Approved Polish Plan
+- c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\.agents\teamwork\worker_bp_1\handoff.md — Worker Handoff
+- c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\.agents\teamwork\auditor_bp_1\handoff.md — Forensic Auditor Handoff

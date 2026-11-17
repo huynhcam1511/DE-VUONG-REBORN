@@ -65,3 +65,15 @@ Chạy `npm run build` trong `De_Vuong_Webapp` và đảm bảo toàn bộ quá 
 ### Build and Deployment
 - [ ] Lệnh `npm run build` chạy thành công trong thư mục `De_Vuong_Webapp` với exit code 0 và không có lỗi TypeScript.
 - [ ] Lệnh `firebase deploy --only hosting:huynhkiencam` hoàn thành thành công và xác nhận triển khai hosting hoàn tất.
+
+
+## 2026-11-17T02:01:27Z
+From: 70bc2703-c15a-40f2-942b-41c08dbb73ee
+Priority: MESSAGE_PRIORITY_HIGH
+
+Yêu cầu và kế hoạch đã được chốt và duyệt chi tiết trong artifact board_view_google_tasks_polish_plan.md. Hãy tiến hành thực thi ngay lập tức:
+1. Sửa Header cột Workspace: bỏ uppercase font-bold, dùng text-sm font-semibold text-slate-800, số lượng cùng hàng không lệch.
+2. Sửa chip dueDate: bỏ nền màu (bg-rose-50 / bg-slate-50), dùng viền mảnh trong suốt (border-rose-200/80 hoặc border-slate-200/80), chỉ dùng text color text-rose-600 / text-slate-600.
+3. Sửa tiêu đề task: chữ thường tự nhiên, text-[13.5px] font-normal text-slate-800 rõ nét, không mờ.
+4. Render subtasks thụt lề dưới task cha (ml-4 pl-2 space-y-1.5 border-l border-slate-100, checkbox tròn nhỏ 14px, text-[12px] text-slate-700).
+5. Build test (npm run build trong De_Vuong_Webapp), commit Git cả repo con và root, deploy production Firebase Hosting.

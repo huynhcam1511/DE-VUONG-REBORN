@@ -1,74 +1,43 @@
-# Orchestrator Final Handoff: Workspace Module Comprehensive Upgrade & Deployment
-
-**Orchestrator**: `teamwork_orchestrator`
-**Working Directory**: `c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\.agents\teamwork\orchestrator\`
-**Date**: 2026-11-16
-**Original Request**: `c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\.agents\teamwork\ORIGINAL_REQUEST.md`
-**Project Plan**: `c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\.agents\teamwork\orchestrator\PROJECT.md`
-**Gate Status**: `c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\.agents\teamwork\orchestrator\GATE_STATUS.md`
-**Status**: 100% COMPLETE & VERIFIED
-
----
+# Orchestrator Handoff Report: Board View Google Tasks Polish & Production Deployment
 
 ## 1. Observation
-
-All 4 Milestones requested in `ORIGINAL_REQUEST.md` have been fully implemented, independently reviewed, empirically challenged, forensically audited, and successfully deployed to Firebase Hosting production.
-
-### Summary of Completed Milestones:
-1. **Milestone 1: Board View SaaS Polish (`BoardView.tsx`)**:
-   - Transformed Kanban columns to modern SaaS styling: `rounded-xl`, `p-2.5`, `bg-slate-50/70`, width `min-w-[290px] w-[290px]`, item count pill counter badge.
-   - Refined Task Card: elevated white card on slate column background (`bg-white rounded-lg p-2.5 shadow-2xs border border-slate-200/80 hover:border-slate-300 hover:shadow-xs`), 16px round checkbox (`w-4 h-4 rounded-full`, `<Check size={10} strokeWidth={3} />`), `text-xs font-semibold` title.
-   - Merged metadata row: due date, priority flag, and assignee avatar stack unified on a single aligned row (`mt-2 flex items-center justify-between gap-1.5 pt-0.5`), completely eliminating the coarse `mt-3` margin.
-   - Gate Result: PASS (2 Reviewers APPROVE, 2 Challengers APPROVE, Forensic Auditor CLEAN).
-
-2. **Milestone 2: Calendar View Week Timeline & Defaults (`CalendarView.tsx`, `WorkspaceModals.tsx`)**:
-   - Modernized `CalendarView.tsx` into a Week View Timeline covering 7 columns (Monday to Sunday: `T2` -> `CN`) with a vertical hour axis from `08:00` to `22:00` (14 hours, 840 minutes).
-   - Real-time Current Time Indicator: live 10-second timer, emerald badge on hour axis, dashed guideline across columns, and solid emerald highlight with animated pulsing ping dot on Today's column.
-   - Dynamic multi-column layout clustering for overlapping tasks on the hour grid.
-   - Dedicated All-Day header section labeled "Cả ngày" beneath day headers for date-only and multi-day spanning tasks.
-   - Smooth view mode toggle between Week View Timeline and Month View.
-   - Default DateTime Today: In `WorkspaceModals.tsx` (`CreateTaskModal`), default `startDateStr` and `dueDateStr` set to Today (`format(new Date(), 'yyyy-MM-dd')`) with standard business hours (`09:00` - `10:00`). Interactive slot-click on grid pre-populates clicked day and time.
-   - Gate Result: PASS (2 Reviewers APPROVE, 2 Challengers APPROVE, Forensic Auditor CLEAN).
-
-3. **Milestone 3: Gantt View Creation & Workspace Integration (`GanttView.tsx`, `WorkspaceLayout.tsx`)**:
-   - Created new `De_Vuong_Webapp/src/components/workspace/views/GanttView.tsx`:
-     * Sticky split-view layout with pinned left task table (`w-[340px] sticky left-0 bg-white z-20 border-r border-slate-200`) and right interactive timeline in a single unified scroll container (0ms vertical desync).
-     * 3-tier zoom switcher: Ngày (Day), Tuần (Week), Tháng (Month) with mathematical 2-tier date headers using `date-fns` v4 (`vi` locale).
-     * Interactive progress bars spanning `startDate -> dueDate` with status color theming, inner progress percentage fills, undated fallback ("Chưa đặt ngày"), overdue rose highlight, quick completion checkbox toggle, and drawer `TaskDetailPanel` integration.
-     * "Hôm nay" jump button and full-height emerald Today indicator line.
-     * Quick task creation via "+ Thêm việc" and inline add task row.
-   - Integrated into `De_Vuong_Webapp/src/components/workspace/WorkspaceLayout.tsx` tab `'gantt'`.
-   - Gate Result: PASS (2 Reviewers APPROVE, 2 Challengers APPROVE, Forensic Auditor CLEAN).
-
-4. **Milestone 4: Build Verification & Production Firebase Hosting Deployment**:
-   - Automated workspace tests: `npm run test:workspace` passed 8/8 tests cleanly with exit code 0.
-   - TypeScript compilation & Vite production build: `npm run build` completed in 10.20s with exit code 0.
-   - Firebase Hosting deployment: `firebase deploy --only hosting:huynhkiencam` executed successfully with exit code 0, releasing the new version to production:
-     **Hosting URL: `https://huynhkiencam.web.app`**
-   - Independent verification confirmed live site returns HTTP 200 and serves matching bundle assets (`index-BMkkyVqY.js`, `index-BzY4gAZM.css`).
-   - Gate Result: PASS (Reviewer APPROVE, Forensic Auditor CLEAN).
-
----
+- **Mission**: Polish `BoardView.tsx` according to approved plan `board_view_google_tasks_polish_plan.md` to match Google Tasks aesthetic benchmarks (Ảnh 1 - Ảnh 5), build with 0 errors, commit git in both repositories, and deploy to Firebase Hosting.
+- **Workflow Execution**:
+  - **Exploration**: 3 parallel Explorers surveyed `BoardView.tsx` and related services:
+    - `explorer_bp_1`: Analyzed Column Header layout, identified lines 101-112 to remove `uppercase font-bold tracking-wide text-xs` and establish natural sentence case `text-sm font-semibold text-slate-800` with horizontally aligned task count.
+    - `explorer_bp_2`: Analyzed DueDate chip & task title, developed helper functions `formatDueDate` and `formatTaskTitle`, and designed the overdue calculation guarded against finished tasks.
+    - `explorer_bp_3`: Analyzed subtasks architecture and designed the nested subtask tree with 14px circular checkbox and state synchronization.
+  - **Implementation**: `worker_bp_1` applied all 4 UI polish requirements into `De_Vuong_Webapp/src/components/workspace/views/BoardView.tsx`:
+    1. Header: `text-sm font-semibold text-slate-800 truncate`, `text-xs font-medium text-slate-400 shrink-0` on same row, `MoreHorizontal` isolated with `shrink-0` & `onClick={(e) => e.stopPropagation()}`.
+    2. DueDate Chip: `bg-transparent`, thin borders `border-rose-200/80` or `border-slate-200/80`, text color `text-rose-600` / `text-slate-600`, overdue warnings suppressed for completed tasks (`status === 'finish' | 'cancel' | 'done'`).
+    3. Task Title: `text-[13.5px] font-normal text-slate-800 leading-5`, sentence casing normalization for all-caps strings while retaining acronyms.
+    4. Subtasks Tree: Indented `mt-2 ml-4 pl-2 space-y-1.5 border-l border-slate-100`, circular 14px button `w-3.5 h-3.5 rounded-full border mt-0.5`, `<Check size={8} strokeWidth={3} />`, text `text-[12px] text-slate-700`, line-through on completed, sub-descriptions, isolated click/pointer propagation, and `toggleSubtask` syncing to Firestore and `selectedTask`.
+  - **Verification & Audit**:
+    - Build test: `npm --prefix De_Vuong_Webapp run build` succeeded with exit code 0 and 0 TypeScript errors.
+    - Git commits: Inner repo `De_Vuong_Webapp` commit `773b113` & `de74bd2`; root repo commit `c78af0c`. Working trees completely clean.
+    - Deployment: Deployed to Firebase Hosting site `huynhkiencam` (`https://huynhkiencam.web.app`). Live site verified serving bundle hash `index-C-Cl2gR-.js`.
+    - `reviewer_bp_1`: **APPROVE**
+    - `reviewer_bp_2`: **APPROVE**
+    - `challenger_bp_1`: **APPROVE** (Executed 34 automated stress test cases, 100% pass)
+    - `challenger_bp_2`: **APPROVE** (Verified markup, build, git, and live HTTP 200)
+    - `auditor_bp_1`: **CLEAN** (Genuine implementation, zero archives touch, live bundle hash match)
+  - **Gate Status**: **PASS**
 
 ## 2. Logic Chain
+1. Eliminating uppercase bold titles in column headers restores visual balance and allows workspace and organization names to read naturally.
+2. Stripping pastel background pills from date chips strictly satisfies AGENTS.md anti-pill standards and aligns with the flat Google Tasks reference.
+3. Preventing completed tasks from showing overdue warnings eliminates false alarms.
+4. Embedding subtasks directly beneath parent tasks with a 14px circular check indicator and vertical guide line recreates the Google Tasks subtask hierarchy.
+5. All click and pointer down events on subtasks and header actions are strictly stopped from bubbling, preserving card drag-and-drop mechanics and detail drawer triggers.
 
-1. **Strict Modular Isolation**:
-   - M1, M2, and M3 touched distinct, non-overlapping files in `De_Vuong_Webapp/src/components/workspace/`.
-   - Each milestone was surveyed, implemented, independently reviewed, challenged with empirical stress harnesses, and forensically audited before closing its gate.
-2. **Canonical Repository Policy**:
-   - All work executed exclusively in `De_Vuong_Webapp/`. `archives/` remained 100% untouched (`git status --porcelain archives` confirmed clean).
-3. **Integrity Forensics**:
-   - Every single milestone received a CLEAN verdict from independent `teamwork_auditor` subagents verifying zero hardcoding, zero fake facades, and genuine logic.
-
----
-
-## 3. Caveats & Notes
-
-- **Live Hosting Site**: The production site `https://huynhkiencam.web.app` is live with all three workspace views (Board View polish, Calendar View week timeline, Gantt View split-view) fully functional.
-- **Single Task Contract**: Preserved the single `Task` data model contract across all components, avoiding legacy `workspace_lists` schemas.
-
----
+## 3. Caveats
+- Subtask reordering via drag-and-drop on the board is handled inside the full task detail panel, not directly on the board card.
+- The `archives/` directory remained 100% untouched.
 
 ## 4. Conclusion
+All requirements of the approved polish plan have been implemented, verified, committed, and deployed live to production. The quality gate has passed with 2 APPROVEs, 2 Challengers APPROVE, and 1 CLEAN forensic audit.
 
-All requirements (R1, R2, R3, R4) and acceptance criteria have been fully met with passing tests, zero TypeScript errors, clean forensic audits, and live deployment.
+## 5. Verification Method
+- Static Build: `npm --prefix De_Vuong_Webapp run build` (Exit code 0).
+- Git Logs: `git -C De_Vuong_Webapp log -2 --stat` and `git log -1 --stat`.
+- Live URL: `https://huynhkiencam.web.app` (Serving bundle `index-C-Cl2gR-.js`).
