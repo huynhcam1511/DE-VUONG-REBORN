@@ -113,6 +113,7 @@ Khi xây dựng hoặc chỉnh sửa các module quản trị (Admin Modules) d�
      - `CRMAdmissionsModule.tsx` (`tab=leads` - Tuyển sinh & Quản lý Nhu cầu học B2C)
      - `PartnerManagementModule.tsx` (`tab=partners` - Hồ sơ Doanh nghiệp B2B)
      - `UserManagementModule.tsx` (`tab=users` - Quản trị Tài khoản & Phân quyền IAM)
+     - `ManualAccountingModule.tsx` (`tab=manual-accounting` - Hạch toán lớp thủ công & Nhập Excel Full-Page)
    - **Quy tắc bắt buộc cho các module tiếp theo**: Bất kỳ module quản trị nào khác (như `tab=blogs`, `tab=schedule`, v.v.) khi chỉnh sửa hoặc mở rộng đều bắt buộc phải tuân thủ 100% chuẩn giao diện này, tuyệt đối không tự ý thêm `<h1>`, `<p>` mô tả dài dòng, hay portal lên `#top-bar-actions`.
 
 10. **Ẩn hoàn toàn thanh cuộn ở Sidebar (Hidden Scrollbar)**:
@@ -316,6 +317,23 @@ Khi xây dựng hoặc refactor các màn hình Xem / Chỉnh sửa chi tiết b
   - Mã định danh nghiệp vụ (`ENT-XXXXXXXX`, `LRN-XXXXXXXX`, `EMP-XXXXXXXX`, `BG-XXXXXXXX`, `HD-XXXXXXXX`) là **khóa ngoại liên thông toàn hệ thống** (Doanh nghiệp $\rightarrow$ CRM Leads $\rightarrow$ Báo giá $\rightarrow$ Hợp đồng $\rightarrow$ Thu chi).
   - Một khi bản ghi đã được tạo và cấp mã, **mã đó là bất biến vĩnh viễn**, tuyệt đối không tự ý thay đổi, tái tạo ngẫu nhiên khi F5/reload trang, hoặc sử dụng mã mẫu giả định (như `p-1`, `p-districtk`).
   - Mọi thao tác lưu/cập nhật bắt buộc phải bám chặt theo Mã ID duy nhất này để ngăn chặn triệt để tình trạng ghi đè chéo hoặc làm gãy liên kết dữ liệu giữa các phân hệ.
+
+## 26. Chuẩn Cú pháp Giao dịch TPBank & SePay (Reconciliation Coding Rules)
+
+Để tự động hóa 100% dòng tiền qua SePay Webhook và TPBank (không cần can thiệp thủ công từ tháng 10 trở đi):
+
+1. **Chiều THU (Doanh thu Học viên đóng qua VietQR)**:
+   - Cú pháp chuẩn trên VietQR: `THANH TOAN HOC PHI [MÃ LEA / MÃ LỚP]` (Ví dụ: `THANH TOAN HOC PHI LEA-46888244` hoặc `THANH TOAN HOC PHI RK1444`).
+   - Phân loại tự động: `type: "payment"`, ghi nhận Doanh thu và gán trực tiếp vào hồ sơ Lead/Lớp tương ứng.
+
+2. **Chiều CHI (Chi phí nhận lớp / Phí chênh lệch chuyển từ TPBank)**:
+   - **Nhận lớp thông thường**: `NHAN LOP [MÃ LỚP]` (Ví dụ: `NHAN LOP RK1444`). Hệ thống ghi: Ghi nợ (Chi phí nhận lớp) của lớp `RK1444`.
+   - **Chuyển phí chênh lệch & Trừ phí dư**: `HUYNH CAM CHUYEN PHI CHENH LECH [MÃ LỚP] TRU PHI DU` (hoặc `CHENH LECH [MÃ LỚP] TRU PHI DU`). Hệ thống ghi: Chi tiền thực tế qua TPBank, đồng thời ghi chú trừ vào Quỹ phí dư tồn đọng.
+   - **Rút hoàn phí / Về Vietcombank**: `HOANPHI` hoặc `RUT VE VCB`.
+
+3. **Mô hình Vệ tinh TPBank & Kho Vietcombank**:
+   - TPBank tài khoản cá nhân: Tiếp nhận doanh thu qua SePay và chi trả phí nhận lớp trực tiếp bằng chuyển khoản kèm mã đối chiếu.
+   - Vietcombank: Tài khoản cá nhân an toàn để rút lợi nhuận tích lũy định kỳ (không tích hợp SePay do rào cản pháp lý hộ kinh doanh).
 
 ## 26. Quy trình Đảm bảo Chất lượng Code & Khép vòng Task (IDE Pipeline: Build -> Audit/Test -> Self-Review -> Fix -> Close)
 
