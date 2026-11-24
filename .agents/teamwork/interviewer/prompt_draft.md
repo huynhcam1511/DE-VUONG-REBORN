@@ -1,54 +1,48 @@
-Chuẩn hóa toàn diện Workspace Module theo AGENTS.md và benchmark Google Tasks (Ảnh 5) trên WorkspaceLayout, CalendarView, BoardView, GanttView, đảm bảo build thành công và triển khai lên Firebase hosting.
+Tái cấu trúc Mục 3 trong CRM Admissions và nâng cấp Màn hình Chi tiết Học viên trong De_Vuong_Webapp nhằm chuẩn hóa quy trình 2 giai đoạn: Giai đoạn 1 (Tuyển sinh / Khởi tạo) và Giai đoạn 2 (Vận hành / Hồ sơ học viên & Công nợ), tuân thủ nghiêm ngặt AGENTS.md.
 
 Working directory: De_Vuong_Webapp
 Integrity mode: development
 
 ## Requirements
 
-### R1. Chuẩn hóa WorkspaceLayout (AGENTS.md Quy tắc 12 & 14)
-Trong `De_Vuong_Webapp/src/components/workspace/WorkspaceLayout.tsx`:
-- Thiết kế Full-Bleed Canvas: Đổi thẻ `main` thành `min-h-0 flex-1 overflow-hidden bg-white w-full flex flex-col`, loại bỏ toàn bộ padding thừa `p-2.5 sm:p-4 xl:p-6` để các view tệp liền tràn viền với Header.
-- Chuẩn bộ lọc Toolbar: Dẹp bỏ hoàn toàn modal Filter cũ có select native chèn màn hình. Tích hợp component `AdminFilterDropdown` chuẩn Linear/Notion lên Toolbar với các tiêu chí: Trạng thái, Mức độ ưu tiên, Hạn chót.
+### R1. Tinh gọn Mục 3 Cổng Tuyển sinh (CRMAdmissionsModule.tsx)
+- Tái cấu trúc Mục 3 thành một thẻ sổ cái phẳng duy nhất (Single Flat Ledger Card) cho Giai đoạn 1 (Tuyển sinh / Khởi tạo):
+  - Kế hoạch học phí: Tổng học phí, hình thức thanh toán (đóng trọn gói 1 lần, chia nhỏ theo đợt milestone, hoặc thu theo tháng).
+  - Phí nhận lớp ban đầu với bộ chuyển đổi nguồn thanh toán: Tiền mặt/VCB vs Cấn trừ Quỹ Phí Dư.
+  - Thu học phí đợt đầu (Ghi có đợt 1, ví dụ 900.000 ₫ hoặc trọn gói 3.600.000 ₫).
+  - Thao tác quyết định chuyển giao duy nhất: nút `[★ XẾP VÀO LỚP HỌC (START)]` để hoàn tất tuyển sinh và bàn giao sang Giai đoạn 2 (Hồ sơ học viên/Vận hành), hoặc `[✖ NON-START (HỦY ➔ HOÀN PHÍ QUỸ)]`.
+  - Khối tính toán hóa đơn VAT Doanh nghiệp (phụ thu 10%, phí 8%) được ẩn gọn gàng bên trong checkbox toggle `[ ] Xuất hóa đơn VAT Doanh nghiệp`, mặc định ẩn.
+- Không để các khoản thu định kỳ tháng 2, tháng 3 làm rối giao diện Tuyển sinh.
 
-### R2. Sửa lỗi hiển thị dữ liệu CalendarView
-Trong `De_Vuong_Webapp/src/components/workspace/views/CalendarView.tsx`:
-- Khi `activeNode.id === 'default-workspace'` hoặc `orgId === 'default-workspace'`, gọi `getAllTasks()` thay vì chỉ `getTasksForOrg('default-workspace')` để tải đầy đủ toàn bộ 112 task trên hệ thống.
-- Hiển thị đầy đủ task lên lưới tuần và All-Day header.
+### R2. Nâng cấp màn hình Chi tiết Học viên (StudentDetail.tsx)
+- Tại tab "Học phí & Giao dịch" (Payment & Ledger):
+  - Hiển thị rõ mã đối chiếu lớp học (ví dụ: `LG4729`) trên thanh tiêu đề công nợ.
+  - Kế thừa và nhận dữ liệu bàn giao từ Tuyển sinh (Tổng học phí, số tiền đã đóng từ Giai đoạn 1, số tiền còn nợ).
+  - Cung cấp các nút thao tác nhanh: `[+ Thu học phí đợt tiếp theo]` (đối với đợt 2, đợt 3... ví dụ 900.000 ₫ hoặc theo tháng 2.200.000 ₫) và `[+ Nộp phí chênh lệch trung tâm]` (ví dụ: 200.000 ₫/tháng cho đối tác, tự động ghi nợ vào sổ cái chung).
 
-### R3. Tái thiết kế BoardView chuẩn Google Tasks (Ảnh 5 & AGENTS.md Quy tắc 4)
-Trong `De_Vuong_Webapp/src/components/workspace/views/BoardView.tsx`:
-- Tái thiết kế phẳng tuyệt đối: Dẹp bỏ lạm dụng pill card, loại bỏ border hộp thô và shadow của card.
-- Thẻ task dạng dòng danh sách phẳng: Checkbox tròn rỗng 18px tinh tế, tiêu đề plain text `text-[13px]` dễ đọc, chip hạn chót bo tròn thanh lịch kiểu Google Tasks `(🕒 Hôm nay, 12:00)` với màu đỏ/xanh nhẹ nhàng.
-- Nút '+ Thêm việc cần làm' dạng text phẳng ở đầu cột, hỗ trợ cuộn nội bộ từng cột, và nhóm 'Đã hoàn thành' dạng thu gọn ở cuối cột.
+### R3. Tuân thủ chuẩn AGENTS.md trong De_Vuong_Webapp
+- Bảng dữ liệu read-only, thao tác qua menu 3 chấm (`MoreVertical`), thanh công cụ 1 hàng cố định, phân cấp typography chuẩn, không lạm dụng pill/badge, layout tệp liền tràn viền (Full-Bleed Layout).
+- Lưu trữ dữ liệu vĩnh viễn qua Firebase/API persistence, không chỉ sửa local state.
 
-### R4. Chuẩn hóa GanttView tràn viền và đồng bộ dòng
-Trong `De_Vuong_Webapp/src/components/workspace/views/GanttView.tsx`:
-- Thiết kế tệp viền Full-bleed tràn viền.
-- Đồng bộ chiều cao dòng 1:1 chuẩn mực giữa pane danh sách task bên trái và pane timeline bên phải.
-
-### R5. Kiểm tra Build và Deploy
-- Chạy `npm run build` trong `De_Vuong_Webapp` đảm bảo 0 lỗi build/TypeScript/linter.
-- Chạy `firebase deploy --only hosting:huynhkiencam` để triển khai thành công lên production.
+### R4. Kiểm tra Build và Xác minh
+- Chạy `npm run build` trong `De_Vuong_Webapp/` đảm bảo biên dịch thành công 0 lỗi build/TypeScript/bundle.
 
 ## Acceptance Criteria
 
-### WorkspaceLayout & Toolbar
-- [ ] Thẻ `main` trong `WorkspaceLayout.tsx` sử dụng class `min-h-0 flex-1 overflow-hidden bg-white w-full flex flex-col` và không còn padding thừa `p-2.5 sm:p-4 xl:p-6`.
-- [ ] Modal filter cũ bị loại bỏ; `AdminFilterDropdown` xuất hiện trên Toolbar cho Trạng thái, Mức độ ưu tiên và Hạn chót theo đúng AGENTS.md Quy tắc 12.
+### CRM Admissions (Section 3)
+- [ ] Mục 3 trong `CRMAdmissionsModule.tsx` là một thẻ sổ cái phẳng duy nhất hiển thị kế hoạch học phí (tổng học phí, hình thức thanh toán: trọn gói, chia nhỏ đợt, theo tháng).
+- [ ] Phí nhận lớp ban đầu có toggle chọn nguồn: Tiền mặt/VCB hoặc Cấn trừ Quỹ Phí Dư.
+- [ ] Ghi có học phí Đợt 1 được ghi nhận chính xác, không bị lẫn các khoản thu tháng 2, tháng 3.
+- [ ] Có nút hành động dứt khoát `[★ XẾP VÀO LỚP HỌC (START)]` và `[✖ NON-START (HỦY ➔ HOÀN PHÍ QUỸ)]`.
+- [ ] Máy tính VAT Doanh nghiệp được thu gọn trong checkbox toggle `[ ] Xuất hóa đơn VAT Doanh nghiệp`, mặc định ẩn.
 
-### CalendarView
-- [ ] Với workspace mặc định (`default-workspace`), hàm `getAllTasks()` được gọi và nạp đầy đủ các task hệ thống.
-- [ ] Task hiển thị chính xác trên lưới tuần (week grid) và All-Day header.
+### Student Detail (Học phí & Giao dịch)
+- [ ] Tab "Học phí & Giao dịch" trong `StudentDetail.tsx` hiển thị mã đối chiếu lớp (ví dụ: `LG4729`) ở header.
+- [ ] Nhận và kế thừa đầy đủ dữ liệu bàn giao từ Tuyển sinh (tổng học phí, đã đóng đợt 1, dư nợ còn lại).
+- [ ] Có các nút thao tác nhanh `[+ Thu học phí đợt tiếp theo]` và `[+ Nộp phí chênh lệch trung tâm]` (ghi nợ sổ cái chung).
 
-### BoardView
-- [ ] Card công việc không có border hộp nổi, shadow, hoặc pill bao quanh.
-- [ ] Mỗi task hiển thị dưới dạng hàng danh sách phẳng với checkbox tròn rỗng 18px, tiêu đề plain text `text-[13px]`, và chip hạn chót bo tròn thanh lịch.
-- [ ] Đầu cột có nút '+ Thêm việc cần làm' dạng text phẳng, mỗi cột cuộn nội bộ mượt mà không tràn viewport, và các task hoàn thành nằm trong nhóm 'Đã hoàn thành' có thể thu gọn/mở rộng ở cuối.
+### AGENTS.md Compliance
+- [ ] Tuân thủ các quy tắc bảng biểu, menu 3 chấm, typography, layout tràn viền và persistence vào Firestore/API.
 
-### GanttView
-- [ ] Giao diện Gantt hiển thị tệp liền full-bleed tràn viền.
-- [ ] Chiều cao dòng ở pane bên trái khớp 1:1 với dòng ở pane timeline bên phải.
-
-### Build & Deploy
-- [ ] `npm run build` trong thư mục `De_Vuong_Webapp` hoàn thành với exit code 0 và không có lỗi.
-- [ ] `firebase deploy --only hosting:huynhkiencam` hoàn thành triển khai production thành công.
+### Build Verification
+- [ ] Lệnh `npm run build` trong `De_Vuong_Webapp/` hoàn thành với mã thoát 0, không có lỗi TypeScript hoặc bundle.

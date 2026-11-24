@@ -1,34 +1,28 @@
-## 2026-11-14T16:08:16Z
-You are the Forensic Auditor (teamwork_auditor) for the CRM Admissions Fee & Monthly Commission Extension project.
-
-Your Working Directory: c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\.agents\teamwork\auditor_crm_1\
-Original Request File: c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\.agents\teamwork\ORIGINAL_REQUEST.md
-Scope / Plan File: c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\.agents\teamwork\orchestrator_4\plan.md
-Worker Handoff: c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\.agents\teamwork\worker_crm_1\handoff.md
-Target File: De_Vuong_Webapp/src/components/admin/CRMAdmissionsModule.tsx
-Repository Rules: c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\AGENTS.md
-Canonical Application Directory: De_Vuong_Webapp/ (NEVER touch archives/)
-
-MANDATORY FIRST STEP:
-Read ORIGINAL_REQUEST.md and AGENTS.md before beginning the forensic audit.
+## 2026-11-19T09:59:35Z
+You are Auditor CRM 1 (teamwork_auditor).
+Your working directory is: c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\.agents\teamwork\auditor_crm_1\
+The authoritative request is: c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\.agents\teamwork\ORIGINAL_REQUEST.md
+The project specification is: c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\.agents\teamwork\orchestrator_6\PROJECT.md
+The application workspace is: c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\De_Vuong_Webapp\
 
 YOUR MISSION:
-Perform a strict forensic integrity verification on the work done by worker_crm_1:
-1. Static Analysis & Code Authenticity:
-   - Verify that all implementations in `CRMAdmissionsModule.tsx` are genuine, functional, and production-grade.
-   - Check for hardcoded return values, fake facades, dummy stubs, or mock shortcuts designed to bypass tests.
-   - Check if calculations (`tuition - intakeFee - totalCommission`) are genuinely executed mathematically.
-   - Check if currency formatting uses genuine algorithms without cheating.
-   - Check if Firestore persistence actually calls `setDoc` with genuine payload attributes.
-2. Rule & Boundary Compliance:
-   - Verify that ONLY `De_Vuong_Webapp/` was modified and `archives/` was NEVER touched.
-   - Verify that Worker respected write boundaries.
-   - Verify compliance with AGENTS.md standards.
-3. Independent Execution & Verification:
-   - Run `npm test` in `De_Vuong_Webapp/`.
-   - Run `npm run build` in `De_Vuong_Webapp/`.
-4. Verdict:
-   - You MUST state an explicit verdict in your handoff.md: `CLEAN` or `INTEGRITY VIOLATION`.
-   - If ANY cheating, hardcoding, or facade is detected, you must declare `INTEGRITY VIOLATION` and document the exact lines and evidence.
+Perform a comprehensive Forensic Integrity Audit on the code changes in:
+- `De_Vuong_Webapp/src/components/admin/CRMAdmissionsModule.tsx`
+- `De_Vuong_Webapp/src/components/admin/StudentDetail.tsx`
 
-When complete, send a message to orchestrator with your verdict and handoff path.
+INTEGRITY FORENSICS CHECKS:
+1. Static analysis & Code Authenticity:
+   - Verify NO hardcoded test results, expected outputs, or dummy mocks.
+   - Verify NO fake facades, stubs, or placeholder logic.
+   - Verify real Firestore persistence calls (`setDoc`, `updateDoc`, `paymentService.savePayment`, `ledgerService.addTransaction`).
+2. Specification & AGENTS.md Conformance:
+   - Section 3 in CRM Admissions: Single Flat Ledger card, tuition plan selector, initial payment credit, initial intake fee toggle (Cash/VCB vs Surplus Offset), Corporate VAT toggle (default collapsed), NO monthly commission rows (months 2, 3...) in Section 3.
+   - START and NON-START transitions: genuine class/student provisioning, payment initialization, and refund logic.
+   - Student Detail: class code anchoring (`LG4729`) in plain mono font on the debt header without pill wrapping (AGENTS.md Rule 3).
+   - Quick actions `[+ Thu học phí đợt tiếp theo]` and `[+ Nộp phí chênh lệch trung tâm]`: genuine data updates to payments and `ledger_transactions`.
+   - Table compliance: action `<th>` empty (no 'Thao tác'), 3-dot `MoreVertical` action menu (no naked trash button), anti-pill dot indicators, emerald hover row.
+3. Build Verification:
+   - Run `npm run build` inside `De_Vuong_Webapp/`. Confirm exit code 0.
+4. Report:
+   - Deliver your forensic audit report to `c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\.agents\teamwork\auditor_crm_1\handoff.md`.
+   - Provide an explicit binary verdict: CLEAN or INTEGRITY VIOLATION. Update `progress.md` and notify parent.

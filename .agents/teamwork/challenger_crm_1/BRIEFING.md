@@ -1,65 +1,64 @@
-# BRIEFING — 2026-11-14T16:08:00Z
+# BRIEFING — 2026-11-19T10:10:00Z
 
 ## Mission
-Empirically stress-test, adversarial verify, and evaluate financial calculations, dynamic monthly commission state logic, input formatting, and layout standards in CRMAdmissionsModule.tsx.
+Empirically verify and stress-test Stage 1 in `De_Vuong_Webapp/src/components/admin/CRMAdmissionsModule.tsx` according to ORIGINAL_REQUEST.md and PROJECT.md specifications.
 
 ## 🔒 My Identity
-- Archetype: empirical_challenger
+- Archetype: challenger
 - Roles: critic, specialist
 - Working directory: c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\.agents\teamwork\challenger_crm_1
-- Original parent: 08099f55-bb2b-4fd9-835b-93c0480cae41
-- Milestone: CRM Admissions Fee & Monthly Commission Extension
+- Original parent: f6cc1e79-c7fd-4477-b25b-149ae6603513
+- Milestone: Stage 1 Verification & Stress Testing
 - Instance: 1 of 1
 
 ## 🔒 Key Constraints
-- Review-only — do NOT modify implementation code in De_Vuong_Webapp/
-- Empirical testing mandatory — execute test scripts/harnesses directly
-- Canonical app is De_Vuong_Webapp/ (never touch archives/)
-- .agents/teamwork/ holds only agent metadata, no source/test code
-- Deliver clear verdict: APPROVE or REJECT
+- Review-only — do NOT modify implementation code directly
+- Respect Canonical Repository Policy: edit only inside De_Vuong_Webapp/ (never archives/)
+- .agents/teamwork/ holds only metadata (plans, progress, handoffs) — never place source code or test scripts here
+- Zero tolerance for unverified claims — empirically execute code and tests
 
 ## Current Parent
-- Conversation ID: 08099f55-bb2b-4fd9-835b-93c0480cae41
+- Conversation ID: f6cc1e79-c7fd-4477-b25b-149ae6603513
 - Updated: not yet
 
 ## Review Scope
-- **Files to review**: De_Vuong_Webapp/src/components/admin/CRMAdmissionsModule.tsx
-- **Interface contracts**:
-  - .agents/teamwork/ORIGINAL_REQUEST.md
-  - .agents/teamwork/orchestrator_4/plan.md
-  - .agents/teamwork/orchestrator_4/synthesis.md
-  - .agents/teamwork/worker_crm_1/handoff.md
-  - AGENTS.md
-- **Review criteria**: correctness, financial precision, boundary behavior, layout compliance, UI standards, build integrity
-
-## Attack Surface
-- **Hypotheses tested**:
-  - Financial formula exactness across standard, zero, deficit, multi-month, and extreme inputs (PASSED)
-  - String sanitization (dots, commas, symbols, spaces, malformed) in currency input (PASSED)
-  - Boundary safety on nullish / undefined inputs in calculation functions (PASSED)
-  - Dynamic monthly commission list operations (add, remove middle, remove head, remove single row) (PASSED)
-  - Cursor stability mathematics in SaaSCurrencyInput (PASSED)
-  - Master table deduction display & secondary text rendering (PASSED)
-  - Firestore save payload structure and sanitization (PASSED)
-  - Production build execution (Vite build) (PASSED)
-- **Vulnerabilities found**: None. Negative numbers are safely stripped of minus signs, preventing cashflow inflation; single-row deletion resets to empty instead of destroying state.
-- **Untested angles**: Live Firestore cloud websocket streaming (covered via local mock payloads and SDK type contract).
-
-## Loaded Skills
-- None specified by dispatch
+- **Files to review**: `De_Vuong_Webapp/src/components/admin/CRMAdmissionsModule.tsx`, `De_Vuong_Webapp/src/services/paymentService.ts`
+- **Interface contracts**: `ORIGINAL_REQUEST.md`, `orchestrator_6/PROJECT.md`
+- **Review criteria**:
+  - Section 3 Single Flat Ledger Card logic
+  - Boundary values for tuition (0, empty, large values)
+  - Initial intake fee logic when availableSurplusFund <= 0 vs > 0
+  - Payment plan selector toggle ('full', 'installments', 'monthly')
+  - Initial payment collection (0 vs 900.000 vs 3.600.000)
+  - Corporate VAT toggle expansion and calculation
+  - START transition: synchronization with paymentService.savePayment, class creation, student profile, Firestore
+  - NON-START transition: cancellation and automatic surplus fund refund in ledger_transactions
+  - Absence of monthly commission rows (months 2, 3...) in Section 3
+  - Build status: zero compile or bundle errors with `npm run build`
 
 ## Key Decisions Made
-- Constructed dedicated empirical test harness in `De_Vuong_Webapp/tests/crmAdmissionsAdversarial.test.ts` with 19 comprehensive stress-test assertions.
-- Verified standard unit test suite (28/28 tests passed) and total test suite (47/47 tests passed).
-- Verified production build (`npm run build` exited with code 0 in 23.23s).
-- Evaluated compliance with AGENTS.md rules.
-- Issued verdict: **APPROVE**.
+- Executed production build (`npm run build`): Exit code 0, 0 compile/bundle errors.
+- Executed unit test suite (`npm run test`): 28/28 tests passed.
+- Created and executed empirical 25-test suite covering boundary values, transitions, VAT, surplus fund, plan selectors: 25/25 passed.
+- Verdict: **APPROVE**. Handoff report completed in `handoff.md`.
 
 ## Artifact Index
-- DISPATCH.md — incoming dispatch instructions
-- BRIEFING.md — situational awareness
-- progress.md — liveness heartbeat
-- analysis.md — detailed stress-test and adversarial analysis
-- handoff.md — 5-component handoff report with APPROVE verdict
-- De_Vuong_Webapp/tests/crmAdmissionsAdversarial.test.ts — empirical adversarial test harness
+- `.agents/teamwork/challenger_crm_1/DISPATCH.md` — Initial dispatch message
+- `.agents/teamwork/challenger_crm_1/BRIEFING.md` — Persistent agent state
+- `.agents/teamwork/challenger_crm_1/progress.md` — Liveness heartbeat and progress
+- `.agents/teamwork/challenger_crm_1/handoff.md` — Final stress-test handoff report
 
+## Attack Surface
+- **Hypotheses tested**: 
+  - Tuition empty/0/large number parsing
+  - Surplus offset disabled when fund <= 0 vs warning when fund > 0 but < fee
+  - Payment plan toggle auto-populating initial payment on 'full'
+  - Initial payment amounts (0, partial 900k, full 3.6M, overpaid 4.0M)
+  - VAT formula with 0 tuition and custom rates
+  - Non-start duplicate refund prevention
+  - Complete removal of monthly commission rows in Section 3
+- **Vulnerabilities found**: None that break build or runtime. Advisory: TypeScript properties `courseId` in `Class` and `source` in `CRMRecord` noted in Caveats.
+- **Untested angles**: Live external bank webhook execution (tested via emulator/mock).
+
+## Loaded Skills
+- None requested in dispatch

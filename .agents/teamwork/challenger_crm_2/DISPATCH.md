@@ -1,32 +1,26 @@
-## 2026-11-14T16:08:08Z
-You are Challenger 2 (teamwork_challenger) for the CRM Admissions Fee & Monthly Commission Extension project.
-
-Your Working Directory: c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\.agents\teamwork\challenger_crm_2\
-Original Request File: c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\.agents\teamwork\ORIGINAL_REQUEST.md
-Scope / Plan File: c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\.agents\teamwork\orchestrator_4\plan.md
-Synthesis File: c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\.agents\teamwork\orchestrator_4\synthesis.md
-Worker Handoff: c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\.agents\teamwork\worker_crm_1\handoff.md
-Target File: De_Vuong_Webapp/src/components/admin/CRMAdmissionsModule.tsx
-Repository Rules: c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\AGENTS.md
-Canonical Application Directory: De_Vuong_Webapp/ (NEVER touch archives/)
-
-MANDATORY FIRST STEP:
-Read ORIGINAL_REQUEST.md before proceeding with adversarial testing.
+## 2026-11-19T09:59:27Z
+You are Challenger CRM 2 (teamwork_challenger).
+Your working directory is: c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\.agents\teamwork\challenger_crm_2\
+The authoritative request is: c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\.agents\teamwork\ORIGINAL_REQUEST.md
+The project specification is: c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\.agents\teamwork\orchestrator_6\PROJECT.md
+The application workspace is: c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\De_Vuong_Webapp\
 
 YOUR MISSION:
-Adversarially challenge the UI state management, persistence flow, and Firestore compatibility:
-1. Firestore Persistence & Listeners Audit:
-   - Check if `classIntakeFee` and `monthlyCommissions` are properly written in `handleSaveForm` and `handleDuplicateRecord`.
-   - Verify that `removeUndefinedFields` is called before `setDoc` to prevent Firestore crashing on `undefined`.
-   - Verify that snapshot listeners for both `crm_records` and `customer_profiles` map both fields, ensuring no data loss when real-time updates fire.
-   - Verify `mergeCRMRecord` retains both fields.
-2. Input Formatting & Anti-Cursor-Jump Challenge:
-   - Inspect `SaaSCurrencyInput`: Does it handle inserting digits at the start, middle, and end without shifting cursor incorrectly?
-   - Does it prevent letters and special symbols from corrupting the numeric state?
-3. Empirical Execution:
-   - Run verification builds in `De_Vuong_Webapp/`: `npm run build` and `npm test`.
-4. Output:
-   - Write your adversarial audit report to `analysis.md` and `handoff.md`.
-   - State an explicit verdict: `APPROVE` or `REJECT`.
-
-When complete, send a message to orchestrator with your verdict and handoff path.
+Empirically verify and stress-test Stage 2 in `De_Vuong_Webapp/src/components/admin/StudentDetail.tsx`:
+1. Read `c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\.agents\teamwork\ORIGINAL_REQUEST.md` and `PROJECT.md`.
+2. Inspect and adversarially test `StudentDetail.tsx`:
+   - Test class code anchoring: verify `resolvedClassCode` (fallback `'LG4729'`) displays in plain mono font on the debt header without pill wrapping.
+   - Test financial inheritance: ensure the 4 cards accurately calculate and reflect `payments/{studentId}`.
+   - Test `NextInstallmentModal` (`[+ Thu học phí đợt tiếp theo]`):
+     - Test collection of 900k, 2.2M, full debt, or custom amount.
+     - Check that `payments/{studentId}` is updated and a credit entry is posted to `ledger_transactions`.
+   - Test `CenterCommissionModal` (`[+ Nộp phí chênh lệch trung tâm]`):
+     - Test 200k/month remittance, verify debit entry in `ledger_transactions` (`type: 'class_accept'`) and audit log in `internalNotes`. Verify it does NOT corrupt student tuition debt.
+   - Test AGENTS.md compliance:
+     - Verify empty `<th>` for action column.
+     - Verify 3-dot `MoreVertical` action menu (no naked trash button).
+     - Verify plain text + dot status indicator (no candy pills).
+     - Verify emerald hover effect.
+   - Verify 0 TypeScript errors.
+3. Run `npm run build` inside `De_Vuong_Webapp/` to verify zero compile or bundle errors.
+4. Deliver your stress-test report in `c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\.agents\teamwork\challenger_crm_2\handoff.md` with an explicit verdict: APPROVE or REQUEST_CHANGES. Update `progress.md` and notify parent.

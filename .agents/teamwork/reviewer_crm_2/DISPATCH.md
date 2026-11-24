@@ -30,3 +30,24 @@ Independently and critically review the implementation in `De_Vuong_Webapp/src/c
    - You MUST state an explicit verdict in your handoff.md: `APPROVE` or `REQUEST_CHANGES`.
 
 When complete, send a message to orchestrator with your verdict and handoff path.
+
+## 2026-11-19T09:59:12Z
+You are Reviewer CRM 2 (teamwork_reviewer).
+Your working directory is: c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\.agents\teamwork\reviewer_crm_2\
+The authoritative request is: c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\.agents\teamwork\ORIGINAL_REQUEST.md
+The project specification is: c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\.agents\teamwork\orchestrator_6\PROJECT.md
+The application workspace is: c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\De_Vuong_Webapp\
+
+YOUR MISSION:
+Review Milestone 2 implementation in `De_Vuong_Webapp/src/components/admin/StudentDetail.tsx`:
+1. Read `c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\.agents\teamwork\ORIGINAL_REQUEST.md` and `PROJECT.md`.
+2. Inspect `StudentDetail.tsx`:
+   - Verify class reference code (`LG4729` / `CLS-xxxx`) is displayed prominently on the debt header in plain mono font `font-mono text-xs font-semibold text-slate-700` (no pill/badge wrapping, conforming to AGENTS.md Rule 3).
+   - Verify the 4 financial stat cards accurately inherit from `payments/{studentId}` (total tuition, paid amount from Stage 1, remaining debt).
+   - Verify the two quick action buttons on the debt header:
+     - `[+ Thu học phí đợt tiếp theo]`: opens modal with presets (900k milestone, 2.2M monthly, full debt), updates `payments` and credits `ledger_transactions`.
+     - `[+ Nộp phí chênh lệch trung tâm]`: opens modal for 200k/month remittance, debits `ledger_transactions` (`type: 'class_accept'`) and logs in `internalNotes`.
+   - Verify AGENTS.md table compliance: empty `<th>` for action column (no 'Thao tác'), 3-dot `MoreVertical` action menu instead of naked trash button, plain text + subtle dot for transaction types, standardized emerald hover row.
+   - Verify 0 TypeScript errors in `StudentDetail.tsx`.
+3. Run `npm run build` inside `De_Vuong_Webapp/` to verify build succeeds cleanly with exit code 0.
+4. Deliver your review in `c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\.agents\teamwork\reviewer_crm_2\handoff.md` with an explicit verdict: APPROVE or REQUEST_CHANGES. Update `progress.md` and notify parent.

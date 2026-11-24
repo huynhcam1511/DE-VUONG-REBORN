@@ -1,30 +1,32 @@
-# BRIEFING — 2026-11-12T20:13:00Z
+# BRIEFING — 2026-11-19T10:14:00Z
 
 ## Mission
-Investigate and audit student quiz submissions for EXM-57035431 and EXM-75958058 in class CLS-63191700 across all Firestore collections.
+Refactor Section 3 in CRM Admissions (CRMAdmissionsModule.tsx) and enhance Student Detail (StudentDetail.tsx) in De_Vuong_Webapp adhering to AGENTS.md.
 
 ## 🔒 My Identity
 - Archetype: sentinel
 - Working directory: c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\.agents\teamwork\
-- Orchestrator: 0cddbbf5-4841-4fc9-a481-1790ad791569
-- Victory Auditor: 99eab461-2462-41e8-87b6-bcd4760a100c
+- Orchestrator: f6cc1e79-c7fd-4477-b25b-149ae6603513 (Retired)
+- Victory Auditor: afc37626-1ed3-4f1d-8851-8f4da57a7dc6 (Verdict: VICTORY CONFIRMED)
 
 ## 🔒 Key Constraints
 - No technical decisions — relay only
 - Victory Audit is MANDATORY before reporting completion
-- Keep context ultra-light
-- Strictly verify submissions across quiz_attempts, student_sessions, classes, exam_banks
+- Working directory: De_Vuong_Webapp/
+- Strictly follow AGENTS.md rules in De_Vuong_Webapp/
+- Single flat ledger card for Admissions Section 3
+- Enhanced Student Detail tab "Học phí & Giao dịch"
+- Verification requires clean `npm run build` with exit code 0
 
 ## User Context
-- **Last user request**: Audit student submissions for EXM-57035431 and EXM-75958058
-- **Pending clarifications**: none (interview skipped via [skip-interview])
+- **Last user request**: Approved task prompt for CRM Admissions Section 3 refactoring & Student Detail enhancement
+- **Pending clarifications**: none
 - **Delivered results**:
-  * Multi-collection audit across quiz_attempts, student_sessions, classes, exam_bank_items, student_grades
-  * Verified 100% data integrity: 2 genuine submissions by Trần Ngọc Minh Tùng (6.5 & 9.0) intact
-  * Determined root cause: CLS-63191700 merged into 631917 on Oct 30; runtime writes route to 631917
-  * Other 10 students took PivotTable & Midterm exams on class schedule; never submitted PivotChart quizzes
-  * Synchronized assessments from classes/631917 to classes/CLS-63191700 with pre-write backup snapshot
-  * Independent Victory Audit confirmed: VICTORY CONFIRMED (Phase A, B, C pass)
+  - CRM Admissions Section 3 refactored into Single Flat Ledger Card (Phase 1 / Start)
+  - StudentDetail tab "Học phí & Giao dịch" enhanced with class reference code anchoring & fast-action modals (Phase 2 / Operations)
+  - Full Firestore & General Ledger dual persistence
+  - 100% AGENTS.md compliance verified
+  - Clean production build (exit code 0) & 83/83 passing test suites
 
 ## Project Status
 - **Phase**: complete
@@ -37,3 +39,7 @@ Investigate and audit student quiz submissions for EXM-57035431 and EXM-75958058
 
 ## Artifact Index
 - c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\.agents\teamwork\ORIGINAL_REQUEST.md — Authoritative user request record
+- c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\.agents\teamwork\orchestrator_6\progress.md — Orchestrator progress record
+- c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\.agents\teamwork\orchestrator_6\handoff.md — Orchestrator handoff report
+- c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\.agents\teamwork\victory_auditor_6\handoff.md — Post-victory independent audit report
+- c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\.agents\teamwork\handoff.md — Sentinel handoff report

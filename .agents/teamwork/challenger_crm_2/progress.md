@@ -1,13 +1,17 @@
-# Progress — challenger_crm_2
+# Progress Tracking - Challenger CRM 2
 
-Last visited: 2026-11-14T16:14:45Z
-Current Status: Completed all empirical adversarial verification and audits. Verdict: APPROVE.
-
-## Steps
-- [x] Step 1: Initialize DISPATCH.md, BRIEFING.md, progress.md
-- [x] Step 2: Read ORIGINAL_REQUEST.md, plan.md, synthesis.md, worker handoff.md
-- [x] Step 3: Inspect `CRMAdmissionsModule.tsx` (persistence, listeners, mergeCRMRecord, duplication, SaaSCurrencyInput)
-- [x] Step 4: Write and execute empirical test scripts to stress-test Firestore serialization and SaaSCurrencyInput logic (`tests/challenger_crm_persistence_cursor.test.ts`)
-- [x] Step 5: Run `npm run build` and `npm test` in `De_Vuong_Webapp/`
-- [x] Step 6: Write `analysis.md` and `handoff.md` with explicit verdict (APPROVE)
-- [x] Step 7: Send message to orchestrator
+- **Status**: Completed Stage 2 empirical verification and adversarial stress testing
+- **Last visited**: 2026-11-19T10:08:00Z
+- **Current Step**: Delivering handoff.md with verdict APPROVE
+- **Key Milestones**:
+  - [x] Read `ORIGINAL_REQUEST.md` and `PROJECT.md`
+  - [x] Verified class code anchoring (`resolvedClassCode`, fallback `'LG4729'`, plain mono font, no pills)
+  - [x] Verified 4 financial cards inheritance and summary math
+  - [x] Tested `NextInstallmentModal` (quick buttons 900k, 2.2M, full debt, custom string amounts, credit ledger entry)
+  - [x] Tested `CenterCommissionModal` (200k/month remittance, debit entry `class_accept`, `internalNotes` audit trail, zero student tuition debt corruption)
+  - [x] Verified AGENTS.md compliance (empty `<th>`, 3-dot `MoreVertical`, plain text + dot status, emerald hover effect)
+  - [x] Verified 0 TypeScript errors in `StudentDetail.tsx`
+  - [x] Executed 21 adversarial stress tests in `tests/stage2_student_detail_stress.test.ts` (21/21 passed)
+  - [x] Executed full test suite (68/68 passed)
+  - [x] Verified `npm run build` exit code 0 (`✓ built in 11.35s`)
+  - [x] Written `handoff.md` and notified parent

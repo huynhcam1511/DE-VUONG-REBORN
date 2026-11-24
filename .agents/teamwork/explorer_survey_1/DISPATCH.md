@@ -1,37 +1,19 @@
-# Dispatch: Explorer 1 (Survey - quiz_attempts & student_grades)
+## 2026-11-17T15:26:49Z
+You are a teamwork_explorer.
+Your working directory is: c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\.agents\teamwork\explorer_survey_1\
+Your identity is: teamwork_explorer (CRM Admissions Codebase Explorer).
 
-## Objective
-Investigate Firestore collections `quiz_attempts` and `student_grades` for any attempts/submissions related to PivotChart quizzes `EXM-57035431` and `EXM-75958058` or students of class `CLS-63191700`.
+MANDATORY FIRST STEP: Read the original user request from:
+c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\.agents\teamwork\ORIGINAL_REQUEST.md
 
-## Input Files
-- `ORIGINAL_REQUEST.md`: c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\.agents\teamwork\ORIGINAL_REQUEST.md
-- `PROJECT.md`: c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\PROJECT.md
+Investigate De_Vuong_Webapp/src/components/admin/CRMAdmissionsModule.tsx and related CRM/Lead files and types:
+1. How leads, admissions, classes, and deals are currently modeled, stored, and persisted (Firestore collections, schema types, state management).
+2. How initial intake fee ("Phí nhận lớp ban đầu"), commissions, tuition, and class outcome states ("Không thành công / Non-Start", "Thành công", etc.) are handled.
+3. Where the financial & commission section lives in the UI/modal/detail view.
+4. Where/how payment source options ("Tiền mặt / MoMo" vs "Cấn trừ từ Quỹ phí dư") can be integrated with real-time available fund balance.
+5. How Corporate VAT invoice calculation (10% surcharge, 8% intermediary fee, net calculation) can be added to the lead/class detail view.
+6. Verify compliance with AGENTS.md rules (read-only table cells, 3-dots action menu, single-row toolbars, sticky headers, font hierarchy, no pills overload, full-bleed table layout, apiRequests/Firestore persistence).
 
-## Scope & Tasks
-1. Identify the student roster of class `CLS-63191700` (UIDs, student codes `LRN-*`, emails, names).
-2. Query `quiz_attempts` for:
-   - Any attempt with `quizId`, `quizTemplateId`, or `examCode` matching `EXM-57035431` or `EXM-75958058` or the underlying exam bank ID.
-   - Any attempt submitted by any student of class `CLS-63191700` across all time (especially around 17/10 to 04/11).
-   - Any attempt containing "PivotChart" or "Kiểm tra Quá trình".
-3. Query `student_grades` for any records for CLS-63191700 students or PivotChart exams.
-4. If writing audit scripts to query Firestore:
-   - Place read-only scripts in `De_Vuong_Webapp/scripts/` (e.g. `audit_quiz_attempts.ts`).
-   - Run via `npx ts-node` or `node` as supported by `De_Vuong_Webapp/package.json`.
-   - Never modify or delete any Firestore data during this exploration.
-5. Produce a comprehensive report in your working directory (`handoff.md`).
-
-## Working Directory
-`c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\.agents\teamwork\explorer_survey_1\`
-
-
-## 2026-11-12T20:24:14Z
-Dispatch received from orchestrator (0cddbbf5-4841-4fc9-a481-1790ad791569):
-You are Explorer 1 for the Quiz Submission Audit of EXM-57035431 and EXM-75958058 (CLS-63191700).
-Scope:
-- Target Firestore collections: `quiz_attempts` and `student_grades`.
-- Find the roster of students in class `CLS-63191700` (UIDs, student codes, emails, names).
-- Query `quiz_attempts` for attempts referencing `EXM-57035431` / `EXM-75958058` or the underlying exam bank ID, or any attempts submitted by students of `CLS-63191700` (especially around Oct 17 to Nov 4).
-- Query `student_grades` for any recorded grades.
-- If writing audit scripts to query Firestore, place read-only scripts in `De_Vuong_Webapp/scripts/` and run them. Do NOT modify or delete any database records.
-- Produce a detailed handoff report in your working directory (`handoff.md`).
-- Communicate your completion report to your caller via send_message.
+Write your findings and recommendations into:
+c:\Users\zit\Documents\Antigravity\DE VUONG REBORN\.agents\teamwork\explorer_survey_1\handoff.md
+Send a completion message when done referencing the handoff path.
