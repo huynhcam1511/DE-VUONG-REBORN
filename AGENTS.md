@@ -26,6 +26,10 @@ Khi xây dựng hoặc chỉnh sửa các module quản trị (Admin Modules) d�
    - **Tuyệt đối KHÔNG gắn sự kiện mở chi tiết (onClick, thẻ button, thẻ a/underline) lên toàn bộ dòng (`<tr>`) hay bất kỳ ô dữ liệu (`<td>`) nào của bảng (kể cả ô Tên/Tiêu đề bản ghi)**: Tránh tuyệt đối tình trạng click nhầm khi chọn văn bản hoặc xem dữ liệu. Toàn bộ các ô dữ liệu trên bảng Master là **READ-ONLY plain text**.
    - **Cơ chế thao tác DUY NHẤT**: Mọi hành động xem chi tiết, chỉnh sửa, đổi tên, nhân bản, xóa **BẮT BUỘC chỉ được thực hiện thông qua Action Menu 3 chấm (`MoreVertical`)** ở cột ngoài cùng bên phải (áp dụng cho cả bảng Master lẫn bảng danh sách chi tiết Detail View). Tuyệt đối không phơi bày các nút icon trần trụi (`Pencil`, `Trash2`) ở cuối dòng.
    - **Thẻ `<th>` của cột Action Menu BẮT BUỘC để trống, TUYỆT ĐỐI KHÔNG có chữ 'Thao tác' hay 'Hành động'**: Thẻ `<th>` ngoài cùng bên phải của Action Menu luôn để rỗng (`<th className="w-16 px-4 py-3.5 text-right font-medium border-b border-slate-200"></th>`), tránh làm thô ráp và chật chội hàng tiêu đề bảng.
+   - **Quy chuẩn Chống rớt dòng (Anti-Wraptext Standard) cho Dropdown Action Menu**:
+     - **Chiều rộng menu an toàn**: Container Dropdown bắt buộc set chiều rộng tối thiểu từ `w-56` (224px) đến `w-64` (256px), tính toán vị trí portal an toàn (`left: Math.max(16, anchor.right - 224)` hoặc `- 256`).
+     - **Cấm rớt dòng (No Wrap)**: Mọi thẻ `<button>` hoặc `<a>` bên trong menu bắt buộc có class `whitespace-nowrap` để nhãn thao tác (ví dụ: "Xem bài nộp / Chấm điểm", "Tùy chỉnh riêng cho Lớp", "Sao chép liên kết bài thi", "Chuyển trạng thái") luôn nằm trên 1 dòng duy nhất, không bao giờ bị ngắt hàng 2 dòng.
+     - **Chống bẹp icon SVG**: Mọi icon Lucide đi kèm trong menu bắt buộc có class `shrink-0` để không bao giờ bị méo khi flex layout co giãn.
    - Luôn luôn tạo một cột ngoài cùng bên phải dành cho Action Menu, sử dụng icon 3 chấm dọc (`MoreVertical`).
    - Dropdown menu tối thiểu phải bao gồm các hành động phù hợp: **Chỉnh sửa / Chi tiết** (BookOpen/Edit2/Pencil), **Nhân bản** (Copy), và **Xóa** (Trash2).
 
